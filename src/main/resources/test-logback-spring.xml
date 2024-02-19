@@ -1,0 +1,40 @@
+<configuration>
+    <property name="LOG_DIR" value="/"/>  <!-- 로그 저장할 위치 -->
+    <property name="CONSOLE_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-5relative] %cyan([%21thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
+    <property name="FILE_PATTERN"
+              value="[%d{yyyy-MM-dd HH:mm:ss}:%-5relative] [%21thread] %-5level [%C.%M:%L] - %msg%n"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/freedom-day-backend.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/freedom-day-backend-%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <maxHistory>10</maxHistory> <!--보관기간-->
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <immediateFlush>true</immediateFlush>
+            <pattern>${FILE_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 개발 환경 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </root>
+    </springProfile>
+
+</configuration>

@@ -1,0 +1,30 @@
+# server
+server:
+  port: 8080
+  tomcat:
+    threads:
+      max: 100 # 최대 스레드
+      min-spare: 10 # 항상대기중인 스레드 갯수
+    accept-count: 100 # 커넥션 넘칠떄 대기하는 큐 사이즈
+    connection-timeout: 20000 # (ms)
+    max-connections: 8192 # 수립가능한 connection의 총 개수
+  servlet:
+    context-path: /api # 모든 request 에다가 /api 붙힘
+
+# profiles
+spring:
+  profiles:
+    default: loc
+
+  # multipartFile request 제한없음
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+
+# AWS
+aws:
+  ses:
+    access-key: test
+    secret-key: test
+
