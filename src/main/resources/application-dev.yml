@@ -1,0 +1,20 @@
+# dev
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  # datasource
+  datasource:
+    url: jdbc:mariadb://${rds_host}:3306/ # TODO)
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: ${rds_username}
+    password: ${rds_password}
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: validate # *******
+    properties:
+      hibernate:
+

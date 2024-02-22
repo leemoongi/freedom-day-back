@@ -1,0 +1,31 @@
+# dev
+spring:
+  config:
+    activate:
+      on-profile: loc
+
+  # datasource
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:3306/api_test
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: root
+#    maximum-pool-size: 10
+#    connection-timeout: 5000 # (ms)
+
+#  maria-datasource:
+#    driver-class-name: org.mariadb.jdbc.Driver
+#    jdbc-url: jdbc:mariadb://127.0.0.1:3306/api_test
+#    username: root
+#    password: root
+#    maximum-pool-size: 10
+#    connection-timeout: 5000 # (ms)
+
+  # JPA
+  jpa:
+#    database-platform: org.hibernate.dialect.MariaDBDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+
