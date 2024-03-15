@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+
+# https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/reference-appspec-file-structure-files.html
+files:
+  - source:  /
+    destination: /home/ec2-user/freedom-day-back # 지정한 파일을 받을 위치
+    overwrite: yes
+
+# https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html
+hooks:
+  AfterInstall: 
+    - location: stop.sh
+      timeout: 60
+      runas: root                   # 스크립트 실행 계정
+  ApplicationStart:
+    - location: start.sh
+      timeout: 60
+      runas: root
