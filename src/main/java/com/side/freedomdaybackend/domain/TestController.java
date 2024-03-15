@@ -34,7 +34,6 @@ public class TestController {
 
     @GetMapping("/error")
     public void errorTest() {
-
         String message = "테스트 성공";
         throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
