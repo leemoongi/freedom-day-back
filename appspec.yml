@@ -4,7 +4,7 @@ os: linux
 # https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/reference-appspec-file-structure-files.html
 files:
   - source:  /
-    destination: /home/ec2-user/freedom-day-back # 지정한 파일을 받을 위치
+    destination: /home/ec2-user/freedom-day-backend # 지정한 파일을 받을 위치
     overwrite: yes
 
 # https://docs.aws.amazon.com/ko_kr/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html
