@@ -5,6 +5,7 @@ import com.side.freedomdaybackend.common.exception.ErrorCode;
 import com.side.freedomdaybackend.common.response.ApiResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,7 +58,106 @@ public class TestController {
 
         UserLoanDto userLoanDto = new UserLoanDto("이문기", 5800000, 90000000, 2, loanDtoList);
         return new ApiResponse(userLoanDto);
+    }
 
+    @GetMapping("/loan-statistics")
+    public StatisticsDto LoanStatistics() {
+        List<LoanSimple> loanSimpleDtoList = new ArrayList<>();
+        List<RepaidLoan> repaidLoanList = new ArrayList<>();
+        List<RepaymentHistoryMonth> repaymentHistoryMonthList = new ArrayList<>();
+        List<RemainingPrincipal> remainingPrincipalList = new ArrayList<>();
+
+        // 상환 예정 레이아웃
+        loanSimpleDtoList.add(
+                new LoanSimple(
+                        "카카오 학자금대출",
+                        "학자금",
+                        16,
+                        LocalDateTime.of(2024, Month.DECEMBER, 18, 0, 0)
+                )
+        );
+        loanSimpleDtoList.add(
+                new LoanSimple(
+                        "카카오 학자금대출",
+                        "생활비",
+                        16,
+                        LocalDateTime.of(2024, Month.DECEMBER, 18, 0, 0)
+                )
+        );
+
+        // 상환 완료 레이아웃
+        repaidLoanList.add(
+                new RepaidLoan(
+                        "하나은행 전세자금대출",
+                        "주택자금",
+                        500000
+                )
+        );
+
+        // 월별 상환 그래프 레이아웃
+        repaymentHistoryMonthList.add(
+                new RepaymentHistoryMonth(
+                        LocalDateTime.of(2024, Month.OCTOBER, 1, 0, 0),
+                        2500000,
+                        15000,
+                        5000000
+                )
+        );
+
+        repaymentHistoryMonthList.add(
+                new RepaymentHistoryMonth(
+                        LocalDateTime.of(2024, Month.OCTOBER, 1, 0, 0),
+                        2500000,
+                        15000,
+                        5000000
+                )
+        );
+
+        remainingPrincipalList.add(
+                new RemainingPrincipal(
+                        "주택자금",
+                        9900000,
+                        5
+                )
+        );
+        remainingPrincipalList.add(
+                new RemainingPrincipal(
+                        "학자금",
+                        19800000,
+                        10
+                )
+        );
+        remainingPrincipalList.add(
+                new RemainingPrincipal(
+                        "자동차",
+                        9900000,
+                        5
+                )
+        );
+        remainingPrincipalList.add(
+                new RemainingPrincipal(
+                        "기타",
+                        59400000,
+                        30
+                )
+        );
+        remainingPrincipalList.add(
+                new RemainingPrincipal(
+                        "주택자금",
+                        99000000,
+                        50
+                )
+        );
+
+
+        return new StatisticsDto(
+                28000000,
+                28000000,
+                loanSimpleDtoList,
+                repaidLoanList,
+                repaymentHistoryMonthList,
+                remainingPrincipalList
+        );
     }
 
     @GetMapping("/error")
@@ -104,6 +204,59 @@ class LoanDto {
     LocalDateTime loanExpirationDate;// 만기일
     int paymentDueDay;// 납부일
 }
+
+/****************************
+ ******* 통계 페이지 DTO ******
+ ***************************/
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+class StatisticsDto {
+    long totalBalance; // 총 대출 잔액
+    long totalPrincipalRepayment; // 총 상환 원금
+    List<LoanSimple> loanList; // 상환 예정
+    List<RepaidLoan> repaidLoanList; // 상환 완료
+    List<RepaymentHistoryMonth> repaymentHistoryMonthList; // 월별 상환 기록
+    List<RemainingPrincipal> remainingPrincipalList; // 대출 원금 비중
+}
+
+@Data
+@AllArgsConstructor
+class LoanSimple {
+    String name; // 대출 이름
+    String purpose; // 용도
+    int paymentDDay; // 남은 납부일
+    LocalDateTime paymentDate; // 납부일자
+}
+
+@Data
+@AllArgsConstructor
+class RepaidLoan {
+    String name; // 대출 이름
+    String purpose; // 용도
+    long amount; // 납부한 금액
+}
+
+@Data
+@AllArgsConstructor
+class RepaymentHistoryMonth {
+    LocalDateTime dateTime;
+    int repaymentAmount1; // 상환 방식 -> 1:원금 2:이자 3:중도상환
+    int repaymentAmount2;
+    int repaymentAmount3;
+}
+
+@Data
+@AllArgsConstructor
+class RemainingPrincipal {
+    String name; // 이름
+    long amount; // 남은 금액
+    int percentage; // 백분율
+}
+
+/****************************
+ ******* 통계 페이지 DTO ******
+ ***************************/
 
 @Data
 @AllArgsConstructor
