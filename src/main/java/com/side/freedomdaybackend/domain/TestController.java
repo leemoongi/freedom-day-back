@@ -106,7 +106,7 @@ public class TestController {
 
         repaymentHistoryMonthList.add(
                 new RepaymentHistoryMonth(
-                        LocalDateTime.of(2024, Month.OCTOBER, 1, 0, 0),
+                        LocalDateTime.of(2024, Month.NOVEMBER, 1, 0, 0),
                         2500000,
                         15000,
                         5000000
