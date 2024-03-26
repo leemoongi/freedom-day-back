@@ -1,5 +1,6 @@
 package com.side.freedomdaybackend.domain.loan;
 
+import com.side.freedomdaybackend.domain.loan.dto.LoanListDto;
 import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistory;
 import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistoryRepository;
 import com.side.freedomdaybackend.domain.member.Member;
@@ -22,6 +23,9 @@ class LoanServiceTest {
     LoanRepository loanRepository;
     @Autowired
     LoanRepaymentMonthHistoryRepository loanRepaymentMonthHistoryRepository;
+
+    @Autowired
+    LoanMapstruct loanMapstruct;
 
     @BeforeEach
     void setUp() {
@@ -63,7 +67,10 @@ class LoanServiceTest {
         Member member = memberRepository.findById(1L).get();
 
         // 대출 정보
-        List<Loan> byLoanList = loanRepository.findByLoanList(member.getId());
-        System.out.println("byLoanList = " + byLoanList);
+        List<Loan> loanList = loanRepository.findByLoanList(member.getId());
+
+        List<LoanListDto> loanDtoList = loanMapstruct.toLoanDtoList(loanList);
+
+        System.out.println("loanDtoList = " + loanDtoList);
     }
 }
