@@ -72,5 +72,6 @@ class LoanServiceTest {
         List<LoanListDto> loanDtoList = loanMapstruct.toLoanDtoList(loanList);
 
         System.out.println("loanDtoList = " + loanDtoList);
+
     }
 }
