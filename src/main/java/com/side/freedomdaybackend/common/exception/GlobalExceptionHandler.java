@@ -32,11 +32,4 @@ public class GlobalExceptionHandler {
 //        return new ResponseEntity<>(response,httpStatus);
 //    }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleServerException(Exception e) {
-        ApiResponse response = new ApiResponse(ErrorCode.INTERNAL_SERVER_ERROR);
-        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-
-        return new ResponseEntity<>(response, httpStatus);
-    }
 }

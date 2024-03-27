@@ -1,6 +1,6 @@
 package com.side.freedomdaybackend.domain.loan;
 
-import com.side.freedomdaybackend.domain.loan.dto.LoanListDto;
+import com.side.freedomdaybackend.domain.loan.dto.LoanDto;
 import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistory;
 import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistoryRepository;
 import com.side.freedomdaybackend.domain.member.Member;
@@ -42,7 +42,7 @@ class LoanServiceTest {
                 .purpose("생활비")
                 .totalPrincipal(19886317L)
                 .paymentDate(16)
-                .repaymentDate(LocalDateTime.now().plusYears(1))
+                .expirationDate(LocalDateTime.now().plusYears(1))
                 .build();
 
         LoanRepaymentMonthHistory loanRepaymentMonthHistory = LoanRepaymentMonthHistory.builder()
@@ -68,8 +68,11 @@ class LoanServiceTest {
 
         // 대출 정보
         List<Loan> loanList = loanRepository.findByLoanList(member.getId());
+        // entity -> dto
+        List<LoanDto> loanDtoList = loanMapstruct.toLoanDtoList(loanList);
 
-        List<LoanListDto> loanDtoList = loanMapstruct.toLoanDtoList(loanList);
+
+
 
         System.out.println("loanDtoList = " + loanDtoList);
 

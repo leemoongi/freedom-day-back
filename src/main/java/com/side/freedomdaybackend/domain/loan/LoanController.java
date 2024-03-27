@@ -21,4 +21,9 @@ public class LoanController {
         loanService.myLoanList();
     }
 
+    @GetMapping("/user-loan-info")
+    public void userLoanInfo() {
+        loanService.myLoanList();
+    }
+
 }

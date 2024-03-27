@@ -1,16 +1,18 @@
 package com.side.freedomdaybackend.domain.loan.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
 
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoanListDto {
+public class LoanDto {
     private Long id;
     private String name; // 대출 이름
     private String purpose; // 대출 목적
@@ -19,8 +21,13 @@ public class LoanListDto {
     private Long repaymentAmount; // 상환 완료 금액
     private int interestRate; // 연 이자율
     private int loanPeriod; // 대출 기간
-    private String variableRate; // 변동금리 여부
+    private String variableRate; // 변동금리여부  0: false  1:true
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime originationDate; // 대출 기간  TODO) 기간에 대한 정보를 어떻게 저장할지 결졍해야함
-    private LocalDateTime repaymentDate; // 시작 일시
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime expirationDate; // 시작 일시
     private int paymentDate; // 납부일  매월 15일에 납부 -> 15
+
+    private int paymentDDay; // 남은 납부일 D-day
+    private Long principal; // 남은 원금
 }

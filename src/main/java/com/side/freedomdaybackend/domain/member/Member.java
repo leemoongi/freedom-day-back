@@ -29,5 +29,5 @@ public class Member {
     private Boolean sex; // 성별
     private LocalDateTime createDate; // 생성날짜
     private LocalDateTime modifyDate; // 수정날짜
-    private Boolean deleted; // 삭제 여부
+    private Character status; // 0:정상  1:삭제  2:정지
 }

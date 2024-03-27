@@ -32,10 +32,9 @@ public class Loan {
     private Long totalPrincipal; // 총 원금
     private Long repaymentAmount; // 상환 완료 금액
     private int interestRate; // 연 이자율
-    private int loanPeriod; // 대출 기간
-    private String variableRate; // 변동금리 여부
-    private LocalDateTime originationDate; // 대출 기간  TODO) 기간에 대한 정보를 어떻게 저장할지 결졍해야함
-    private LocalDateTime repaymentDate; // 시작 일시
+    private int loanPeriod; // 대출 기간  TODO) 기간에 대한 정보를 어떻게 저장할지 결졍해야함
+    private String variableRate; // 변동금리여부  0: false  1:true
+    private LocalDateTime originationDate; // 시작 일시
+    private LocalDateTime expirationDate; // 상환 일시
     private int paymentDate; // 납부일  매월 15일에 납부 -> 15
-
 }

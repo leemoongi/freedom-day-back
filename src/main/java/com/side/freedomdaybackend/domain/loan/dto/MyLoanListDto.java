@@ -1,15 +1,13 @@
 package com.side.freedomdaybackend.domain.loan.dto;
 
 import com.querydsl.core.annotations.QueryProjection;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 
-@Getter
+@Data
 @NoArgsConstructor
 public class MyLoanListDto {
     String loanName; // 대출이름
