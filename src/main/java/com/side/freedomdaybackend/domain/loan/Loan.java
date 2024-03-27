@@ -37,4 +37,5 @@ public class Loan {
     private LocalDateTime originationDate; // 시작 일시
     private LocalDateTime expirationDate; // 상환 일시
     private int paymentDate; // 납부일  매월 15일에 납부 -> 15
+    private Character status; // 0:진행중  1: 만료됨
 }
