@@ -11,18 +11,23 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class MyLoanInfo {
+public class MyLoanInfoDto {
     private long previousMonthPayment; // 지난달 총 납부금액
     private int repaymentRate; // 상활률
     private int loanCount; // 대출 개수
     private List<LoanSimpleDto> loanSimpleDtoList;
-}
 
-class LoanSimpleDto {
-    String loanName; // 대출이름
-    String purpose; // 용도
-    int paymentDDay; // 남은 납부일
-    int loanAmount; // 남은 원금
-    LocalDateTime loanExpirationDate; // 만기일
-    int paymentDueDay; // 납부일
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class LoanSimpleDto {
+        String name; // 대출이름
+        String purpose; // 용도
+        int paymentDDay; // 남은 납부일
+        int outstandingPrincipal; // 남은 원금
+        LocalDateTime expirationDate; // 만기일
+        int paymentDate; // 납부일
+    }
+
 }

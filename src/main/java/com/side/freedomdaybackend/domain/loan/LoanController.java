@@ -1,6 +1,7 @@
 package com.side.freedomdaybackend.domain.loan;
 
 import com.side.freedomdaybackend.common.response.ApiResponse;
+import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
 import com.side.freedomdaybackend.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +23,9 @@ public class LoanController {
     }
 
     @GetMapping("/user-loan-info")
-    public void userLoanInfo() {
-        loanService.myLoanList();
+    public ApiResponse userLoanInfo() {
+        MyLoanInfoDto myLoanInfoDto = loanService.myLoanList();
+        return new ApiResponse<>(myLoanInfoDto);
     }
 
 }

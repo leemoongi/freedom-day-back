@@ -9,7 +9,7 @@ public interface LoanRepositoryCustom {
     public Member queryDslTest();
 
     List<Loan> findByLoanList(Long memberId);
-    List<LoanRepaymentMonthHistory> findByPreviousMonthPayment(Long memberId);
+    long findByPreviousMonthPayment(Long memberId);
 
 
 }

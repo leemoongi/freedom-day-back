@@ -1,7 +1,7 @@
 package com.side.freedomdaybackend.domain.loan;
 
 import com.side.freedomdaybackend.domain.loan.dto.LoanDto;
-import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistory;
+import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
 import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final LoanMapstruct loanMapstruct;
 
-    public void myLoanList() {
+    public MyLoanInfoDto myLoanList() {
         // 유저 id
         Member member = memberRepository.findById(1L).get();
         Long memberId = member.getId();
@@ -28,9 +28,16 @@ public class LoanService {
         List<Loan> loanList = loanRepository.findByLoanList(memberId);
         List<LoanDto> loanDtoList = loanMapstruct.toLoanDtoList(loanList);
 
+        int repaymentRate = 0; // 상환률 = 상환금액 / 대출원금 * 100
+        double totalPayment = 0; // 대출원금
+        double repaymentAmount = 0; // 상환금액
+        double loanAmount = 0; // 남은 원금
+        int loanCount = 0; // 개수
+        long previousMonthPayment = loanRepository.findByPreviousMonthPayment(memberId);; // 지난달 총 납부액
+
         LocalDate now = LocalDate.now();
         for (LoanDto loanDto : loanDtoList) {
-            // 남은 납부일 계산
+            // 남은 납부일 계산 D-day
             int dayOfMonth = now.getDayOfMonth();
             LocalDate paymentDate = LocalDate.of(now.getYear(), now.getMonth(), loanDto.getPaymentDate());
             if (dayOfMonth > loanDto.getPaymentDate()) {
@@ -41,15 +48,19 @@ public class LoanService {
 
             // 남은 원금 계산
             long principal = loanDto.getTotalPrincipal() - loanDto.getRepaymentAmount();
-            loanDto.setPrincipal(principal);
+            loanDto.setOutstandingPrincipal(principal);
+
+            totalPayment = totalPayment + loanDto.getTotalPrincipal();
+            repaymentAmount = repaymentAmount + loanDto.getRepaymentAmount();
         }
 
-        int repaymentRate; // 상환률 = 전체대출원금,  전체남은원금 으로 백분율
-        long totalPayment;
-        long previousMonthPayment; // 지난달 총 납부액
-        int loanCount = loanDtoList.size(); // 개수
+        repaymentRate = (int) (repaymentAmount / totalPayment * 100);
+        loanCount = loanDtoList.size();
 
-        List<LoanRepaymentMonthHistory> byPreviousMonthPayment = loanRepository.findByPreviousMonthPayment(memberId);
+        // api 객체
+        List<MyLoanInfoDto.LoanSimpleDto> loanSimpleDto = loanMapstruct.toLoanSimpleDto(loanDtoList);
+        MyLoanInfoDto myLoanInfoDto = new MyLoanInfoDto(previousMonthPayment, repaymentRate, loanCount, loanSimpleDto);
 
+        return myLoanInfoDto;
     }
 }

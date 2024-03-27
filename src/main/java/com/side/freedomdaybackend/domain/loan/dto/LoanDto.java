@@ -2,7 +2,6 @@ package com.side.freedomdaybackend.domain.loan.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -29,5 +28,24 @@ public class LoanDto {
     private int paymentDate; // 납부일  매월 15일에 납부 -> 15
 
     private int paymentDDay; // 남은 납부일 D-day
-    private Long principal; // 남은 원금
+    private Long outstandingPrincipal; // 남은 원금
+
+//    @QueryProjection
+//    public LoanDto(Long id, String name, String purpose, String bankCode, Long totalPrincipal, Long repaymentAmount, int interestRate, int loanPeriod, String variableRate, LocalDateTime originationDate, LocalDateTime expirationDate, int paymentDate, int paymentDDay, Long principal) {
+//        this.id = id;
+//        this.name = name;
+//        this.purpose = purpose;
+//        this.bankCode = bankCode;
+//        this.totalPrincipal = totalPrincipal;
+//        this.repaymentAmount = repaymentAmount;
+//        this.interestRate = interestRate;
+//        this.loanPeriod = loanPeriod;
+//        this.variableRate = variableRate;
+//        this.originationDate = originationDate;
+//        this.expirationDate = expirationDate;
+//        this.paymentDate = paymentDate;
+//        this.paymentDDay = paymentDDay;
+//        this.principal = principal;
+//    }
 }
+
