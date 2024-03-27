@@ -6,7 +6,7 @@ spring:
 
   # datasource
   datasource:
-    url: jdbc:mariadb://${rds_host}:3306/ # TODO)
+    url: jdbc:mariadb://${rds_host}:3306/freedom_day # TODO)
     driver-class-name: org.mariadb.jdbc.Driver
     username: ${rds_username}
     password: ${rds_password}
@@ -17,4 +17,5 @@ spring:
       ddl-auto: validate # *******
     properties:
       hibernate:
-
+        format_sql: true
+        show_sql: true
