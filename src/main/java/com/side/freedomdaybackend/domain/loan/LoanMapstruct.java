@@ -1,6 +1,6 @@
 package com.side.freedomdaybackend.domain.loan;
 
-import com.side.freedomdaybackend.domain.loan.dto.LoanDto;
+import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
 import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
 import org.mapstruct.Mapper;
 
@@ -13,11 +13,11 @@ import static org.mapstruct.MappingConstants.ComponentModel.SPRING;
 public interface LoanMapstruct {
 
     // entity -> dto
-    LoanDto toLoanDto(Loan entity);
-    List<LoanDto> toLoanDtoList(List<Loan> entity);
+    LoanSimpleDto toLoanDto(Loan entity);
+    List<LoanSimpleDto> toLoanDtoList(List<Loan> entity);
 
 
     // dto -> dto
-    List<MyLoanInfoDto.LoanSimpleDto> toLoanSimpleDto(List<LoanDto> dto);
+    List<MyLoanInfoDto.LoanSimpleDto> toLoanSimpleDto(List<LoanSimpleDto> dto);
 
 }

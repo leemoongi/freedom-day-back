@@ -1,6 +1,6 @@
 package com.side.freedomdaybackend.domain.loan;
 
-import com.side.freedomdaybackend.domain.loan.dto.LoanDto;
+import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
 import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistory;
 import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistoryRepository;
 import com.side.freedomdaybackend.domain.member.Member;
@@ -69,12 +69,12 @@ class LoanServiceTest {
         // 대출 정보
         List<Loan> loanList = loanRepository.findByLoanList(member.getId());
         // entity -> dto
-        List<LoanDto> loanDtoList = loanMapstruct.toLoanDtoList(loanList);
+        List<LoanSimpleDto> loanSimpleDtoList = loanMapstruct.toLoanDtoList(loanList);
 
 
 
 
-        System.out.println("loanDtoList = " + loanDtoList);
+        System.out.println("loanSimpleDtoList = " + loanSimpleDtoList);
 
     }
 }

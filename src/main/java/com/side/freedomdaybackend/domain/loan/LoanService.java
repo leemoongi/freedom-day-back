@@ -1,6 +1,6 @@
 package com.side.freedomdaybackend.domain.loan;
 
-import com.side.freedomdaybackend.domain.loan.dto.LoanDto;
+import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
 import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
 import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
@@ -26,7 +26,7 @@ public class LoanService {
 
         // 내 대출 리스트 정보
         List<Loan> loanList = loanRepository.findByLoanList(memberId);
-        List<LoanDto> loanDtoList = loanMapstruct.toLoanDtoList(loanList);
+        List<LoanSimpleDto> loanSimpleDtoList = loanMapstruct.toLoanDtoList(loanList);
 
         int repaymentRate = 0; // 상환률 = 상환금액 / 대출원금 * 100
         double totalPayment = 0; // 대출원금
@@ -36,29 +36,30 @@ public class LoanService {
         long previousMonthPayment = loanRepository.findByPreviousMonthPayment(memberId);; // 지난달 총 납부액
 
         LocalDate now = LocalDate.now();
-        for (LoanDto loanDto : loanDtoList) {
+        for (LoanSimpleDto loanSimpleDto : loanSimpleDtoList) {
             // 남은 납부일 계산 D-day
             int dayOfMonth = now.getDayOfMonth();
-            LocalDate paymentDate = LocalDate.of(now.getYear(), now.getMonth(), loanDto.getPaymentDate());
-            if (dayOfMonth > loanDto.getPaymentDate()) {
+            LocalDate paymentDate = LocalDate.of(now.getYear(), now.getMonth(), loanSimpleDto.getPaymentDate());
+            if (dayOfMonth > loanSimpleDto.getPaymentDate()) {
                 paymentDate = paymentDate.plusMonths(1);
             }
             long d_day = ChronoUnit.DAYS.between(now, paymentDate);
-            loanDto.setPaymentDDay((int) d_day);
+            loanSimpleDto.setPaymentDDay((int) d_day);
 
             // 남은 원금 계산
-            long principal = loanDto.getTotalPrincipal() - loanDto.getRepaymentAmount();
-            loanDto.setOutstandingPrincipal(principal);
+            long principal = loanSimpleDto.getTotalPrincipal() - loanSimpleDto.getRepaymentAmount();
+            loanSimpleDto.setOutstandingPrincipal(principal);
 
-            totalPayment = totalPayment + loanDto.getTotalPrincipal();
-            repaymentAmount = repaymentAmount + loanDto.getRepaymentAmount();
+            totalPayment = totalPayment + loanSimpleDto.getTotalPrincipal();
+            repaymentAmount = repaymentAmount + loanSimpleDto.getRepaymentAmount();
+            loanSimpleDto.setPaymentPercentage((int) ((double) loanSimpleDto.getRepaymentAmount() / (double) loanSimpleDto.getTotalPrincipal() * 100)); //
         }
 
         repaymentRate = (int) (repaymentAmount / totalPayment * 100);
-        loanCount = loanDtoList.size();
+        loanCount = loanSimpleDtoList.size();
 
         // api 객체
-        List<MyLoanInfoDto.LoanSimpleDto> loanSimpleDto = loanMapstruct.toLoanSimpleDto(loanDtoList);
+        List<MyLoanInfoDto.LoanSimpleDto> loanSimpleDto = loanMapstruct.toLoanSimpleDto(loanSimpleDtoList);
         MyLoanInfoDto myLoanInfoDto = new MyLoanInfoDto(previousMonthPayment, repaymentRate, loanCount, loanSimpleDto);
 
         return myLoanInfoDto;

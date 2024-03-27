@@ -28,6 +28,7 @@ public class MyLoanInfoDto {
         int outstandingPrincipal; // 남은 원금
         LocalDateTime expirationDate; // 만기일
         int paymentDate; // 납부일
+        int paymentPercentage; // 납부 진행률
     }
 
 }
