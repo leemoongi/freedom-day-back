@@ -18,6 +18,7 @@ public class LoanSimpleDto {
     private String bankCode; // 은행
     private Long totalPrincipal; // 총 원금
     private Long repaymentAmount; // 상환 완료 금액
+    private LocalDateTime expirationDate; // 시작 일시
     private int paymentDate; // 납부일  매월 15일에 납부 -> 15
 
     private int paymentDDay; // 남은 납부일 D-day
