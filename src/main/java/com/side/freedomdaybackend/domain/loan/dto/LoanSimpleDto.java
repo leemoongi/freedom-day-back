@@ -1,6 +1,8 @@
 package com.side.freedomdaybackend.domain.loan.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,7 +12,6 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class LoanSimpleDto {
     private Long id;
     private String name; // 대출 이름
@@ -25,5 +26,16 @@ public class LoanSimpleDto {
     private Long outstandingPrincipal; // 남은 원금
     private int paymentPercentage; // 납부 진행률
 
+    @QueryProjection
+    public LoanSimpleDto(Long id, String name, String purpose, String bankCode, Long totalPrincipal, Long repaymentAmount, LocalDateTime expirationDate, int paymentDate) {
+        this.id = id;
+        this.name = name;
+        this.purpose = purpose;
+        this.bankCode = bankCode;
+        this.totalPrincipal = totalPrincipal;
+        this.repaymentAmount = repaymentAmount;
+        this.expirationDate = expirationDate;
+        this.paymentDate = paymentDate;
+    }
 }
 

@@ -25,8 +25,7 @@ public class LoanService {
         Long memberId = member.getId();
 
         // 내 대출 리스트 정보
-        List<Loan> loanList = loanRepository.findByLoanList(memberId);
-        List<LoanSimpleDto> loanSimpleDtoList = loanMapstruct.toLoanDtoList(loanList);
+        List<LoanSimpleDto> loanSimpleDtoList = loanRepository.findByLoanList(memberId);
 
         int repaymentRate = 0; // 상환률 = 상환금액 / 대출원금 * 100
         double totalPayment = 0; // 대출원금
@@ -58,7 +57,7 @@ public class LoanService {
         repaymentRate = (int) (repaymentAmount / totalPayment * 100);
         loanCount = loanSimpleDtoList.size();
 
-        // api 객체
+        // api 객체로 변경
         List<MyLoanInfoDto.LoanSimpleDto> loanSimpleDto = loanMapstruct.toLoanSimpleDto(loanSimpleDtoList);
         MyLoanInfoDto myLoanInfoDto = new MyLoanInfoDto(previousMonthPayment, repaymentRate, loanCount, loanSimpleDto);
 

@@ -63,18 +63,6 @@ class LoanServiceTest {
 
     @Test
     void myLoanList() {
-        // 유저 저회
-        Member member = memberRepository.findById(1L).get();
-
-        // 대출 정보
-        List<Loan> loanList = loanRepository.findByLoanList(member.getId());
-        // entity -> dto
-        List<LoanSimpleDto> loanSimpleDtoList = loanMapstruct.toLoanDtoList(loanList);
-
-
-
-
-        System.out.println("loanSimpleDtoList = " + loanSimpleDtoList);
 
     }
 }

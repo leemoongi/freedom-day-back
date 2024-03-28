@@ -1,7 +1,8 @@
 package com.side.freedomdaybackend.domain.loan;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistory;
+import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
+import com.side.freedomdaybackend.domain.loan.dto.QLoanSimpleDto;
 import com.side.freedomdaybackend.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 
@@ -24,15 +25,25 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
     }
 
     @Override
-    public List<Loan> findByLoanList(Long memberId) {
-        List<Loan> fetch = queryFactory
-                .select(loan)
+    public List<LoanSimpleDto> findByLoanList(Long memberId) {
+
+        return queryFactory
+                .select(
+                        new QLoanSimpleDto(
+                                loan.id
+                                , loan.name
+                                , loan.purpose
+                                , loan.bankCode
+                                , loan.totalPrincipal
+                                , loan.repaymentAmount
+                                , loan.expirationDate
+                                , loan.paymentDate
+                        )
+                )
                 .from(loan)
                 .where(loan.member.id.eq(memberId),
                         loan.status.eq('0'))
                 .fetch();
-
-        return fetch;
     }
 
     @Override
@@ -45,10 +56,10 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
         return queryFactory
                 .select(loanRepaymentMonthHistory.repaymentAmount.sum())
                 .from(member)
-                .leftJoin(loan)
-                .on(member.eq(loan.member))
-                .leftJoin(loanRepaymentMonthHistory)
-                .on(loan.eq(loanRepaymentMonthHistory.loan))
+                    .leftJoin(loan)
+                    .on(member.eq(loan.member))
+                    .leftJoin(loanRepaymentMonthHistory)
+                    .on(loan.eq(loanRepaymentMonthHistory.loan))
                 .where(loanRepaymentMonthHistory.historyDate.between(start, end),
                         loan.status.eq('0'))
                 .groupBy(loan.id)
