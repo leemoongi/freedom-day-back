@@ -10,6 +10,7 @@ import java.util.Locale;
 
 public class P6spyPrettySqlFormatter implements MessageFormattingStrategy {
 
+
     @Override
     public String formatMessage(int connectionId, String now, long elapsed, String category, String prepared, String sql, String url) {
         sql = formatSql(category, sql);
