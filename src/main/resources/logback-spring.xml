@@ -1,5 +1,5 @@
 <configuration>
-    <property name="LOG_DIR" value="./log"/>  <!-- 로그 저장할 위치 -->
+    <property name="LOG_DIR" value="/home/ec2-user/freedom-day-backend/log"/>  <!-- 로그 저장할 위치 -->
     <property name="CONSOLE_PATTERN"
               value="[%d{yyyy-MM-dd HH:mm:ss}:%-5relative] %cyan([%21thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
     <property name="FILE_PATTERN"
