@@ -1,5 +1,5 @@
 <configuration>
-    <property name="LOG_DIR" value="/"/>  <!-- 로그 저장할 위치 -->
+    <property name="LOG_DIR" value="./log"/>  <!-- 로그 저장할 위치 -->
     <property name="CONSOLE_PATTERN"
               value="[%d{yyyy-MM-dd HH:mm:ss}:%-5relative] %cyan([%21thread]) %highlight(%-5level) %boldWhite([%C.%M:%yellow(%L)]) - %msg%n"/>
     <property name="FILE_PATTERN"
@@ -15,7 +15,7 @@
         <file>${LOG_DIR}/freedom-day-backend.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_DIR}/freedom-day-backend-%d{yyyy-MM-dd}.gz</fileNamePattern>
-            <maxHistory>10</maxHistory> <!--보관기간-->
+            <maxHistory>5</maxHistory> <!--보관기간-->
             <totalSizeCap>5GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
@@ -25,11 +25,13 @@
         </encoder>
     </appender>
 
-    <!-- 개발 환경 -->
+    <!-- 기본 환경 -->
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </root>
 
+    <!-- 개발 환경 -->
     <springProfile name="dev">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
