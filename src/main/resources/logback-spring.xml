@@ -27,7 +27,6 @@
 
     <!-- 기본 환경 -->
     <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </root>
 
