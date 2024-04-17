@@ -18,7 +18,7 @@ public class MemberDto {
     private String name; // 이름
     private String phoneNumber; // 휴대폰 번호
     private String nickName; // 닉네임
-    private Boolean sex; // 성별
+    private Character sex; // 성별
     private LocalDateTime createDate; // 생성날짜
     private LocalDateTime modifyDate; // 수정날짜
     private Character status; // 0:정상  1:삭제  2:정지

@@ -28,3 +28,5 @@ aws:
     access-key: test
     secret-key: test
 
+security:
+  jwt-key: xUstasdf/nIgprTTcy90YUuki7xbansrKPs3iohsVJU=

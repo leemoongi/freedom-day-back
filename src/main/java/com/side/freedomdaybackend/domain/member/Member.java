@@ -23,10 +23,12 @@ public class Member {
     private List<Loan> loanList = new ArrayList<>();
 
     private String email; // 이메일
-    private String name; // 이름
-    private String phoneNumber; // 휴대폰 번호
+//    private String name; // 이름
+//    private String phoneNumber; // 휴대폰 번호
+    private String password; // 비밀번호
     private String nickName; // 닉네임
-    private Boolean sex; // 성별
+    private String birthDate; // 생년월일
+    private Character sex; // 성별
     private LocalDateTime createDate; // 생성날짜
     private LocalDateTime modifyDate; // 수정날짜
     private Character status; // 0:정상  1:삭제  2:정지
