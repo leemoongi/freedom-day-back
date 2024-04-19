@@ -20,11 +20,9 @@ public class Member {
     private Long id;
 
     @OneToMany(mappedBy = "member")
-    private List<Loan> loanList = new ArrayList<>();
+    private final List<Loan> loanList = new ArrayList<>();
 
     private String email; // 이메일
-//    private String name; // 이름
-//    private String phoneNumber; // 휴대폰 번호
     private String password; // 비밀번호
     private String nickName; // 닉네임
     private String birthDate; // 생년월일
