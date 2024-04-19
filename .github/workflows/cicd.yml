@@ -33,7 +33,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build Project
-        run: ./gradlew bootJar -x test
+        run: ./gradlew build
 
       - name: Make zip file
         run: zip -r ./code-deploy.zip ./build/libs/*.jar ./script/* -j ./appspec.yml
