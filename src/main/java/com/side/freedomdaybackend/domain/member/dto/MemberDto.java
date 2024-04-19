@@ -15,8 +15,6 @@ public class MemberDto {
 
     private Long id;
     private String email; // 이메일
-    private String name; // 이름
-    private String phoneNumber; // 휴대폰 번호
     private String nickName; // 닉네임
     private Character sex; // 성별
     private LocalDateTime createDate; // 생성날짜
