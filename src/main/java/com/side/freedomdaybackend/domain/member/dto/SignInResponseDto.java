@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SignInResponseDto {
 
-    private String id; // member pk
+    private Long id; // member pk
 
 }

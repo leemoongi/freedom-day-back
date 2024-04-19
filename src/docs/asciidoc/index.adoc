@@ -1,0 +1,17 @@
+= API 명세
+:doctype: book
+:source-highlighter: highlightjs
+:toc: left
+:toc-title: 목차
+:toclevels: 2
+:sectlinks:
+:sectnums:
+:docinfo: shared-head
+
+
+== 멤버
+=== 로그인
+operation::member/sign-in[snippets='http-request,http-response,request-fields,response-fields']
+
+=== 회원가입
+operation::member/sign-up[snippets='http-request,http-response,request-fields,response-fields']
