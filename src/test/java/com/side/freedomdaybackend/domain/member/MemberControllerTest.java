@@ -92,20 +92,4 @@ class MemberControllerTest extends RestDocsTest {
                         )
                 ));
     }
-
-
-
-
-
-    @Test
-    void emailAuthentication() {
-    }
-
-    @Test
-    void memberList() {
-    }
-
-    @Test
-    void queryDslTest() {
-    }
 }

@@ -33,8 +33,7 @@ public abstract class RestDocsTest {
                 .apply(documentationConfiguration(restDocumentation)
                         .uris()
                         .withScheme("https")
-                        .withHost("localhost")
-                        .withPort(8080))
+                        .withHost("freedom-day.site"))
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print()) // 항상 프린트
                 .build();
