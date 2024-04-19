@@ -17,7 +17,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-//@SpringBootTest // 모든 빈 사용
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs // SpringRestDocs 자동 설정
 @SpringBootTest // 모든 빈 사용
@@ -33,7 +32,8 @@ public abstract class RestDocsTest {
                 .apply(documentationConfiguration(restDocumentation)
                         .uris()
                         .withScheme("https")
-                        .withHost("freedom-day.site"))
+                        .withHost("freedom-day.site")
+                        .withPort(433))
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print()) // 항상 프린트
                 .build();
