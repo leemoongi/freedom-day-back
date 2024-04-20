@@ -65,13 +65,5 @@ public class MemberController {
     }
 
 
-        @GetMapping("/static/docs/index")
-        public ResponseEntity<Resource> getIndexPage() {
-            // 정적 리소스 반환
-            Resource resource = new ClassPathResource("static/docs/index.html");
-            return ResponseEntity.ok()
-                    .contentType(MediaType.TEXT_HTML)
-                    .body(resource);
-        }
 
 }
