@@ -95,10 +95,13 @@ tasks.named('asciidoctor') {
 }
 
 // spring rest docs
+// 공식문서에 나와있는 기본경로가 다르다 이유는 잘 모르겠다
+// ${asciidoctor.outputDir} => build/docs/asciidoc
+// into 안에 잡혀있는 기본 경로도 다르다
 bootJar {
 	dependsOn asciidoctor
-	from ("${asciidoctor.outputDir}") {
-		into 'static/docs' // 빌드 파일에 포함
+	from("${asciidoctor.outputDir}") {
+		into "BOOT-INF/classes/static/docs"
 	}
 }
 
