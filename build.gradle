@@ -81,39 +81,26 @@ ext { // spring rest docs
 	snippetsDir = file('build/generated-snippets')
 }
 
-tasks.named('test') {
+test {
 	outputs.dir snippetsDir
 	useJUnitPlatform()
 }
 
 // spring rest docs
-tasks.named('asciidoctor') {
-	inputs.dir snippetsDir
+asciidoctor {
 	configurations 'asciidoctorExt'
+	baseDirFollowsSourceFile()
+	inputs.dir snippetsDir
 	dependsOn test
-	delete file('src/main/resources/static/docs') // 기존에 있던 문서 삭제
+	outputDir file('build/docs/asciidoc')
 }
 
 // spring rest docs
-// 공식문서에 나와있는 기본경로가 다르다 이유는 잘 모르겠다
-// ${asciidoctor.outputDir} => build/docs/asciidoc
-// into 안에 잡혀있는 기본 경로도 다르다
 bootJar {
 	dependsOn asciidoctor
 	from("${asciidoctor.outputDir}") {
-		into "BOOT-INF/classes/static/docs"
+		into "static/docs"
 	}
-}
-
-tasks.register('copyDocument', Copy) {
-	dependsOn asciidoctor
-
-	from file("build/docs/asciidoc")
-	into file("src/main/resources/static/docs") // ./gradlew asciidoctor 실행으로 만들어진 파일을 리소스 파일로 복사
-}
-
-build {
-	dependsOn copyDocument // 빌드전에 파일 복사 먼저
 }
 
 // queryDsl 추가
