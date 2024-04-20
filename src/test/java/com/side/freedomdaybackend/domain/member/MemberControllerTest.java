@@ -97,7 +97,7 @@ class MemberControllerTest extends RestDocsTest {
 
                 // spring rest docs
                 .andDo(
-                        document("/member/sign-in",
+                        document("member/sign-in",
                                 Preprocessors.preprocessRequest(prettyPrint()),
                                 Preprocessors.preprocessResponse(prettyPrint()),
                                 requestFields(
@@ -115,7 +115,7 @@ class MemberControllerTest extends RestDocsTest {
         SignUpRequestDto signUpRequestDto = new SignUpRequestDto("newTestTest@naver.com", "test1234@", "testNickName", 'M', "19880101");
 
         // when
-        mockMvc.perform(post("/member/sign-up")
+        mockMvc.perform(post("member/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpRequestDto)))
 
