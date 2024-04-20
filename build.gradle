@@ -97,12 +97,8 @@ tasks.named('asciidoctor') {
 // spring rest docs
 bootJar {
 	dependsOn asciidoctor
-//	from ("${asciidoctor.outputDir}/html5") {
-//		into 'static/docs' // 빌드 파일에 포함
-//	}
-	copy {
-		from asciidoctor.outputDir
-		into "src/main/resources/static/docs"
+	from ("${asciidoctor.outputDir}") {
+		into 'static/docs' // 빌드 파일에 포함
 	}
 }
 

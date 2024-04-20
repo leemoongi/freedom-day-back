@@ -14,4 +14,4 @@
 operation::member/sign-in[snippets='http-request,http-response,request-fields,response-fields']
 
 === 회원가입
-operation::member/sign-up[snippets='http-request,http-response,request-fields,response-fields']
+// operation::member/sign-up[snippets='http-request,http-response,request-fields,response-fields']
