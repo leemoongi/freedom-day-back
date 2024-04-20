@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -25,15 +24,15 @@ import java.util.UUID;
 public class MemberController {
 
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
-    private final MemberMapstruct memberMapstruct;
-    private final JwtUtil jwtUtil;
+
     private final CookieUtil cookieUtil;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/sign-in")
     public ResponseEntity<SignInResponseDto> signIn(@RequestBody SignInRequestDto signInRequestDto) throws NoSuchAlgorithmException {
 
         Member member = memberService.signIn(signInRequestDto);
+//        headerUtil.createHttpHeader()
 
         // 3. 토큰 발급
         String accessToken = jwtUtil.createAccessToken(member.getEmail());
@@ -66,17 +65,4 @@ public class MemberController {
         return new ApiResponse<>("test");
     }
 
-    @GetMapping("/list")
-    public ApiResponse<List<MemberDto>> memberList() {
-        List<Member> memberList = memberRepository.findAll();
-        List<MemberDto> memberDtoList = memberMapstruct.toMemberDtoList(memberList);
-        return new ApiResponse<>(memberDtoList);
-    }
-
-    @GetMapping("/querydsl-test")
-    public ApiResponse<MemberDto> queryDslTest() {
-        Member member = memberRepository.queryDslTest();
-        MemberDto memberDto = memberMapstruct.toMemberDto(member);
-        return new ApiResponse<>(memberDto);
-    }
 }
