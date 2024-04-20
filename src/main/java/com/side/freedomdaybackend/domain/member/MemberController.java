@@ -9,10 +9,9 @@ import com.side.freedomdaybackend.domain.member.dto.SignInRequestDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInResponseDto;
 import com.side.freedomdaybackend.domain.member.dto.SignUpRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -64,5 +63,15 @@ public class MemberController {
         // TODO) 작업중
         return new ApiResponse<>("test");
     }
+
+
+        @GetMapping("/static/docs/index")
+        public ResponseEntity<Resource> getIndexPage() {
+            // 정적 리소스 반환
+            Resource resource = new ClassPathResource("static/docs/index.html");
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_HTML)
+                    .body(resource);
+        }
 
 }
