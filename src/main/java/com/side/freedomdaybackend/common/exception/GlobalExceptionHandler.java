@@ -21,6 +21,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response,httpStatus);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse> handleServerException(Exception e) {
+        ApiResponse response = new ApiResponse(ErrorCode.INTERNAL_SERVER_ERROR);
+        HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+
+        log.error("An error occurred: {}, StackTrace: {}", e.getMessage(), e);
+        return new ResponseEntity<>(response, httpStatus);
+    }
+
 //    @ExceptionHandler(LoginException.class)
 //    public ResponseEntity<ErrorApiResponse> handleLoginException(LoginException e) {
 //

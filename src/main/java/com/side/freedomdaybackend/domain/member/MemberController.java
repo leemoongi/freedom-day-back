@@ -31,7 +31,6 @@ public class MemberController {
     public ResponseEntity<SignInResponseDto> signIn(@RequestBody SignInRequestDto signInRequestDto) throws NoSuchAlgorithmException {
 
         Member member = memberService.signIn(signInRequestDto);
-//        headerUtil.createHttpHeader()
 
         // 3. 토큰 발급
         String accessToken = jwtUtil.createAccessToken(member.getEmail());
