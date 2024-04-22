@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberDto {
-
     private Long id;
     private String email; // 이메일
     private String nickName; // 닉네임
