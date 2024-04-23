@@ -91,7 +91,7 @@ class MemberControllerTest extends RestDocsTest {
 
                 // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(notNullValue()))
+                .andExpect(jsonPath("$.response").value(notNullValue()))
                 .andExpect(cookie().exists(Constants.ACCESS_TOKEN))
                 .andExpect(cookie().exists(Constants.REFRESH_TOKEN))
 
@@ -104,8 +104,14 @@ class MemberControllerTest extends RestDocsTest {
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("멤버 이메일"),
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")),
                                 responseFields(
-                                        fieldWithPath("id").description("멤버 PK")
-                                )));
+                                        beneathPath("response").withSubsectionId("response"),
+//                                        fieldWithPath("response.code").type(JsonFieldType.STRING).description("비밀번호"),
+//                                        fieldWithPath("response.message").type(JsonFieldType.STRING).description("비밀번호"),
+//                                        fieldWithPath("code").description("응답 코드"),
+//                                        fieldWithPath("message").description("응답 메시지"),
+                                        fieldWithPath("id").description("멤버 PK"))
+                                )
+                        );
     }
 
     @DisplayName("회원가입")

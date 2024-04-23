@@ -28,7 +28,7 @@ public class MemberController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/sign-in")
-    public ResponseEntity<SignInResponseDto> signIn(@RequestBody SignInRequestDto signInRequestDto) throws NoSuchAlgorithmException {
+    public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestDto signInRequestDto) throws NoSuchAlgorithmException {
 
         Member member = memberService.signIn(signInRequestDto);
 
@@ -47,8 +47,9 @@ public class MemberController {
         headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
         SignInResponseDto signInResponseDto = new SignInResponseDto(member.getId());
+        ApiResponse apiResponse = new ApiResponse(signInResponseDto);
 
-        return new ResponseEntity<>(signInResponseDto, headers, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, headers, HttpStatus.OK);
     }
 
     @PostMapping("/sign-up")
