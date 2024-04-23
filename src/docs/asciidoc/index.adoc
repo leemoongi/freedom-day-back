@@ -12,6 +12,14 @@
 == 멤버
 === 로그인
 operation::member/sign-in[snippets='http-request,http-response,request-fields,response-fields']
+==== 에러코드
+[cols="1,3", options="header"]
+|===
+| 에러 코드 | 설명
+| ACCOUNT-001 | 존재하지 않은 유저
+| ACCOUNT-002 | 비밀번호 일치 실패
+|===
+
 
 === 회원가입
-// operation::member/sign-up[snippets='http-request,http-response,request-fields,response-fields']
+operation::member/sign-up[snippets='http-request,http-response,request-fields']

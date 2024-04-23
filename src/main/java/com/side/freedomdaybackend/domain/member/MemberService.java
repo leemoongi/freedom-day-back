@@ -29,8 +29,12 @@ public class MemberService {
         String password = signInRequestDto.getPassword();
         String encryptedPassword = encryptUtil.sha256(password); // 암호화
 
-        Member member = memberRepository.findByEmailAndPassword(email, encryptedPassword)
-                .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST)); // TODO) 에러코드 추가
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_EXIST));
+
+        // 비밀번호 일치 여부
+        if (!signInRequestDto.getPassword().equals(member.getPassword()))
+            throw new CustomException(ErrorCode.ACCOUNT_PASSWORD_NOT_MATCH);
 
         return member;
 
