@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.util.CookieUtil;
 import com.side.freedomdaybackend.common.util.JwtUtil;
+import com.side.freedomdaybackend.common.util.RedisUtil;
 import com.side.freedomdaybackend.domain.RestDocsTest;
 import com.side.freedomdaybackend.domain.member.dto.SignInRequestDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInResponseDto;
@@ -43,6 +44,9 @@ class MemberControllerTest extends RestDocsTest {
 
     @MockBean
     private MemberService memberService;
+
+    @MockBean
+    private RedisUtil redisUtil;
 
 
     @DisplayName("로그인")
