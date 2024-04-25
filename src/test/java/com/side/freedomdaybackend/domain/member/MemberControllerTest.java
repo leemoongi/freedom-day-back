@@ -16,7 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
-import org.springframework.restdocs.operation.preprocess.Preprocessors;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -24,8 +24,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -35,6 +33,9 @@ class MemberControllerTest extends RestDocsTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    RestDocumentationResultHandler restDocs;
 
     @MockBean
     private JwtUtil jwtUtil;
@@ -101,9 +102,7 @@ class MemberControllerTest extends RestDocsTest {
 
                 // spring rest docs
                 .andDo(
-                        document("member/sign-in",
-                                Preprocessors.preprocessRequest(prettyPrint()),
-                                Preprocessors.preprocessResponse(prettyPrint()),
+                        restDocs.document(
                                 requestFields(
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("멤버 이메일"),
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호")),
@@ -133,14 +132,16 @@ class MemberControllerTest extends RestDocsTest {
                 .andExpect(status().isOk())
 
                 // spring rest docs
-                .andDo(document("member/sign-up",
-                        requestFields(
-                                fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
-                                fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-                                fieldWithPath("nickName").type(JsonFieldType.STRING).description("닉네임"),
-                                fieldWithPath("sex").type(JsonFieldType.STRING).description("성별"),
-                                fieldWithPath("birthDate").type(JsonFieldType.STRING).description("생년월일")
-                        )
-                ));
+                .andDo(
+                        restDocs.document(
+                                requestFields(
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+                                        fieldWithPath("nickName").type(JsonFieldType.STRING).description("닉네임"),
+                                        fieldWithPath("sex").type(JsonFieldType.STRING).description("성별"),
+                                        fieldWithPath("birthDate").type(JsonFieldType.STRING).description("생년월일")
+                                )
+                        ));
+
     }
 }

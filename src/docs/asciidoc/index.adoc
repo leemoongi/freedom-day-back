@@ -11,7 +11,7 @@
 
 == 멤버
 === 로그인
-operation::member/sign-in[snippets='http-request,http-response,request-fields,response-fields-response']
+operation::member-controller-test/sign-in[snippets='http-request,http-response,request-fields,response-fields-response']
 ==== Error Code
 [cols="1,3", options="header"]
 |===
@@ -22,9 +22,10 @@ operation::member/sign-in[snippets='http-request,http-response,request-fields,re
 
 
 === 회원가입
-operation::member/sign-up[snippets='http-request,http-response,request-fields']
+operation::member-controller-test/sign-up[snippets='http-request,http-response,request-fields']
 ==== Error Code
 [cols="1,3", options="header"]
 |===
 | Code | Description
+| ACCOUNT-001 | 존재하지 않은 유저
 |===

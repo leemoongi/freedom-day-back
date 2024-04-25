@@ -48,7 +48,7 @@ public class MemberService {
         String password = signUpRequestDto.getPassword();
 
         if (memberRepository.existsByEmail(email)) {
-            throw new CustomException(ErrorCode.BAD_REQUEST);  // TODO) 에러코드 추가
+            throw new CustomException(ErrorCode.ACCOUNT_NOT_EXIST);
         };
 
         // 2. 비밀번호 안호화

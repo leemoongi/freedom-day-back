@@ -7,8 +7,10 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -21,11 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @AutoConfigureRestDocs // SpringRestDocs 자동 설정
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @WebMvcTest
-//@SpringBootTest
-//@AutoConfigureMockMvc
+@Import(RestDocsConfiguration.class)
 public abstract class RestDocsTest {
 
+    @Autowired
     protected MockMvc mockMvc;
+
+    @Autowired
+    RestDocumentationResultHandler restDocs;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -37,6 +42,7 @@ public abstract class RestDocsTest {
                         .withPort(8080))
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print()) // 항상 프린트
+                .alwaysDo(restDocs)
                 .build();
     }
 }
