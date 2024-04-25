@@ -33,7 +33,7 @@ public class MemberService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_EXIST));
 
         // 비밀번호 일치 여부
-        if (!signInRequestDto.getPassword().equals(member.getPassword()))
+        if (!encryptedPassword.equals(member.getPassword()))
             throw new CustomException(ErrorCode.ACCOUNT_PASSWORD_NOT_MATCH);
 
         return member;

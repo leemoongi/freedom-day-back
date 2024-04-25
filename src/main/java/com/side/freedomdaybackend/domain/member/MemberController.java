@@ -4,14 +4,15 @@ import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.response.ApiResponse;
 import com.side.freedomdaybackend.common.util.CookieUtil;
 import com.side.freedomdaybackend.common.util.JwtUtil;
-import com.side.freedomdaybackend.domain.member.dto.MemberDto;
+import com.side.freedomdaybackend.common.util.RedisUtil;
 import com.side.freedomdaybackend.domain.member.dto.SignInRequestDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInResponseDto;
 import com.side.freedomdaybackend.domain.member.dto.SignUpRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -23,9 +24,9 @@ import java.util.UUID;
 public class MemberController {
 
     private final MemberService memberService;
-
     private final CookieUtil cookieUtil;
     private final JwtUtil jwtUtil;
+    private final RedisUtil redisUtil;
 
     @PostMapping("/sign-in")
     public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestDto signInRequestDto) throws NoSuchAlgorithmException {
@@ -33,10 +34,12 @@ public class MemberController {
         Member member = memberService.signIn(signInRequestDto);
 
         // 3. 토큰 발급
+        String uuid = UUID.randomUUID().toString();
         String accessToken = jwtUtil.createAccessToken(member.getEmail());
-        String refreshToken = jwtUtil.createRefreshToken(member.getEmail(), UUID.randomUUID().toString());
+        String refreshToken = jwtUtil.createRefreshToken(member.getEmail(), uuid);
 
-        // 4. TODO) 리프레쉬 토큰 Redis 저장
+        // 4. 리프레쉬 토큰 저장
+        redisUtil.set(uuid, refreshToken);
 
         // 5. 헤더에 추가
         ResponseCookie accessCookie = cookieUtil.createToken(Constants.ACCESS_TOKEN, accessToken);
