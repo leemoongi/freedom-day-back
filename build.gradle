@@ -75,6 +75,9 @@ dependencies {
 	asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
 	testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
 
+	// spring redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 ext { // spring rest docs

@@ -4,7 +4,13 @@ spring:
     activate:
       on-profile: dev
 
-  # datasource
+  data:
+    redis:
+      host: freedom-day-refreshtoken-redis-ro.v9dkc7.ng.0001.apn2.cache.amazonaws.com
+      port: 6379
+      password:
+
+
   datasource:
     url: jdbc:mariadb://${rds_host}:3306/freedom_day # TODO)
     driver-class-name: org.mariadb.jdbc.Driver
