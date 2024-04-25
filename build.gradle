@@ -90,19 +90,33 @@ test {
 }
 
 // spring rest docs
+asciidoctor.doFirst {
+	delete file("src/main/resources/static/docs")
+}
+
 asciidoctor {
 	configurations 'asciidoctorExt'
 	baseDirFollowsSourceFile()
 	inputs.dir snippetsDir
 	dependsOn test
-	outputDir file('build/docs/asciidoc')
 }
 
-// spring rest docs
+task copyDocument(type: Copy) { // build/docs 문서를 resources에 복사
+	dependsOn asciidoctor
+
+	from file("build/docs/asciidoc")
+	into file("src/main/resources/static/docs")
+}
+
+build {
+	dependsOn copyDocument
+}
+
+// jar 파일에 포함
 bootJar {
 	dependsOn asciidoctor
 	from("${asciidoctor.outputDir}") {
-		into "BOOT-INF/classes/static/docs"
+		into 'static/docs'
 	}
 }
 
