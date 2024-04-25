@@ -18,7 +18,8 @@ public class WebConfig implements WebMvcConfigurer {
             "/member/sign-up",
             "/member/token-reissuance",
             "/member/email-authentication",
-            "/docs/*"};
+            "/docs/index.html"
+    };
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
