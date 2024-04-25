@@ -13,7 +13,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final JwtInterceptor jwtInterceptor;
 
-    private final String[] path = {"/member/sign-in", "/member/sign-up", "/member/token-reissuance",  "/member/email-authentication"};
+    private final String[] path = {
+            "/member/sign-in",
+            "/member/sign-up",
+            "/member/token-reissuance",
+            "/member/email-authentication",
+            "/docs/*"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

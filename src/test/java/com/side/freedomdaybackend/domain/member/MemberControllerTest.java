@@ -113,9 +113,9 @@ class MemberControllerTest extends RestDocsTest {
 //                                        fieldWithPath("response.message").type(JsonFieldType.STRING).description("비밀번호"),
 //                                        fieldWithPath("code").description("응답 코드"),
 //                                        fieldWithPath("message").description("응답 메시지"),
-                                        fieldWithPath("id").description("멤버 PK"))
-                                )
-                        );
+                                        fieldWithPath("accessToken").description("엑세스 토큰"))
+                        )
+                );
     }
 
     @DisplayName("회원가입")

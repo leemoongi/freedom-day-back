@@ -50,8 +50,6 @@ public class JwtInterceptor implements HandlerInterceptor {
             if (cookie.getName().equals(Constants.REFRESH_TOKEN)) refreshToken = cookie.getValue();
         }
 
-        String requestURI = request.getRequestURI();
-
         try {
             // accessToken 확인
             jwtUtil.isValidToken(accessToken);
@@ -74,7 +72,6 @@ public class JwtInterceptor implements HandlerInterceptor {
 
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(Constants.ACCESS_TOKEN)) cookie.setValue(accessCookie.toString().replaceAll("Access-Token=", "").substring(0, accessCookie.toString().replaceAll("Access-Token=", "").indexOf(";")));
-//                if (cookie.getName().equals(Constants.REFRESH_TOKEN)) cookie.setValue(refreshCookie.toString().replaceAll("Refresh-Token=", "").substring(0, accessCookie.toString().replaceAll("Refresh-Token=", "").indexOf(";")));
             }
 
             return HandlerInterceptor.super.preHandle(request, response, handler);
