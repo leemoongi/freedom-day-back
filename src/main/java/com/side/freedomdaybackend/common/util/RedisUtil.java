@@ -4,14 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 @Component
 @RequiredArgsConstructor
 public class RedisUtil {
 
     private final RedisTemplate<String, String> redisTemplate;
+    private final long expireTime = 3600000L; // 1시간
 
     public void set(String key, String value) {
-        redisTemplate.opsForValue().set(key, value);
+        redisTemplate.opsForValue().set(key, value, expireTime, TimeUnit.MILLISECONDS);
     }
 
     public String get(String key) {
@@ -19,7 +22,7 @@ public class RedisUtil {
     }
 
     public void remove(String key) {
-        redisTemplate.delete("key");
+        redisTemplate.delete(key);
     }
 
     public Boolean notExists(String key) {

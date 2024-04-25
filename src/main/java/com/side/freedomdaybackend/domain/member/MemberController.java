@@ -58,7 +58,7 @@ public class MemberController {
     @PostMapping("/sign-up")
     public ApiResponse<String> signUp(@RequestBody SignUpRequestDto signUpRequestDto) throws NoSuchAlgorithmException {
         memberService.signUp(signUpRequestDto);
-        return new ApiResponse<>("test");
+        return new ApiResponse<>();
     }
 
     @GetMapping("/email-authentication")
