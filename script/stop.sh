@@ -1,5 +1,5 @@
 PROJECT_ROOT="/home/ec2-user/freedom-day-backend"
-JAR_FILE="$PROJECT_ROOT/freedom-day-backend-0.0.1-SNAPSHOT.jar"
+JAR_FILE="freedom-day-backend-0.0.1-SNAPSHOT.jar"
 
 DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
