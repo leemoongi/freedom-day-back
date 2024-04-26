@@ -11,6 +11,7 @@ import com.side.freedomdaybackend.common.util.RedisUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,7 +45,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         Cookie[] cookies = request.getCookies();
 
         if(request.getMethod().equals("OPTIONS")) return true;
-        if(cookies == null) throw new CustomException(ErrorCode.JWT_ERROR); // TODO) 에러코드 추가
+        if(cookies == null) throw new CustomException(ErrorCode.JWT_ERROR);
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals(Constants.ACCESS_TOKEN)) accessToken = cookie.getValue();
             if (cookie.getName().equals(Constants.REFRESH_TOKEN)) refreshToken = cookie.getValue();
@@ -62,7 +63,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             // redis refreshToken 존재 확인
             if (redisUtil.notExists(uuid)) {
                 logout(response);
-                throw new CustomException(ErrorCode.BAD_REQUEST); // TODO) 에러코드 추가
+                throw new CustomException(ErrorCode.JWT_REFRESH_NOT_FOUND); // TODO) 에러코드 추가
             }
 
             // 재발급 시작
@@ -75,12 +76,14 @@ public class JwtInterceptor implements HandlerInterceptor {
             }
 
             return HandlerInterceptor.super.preHandle(request, response, handler);
+        } catch (SignatureException e) {
+            throw new CustomException(ErrorCode.JWT_ACCESS_INVALID_SIGNATURE);
         } catch (JwtException e) {
             logout(response);
-            throw new CustomException(ErrorCode.BAD_REQUEST); // TODO) 에러코드 추가
+            throw new CustomException(ErrorCode.JWT_ERROR);
         } catch (Exception e) {
             logout(response);
-            throw new CustomException(ErrorCode.BAD_REQUEST); // TODO) 에러코드 추가
+            throw new CustomException(ErrorCode.JWT_ERROR);
         }
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
@@ -91,9 +94,15 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         try {
             refreshClaims = jwtUtil.isValidToken(refreshToken);
-        } catch (JwtException e) {
+        } catch (ExpiredJwtException e) {
             logout(response);
-            throw new CustomException(ErrorCode.BAD_REQUEST); // TODO) 에러코드 추가
+            throw new CustomException(ErrorCode.JWT_REFRESH_EXPIRE);
+        } catch (SignatureException e) {
+            logout(response);
+            throw new CustomException(ErrorCode.JWT_REFRESH_INVALID_SIGNATURE);
+        } catch (Exception e) {
+            logout(response);
+            throw new CustomException(ErrorCode.JWT_ERROR);
         }
 
         return refreshClaims;
