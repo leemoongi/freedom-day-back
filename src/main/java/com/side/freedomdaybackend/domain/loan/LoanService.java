@@ -1,8 +1,9 @@
 package com.side.freedomdaybackend.domain.loan;
 
+import com.side.freedomdaybackend.common.exception.CustomException;
+import com.side.freedomdaybackend.common.exception.ErrorCode;
 import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
 import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
-import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,10 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final LoanMapstruct loanMapstruct;
 
-    public MyLoanInfoDto myLoanList() {
-        // 유저 id
-        Member member = memberRepository.findById(1L).get();
-        Long memberId = member.getId();
+    public MyLoanInfoDto myLoanList(long memberId) {
+         if (!memberRepository.existsById(memberId)) {
+             throw new CustomException(ErrorCode.ACCOUNT_NOT_FOUND);
+         }
 
         // 내 대출 리스트 정보
         List<LoanSimpleDto> loanSimpleDtoList = loanRepository.findByLoanList(memberId);

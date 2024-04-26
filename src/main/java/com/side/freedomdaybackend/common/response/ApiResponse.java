@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
+//@NoArgsConstructor
 public class ApiResponse<T> {
 
     private String code;
@@ -15,6 +15,12 @@ public class ApiResponse<T> {
     private String message;
 
     private T response;
+
+    public ApiResponse() {
+        this.code = "SUCCESS";
+        this.message = "api 통신 성공";
+        this.response = null;
+    }
 
     public ApiResponse(T response) {
         this.code = "SUCCESS";

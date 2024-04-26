@@ -30,7 +30,7 @@ public class MemberService {
         String encryptedPassword = encryptUtil.sha256(password); // 암호화
 
         Member member = memberRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_EXIST));
+                .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
 
         // 비밀번호 일치 여부
         if (!encryptedPassword.equals(member.getPassword()))
@@ -48,7 +48,7 @@ public class MemberService {
         String password = signUpRequestDto.getPassword();
 
         if (memberRepository.existsByEmail(email)) {
-            throw new CustomException(ErrorCode.ACCOUNT_NOT_EXIST);
+            throw new CustomException(ErrorCode.ACCOUNT_NOT_FOUND);
         };
 
         // 2. 비밀번호 안호화

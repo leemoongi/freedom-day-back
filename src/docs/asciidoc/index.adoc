@@ -29,3 +29,14 @@ operation::member-controller-test/sign-up[snippets='http-request,http-response,r
 | Code | Description
 | ACCOUNT-001 | 존재하지 않은 유저
 |===
+
+
+== 대출
+=== 내 대출 정보
+operation::loan-controller-test/user-loan-info[snippets='http-request,http-response,response-fields-response']
+==== Error Code
+[cols="1,3", options="header"]
+|===
+| Code | Description
+// | ACCOUNT-001 | 존재하지 않은 유저
+|===

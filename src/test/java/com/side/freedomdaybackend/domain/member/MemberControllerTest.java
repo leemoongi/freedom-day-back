@@ -35,7 +35,7 @@ class MemberControllerTest extends RestDocsTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    RestDocumentationResultHandler restDocs;
+    private RestDocumentationResultHandler restDocs;
 
     @MockBean
     private JwtUtil jwtUtil;
