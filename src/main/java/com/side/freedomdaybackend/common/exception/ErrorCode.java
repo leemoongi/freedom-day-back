@@ -25,7 +25,7 @@ public enum ErrorCode {
     ACCOUNT_PASSWORD_NOT_MATCH("ACCOUNT-002", 401,"비밀번호가 일치하지 않습니다."),
     ACCOUNT_NOT_ACTIVE("ACCOUNT-003", 401,"비활성화된 계정입니다."),
     ACCOUNT_LOCK("ACCOUNT-004", 401,"비밀번호가 5번 틀렸습니다. 계정이 잠금됩니다."),
-    ACCOUNT_EXIST_ID("ACCOUNT-005", 400, "이미 존재하는 아이디입니다."),
+    ACCOUNT_EXIST_EMAIL("ACCOUNT-005", 400, "이미 존재하는 이메일입니다."),
 
     ;
 

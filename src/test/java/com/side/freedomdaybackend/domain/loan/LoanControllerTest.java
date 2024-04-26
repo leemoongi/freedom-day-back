@@ -75,7 +75,6 @@ class LoanControllerTest extends RestDocsTest {
 
         ResultActions perform = mockMvc.perform(get("/loan/user-loan-info")
                 .contentType(MediaType.APPLICATION_JSON));
-//                .content(objectMapper.writeValueAsString(signInRequestDto)));
 
         // then
         perform.andExpect(status().isOk())

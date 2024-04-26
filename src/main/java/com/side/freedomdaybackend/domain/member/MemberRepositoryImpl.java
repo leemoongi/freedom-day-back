@@ -17,4 +17,15 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .where(member.id.eq(1L))
                 .fetchOne();
     }
+
+    @Override
+    public boolean existsMemberId(long id) {
+        Member firstMember = queryFactory
+                .selectFrom(member)
+                .where(member.id.eq(id))
+                .fetchFirst();
+
+        return firstMember != null;
+    }
+
 }

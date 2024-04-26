@@ -47,8 +47,8 @@ public class MemberService {
         String email = signUpRequestDto.getEmail();
         String password = signUpRequestDto.getPassword();
 
-        if (memberRepository.existsByEmail(email)) {
-            throw new CustomException(ErrorCode.ACCOUNT_NOT_FOUND);
+        if (memberRepository.existsByEmail(email)) { // TODO) exists 성능 문제
+            throw new CustomException(ErrorCode.ACCOUNT_EXIST_EMAIL);
         };
 
         // 2. 비밀번호 안호화

@@ -21,16 +21,17 @@ public class AuthUtil {
         String accessToken = null;
 
         if (cookies.length == 0)
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ErrorCode.JWT_ERROR);
 
         for (Cookie cookie : cookies) {
             if (Constants.ACCESS_TOKEN.equals(cookie.getName())) accessToken = cookie.getValue();
         }
 
         if (accessToken == null)
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ErrorCode.JWT_ERROR);
 
         Claims claims = jwtUtil.isValidToken(accessToken);
-        return (Long) claims.get(Constants.MEMBER_ID);
+        String memberId = (String) claims.get(Constants.MEMBER_ID);
+        return Long.valueOf(memberId);
     }
 }

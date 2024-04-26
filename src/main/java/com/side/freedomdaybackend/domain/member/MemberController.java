@@ -35,8 +35,8 @@ public class MemberController {
 
         // 3. 토큰 발급
         String uuid = UUID.randomUUID().toString();
-        String accessToken = jwtUtil.createAccessToken(member.getEmail());
-        String refreshToken = jwtUtil.createRefreshToken(member.getEmail(), uuid);
+        String accessToken = jwtUtil.createAccessToken(String.valueOf(member.getId()));
+        String refreshToken = jwtUtil.createRefreshToken(String.valueOf(member.getId()), uuid);
 
         // 4. 리프레쉬 토큰 저장
         redisUtil.set(uuid, refreshToken);

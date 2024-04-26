@@ -21,7 +21,7 @@ public class LoanService {
     private final LoanMapstruct loanMapstruct;
 
     public MyLoanInfoDto myLoanList(long memberId) {
-         if (!memberRepository.existsById(memberId)) {
+         if (!memberRepository.existsMemberId(memberId)) {
              throw new CustomException(ErrorCode.ACCOUNT_NOT_FOUND);
          }
 
