@@ -23,8 +23,6 @@ spring:
       ddl-auto: validate # *******
     properties:
       hibernate:
-        format_sql: true
-        show_sql: true
 
 security:
   jwt-key: ${security_jwt_key}
