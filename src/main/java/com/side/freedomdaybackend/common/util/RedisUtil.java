@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
 
     private final RedisTemplate<String, String> redisTemplate;
-    private final long expireTime = 3600000L; // 1시간
+    private final long expireTime = 3600000L * 3; // 3시간
 
     public void set(String key, String value) {
         redisTemplate.opsForValue().set(key, value, expireTime, TimeUnit.MILLISECONDS);

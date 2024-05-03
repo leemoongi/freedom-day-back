@@ -33,7 +33,7 @@ public class JwtUtil {
 
     public String createRefreshToken(String memberId, String uuid) {
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + Duration.ofHours(1).toMillis()); // 1시간
+        Date expiration = new Date(now.getTime() + Duration.ofHours(3).toMillis()); // 3시간
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
