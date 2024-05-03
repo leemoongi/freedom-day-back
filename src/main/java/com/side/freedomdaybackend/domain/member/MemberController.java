@@ -49,7 +49,7 @@ public class MemberController {
         headers.add(HttpHeaders.SET_COOKIE, accessCookie.toString());
         headers.add(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-        SignInResponseDto signInResponseDto = new SignInResponseDto(member.getId());
+        SignInResponseDto signInResponseDto = new SignInResponseDto(member.getNickName());
         ApiResponse apiResponse = new ApiResponse(signInResponseDto);
 
         return new ResponseEntity<>(apiResponse, headers, HttpStatus.OK);

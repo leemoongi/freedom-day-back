@@ -60,6 +60,7 @@ class MemberControllerTest extends RestDocsTest {
         Member member = Member.builder()
                 .id(1L)
                 .email("test1234@gmail.com")
+                .nickName("test")
                 .build();
 
         String accessToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MTM2MDEwNjEsIm1lbWJlcklkIjoidGVzdDEyMzRAbmF2ZXIuY29tIn0.DZJzTFV45o-sm4CaHy7F09_B0llBEosAQdw9suGF1xo";
@@ -112,7 +113,7 @@ class MemberControllerTest extends RestDocsTest {
 //                                        fieldWithPath("response.message").type(JsonFieldType.STRING).description("비밀번호"),
 //                                        fieldWithPath("code").description("응답 코드"),
 //                                        fieldWithPath("message").description("응답 메시지"),
-                                        fieldWithPath("id").description("멤버 pk"))
+                                        fieldWithPath("nickName").type(JsonFieldType.STRING).description("닉네임"))
                         )
                 );
     }
