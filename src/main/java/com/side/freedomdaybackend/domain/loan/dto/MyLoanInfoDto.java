@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MyLoanInfoDto {
-    private long previousMonthPayment; // 지난달 총 납부금액
+    private Long previousMonthPayment; // 지난달 총 납부금액
     private int repaymentRate; // 상활률
     private int loanCount; // 대출 개수
     private List<LoanSimpleDto> loanSimpleDtoList;

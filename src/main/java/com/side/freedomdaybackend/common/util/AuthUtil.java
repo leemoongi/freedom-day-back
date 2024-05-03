@@ -3,6 +3,7 @@ package com.side.freedomdaybackend.common.util;
 import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.exception.CustomException;
 import com.side.freedomdaybackend.common.exception.ErrorCode;
+import com.side.freedomdaybackend.domain.member.MemberRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,8 +16,9 @@ import org.springframework.stereotype.Component;
 public class AuthUtil {
 
     private final JwtUtil jwtUtil;
+    private final MemberRepository memberRepository;
 
-    public long checkAuth(HttpServletRequest request) {
+    public Long checkAuth(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         String accessToken = null;
 
@@ -31,7 +33,13 @@ public class AuthUtil {
             throw new CustomException(ErrorCode.JWT_ERROR);
 
         Claims claims = jwtUtil.isValidToken(accessToken);
-        String memberId = (String) claims.get(Constants.MEMBER_ID);
-        return Long.valueOf(memberId);
+        String memberIdStr = (String) claims.get(Constants.MEMBER_ID);
+        Long memberId = Long.valueOf(memberIdStr);
+
+        if (!memberRepository.existsMemberId(memberId)) {
+            throw new CustomException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+
+        return memberId;
     }
 }
