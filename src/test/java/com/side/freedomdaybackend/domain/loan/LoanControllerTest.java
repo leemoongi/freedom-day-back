@@ -67,7 +67,7 @@ class LoanControllerTest extends RestDocsTest {
                         LocalDateTime.of(2024, Month.DECEMBER, 3, 22, 0),
                         16,
                         0));
-        MyLoanInfoDto myLoanInfoDto = new MyLoanInfoDto(50000, 8, 2, loanDtoList);
+        MyLoanInfoDto myLoanInfoDto = new MyLoanInfoDto(50000L, 8, 2, loanDtoList);
 
         // when
         when(authUtil.checkAuth(any())).thenReturn(1L);
