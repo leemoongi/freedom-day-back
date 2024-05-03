@@ -21,7 +21,8 @@ public class JwtUtil {
 
     public String createAccessToken(String memberId) {
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + Duration.ofMinutes(10).toMillis()); // 10분
+//        Date expiration = new Date(now.getTime() + Duration.ofMinutes(10).toMillis()); // 10분
+        Date expiration = new Date(now.getTime() + Duration.ofHours(3).toMillis()); // 3시간
 
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
