@@ -1,5 +1,6 @@
 package com.side.freedomdaybackend.domain.loan.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,13 +23,15 @@ public class MyLoanInfoDto {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class LoanSimpleDto {
-        String name; // 대출이름
-        String purpose; // 용도
-        int paymentDDay; // 남은 납부일
-        int outstandingPrincipal; // 남은 원금
-        LocalDateTime expirationDate; // 만기일
-        int paymentDate; // 납부일
-        int paymentPercentage; // 납부 진행률
+        private long id;
+        private String name; // 대출이름
+        private String purpose; // 용도
+        private int paymentDDay; // 남은 납부일
+        private int outstandingPrincipal; // 남은 원금
+        @JsonFormat(pattern = "yyyy.MM.dd")
+        private LocalDateTime expirationDate; // 만기일
+        private int paymentDate; // 납부일
+        private int paymentPercentage; // 납부 진행률
     }
 
 }

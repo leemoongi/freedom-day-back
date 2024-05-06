@@ -7,6 +7,7 @@ import com.side.freedomdaybackend.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -76,15 +77,10 @@ public class LoanService {
 
             int d_day = repaymentCountdown(paymentDate, now);
             loanSimpleTmp.setPaymentDDay(d_day);
-
-
         }
 
 
-
         return statisticsDto;
-
-
     }
 
 

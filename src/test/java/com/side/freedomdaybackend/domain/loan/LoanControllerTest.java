@@ -51,6 +51,7 @@ class LoanControllerTest extends RestDocsTest {
         List<MyLoanInfoDto.LoanSimpleDto> loanDtoList = new ArrayList<>();
         loanDtoList.add(
                 new MyLoanInfoDto.LoanSimpleDto(
+                        1L,
                         "토스뱅크 신용대출",
                         "생활비",
                         20,
@@ -60,6 +61,7 @@ class LoanControllerTest extends RestDocsTest {
                         9));
         loanDtoList.add(
                 new MyLoanInfoDto.LoanSimpleDto(
+                        1L,
                         "카카오뱅크 신용대출",
                         "생활비",
                         20,
@@ -79,7 +81,7 @@ class LoanControllerTest extends RestDocsTest {
         // then
         perform.andExpect(status().isOk())
 
-        // spring rest docs
+                // spring rest docs
                 .andDo(
                         restDocs.document(
                                 responseFields(
@@ -87,6 +89,7 @@ class LoanControllerTest extends RestDocsTest {
                                         fieldWithPath("previousMonthPayment").type(JsonFieldType.NUMBER).description("지난달 총 납부금액"),
                                         fieldWithPath("repaymentRate").type(JsonFieldType.NUMBER).description("상활률"),
                                         fieldWithPath("loanCount").type(JsonFieldType.NUMBER).description("대출 개수"),
+                                        fieldWithPath("loanSimpleDtoList[].id").type(JsonFieldType.NUMBER).description("pk"),
                                         fieldWithPath("loanSimpleDtoList[].name").type(JsonFieldType.STRING).description("대출이름"),
                                         fieldWithPath("loanSimpleDtoList[].purpose").type(JsonFieldType.STRING).description("용도"),
                                         fieldWithPath("loanSimpleDtoList[].paymentDDay").type(JsonFieldType.NUMBER).description("남은 납부일"),
