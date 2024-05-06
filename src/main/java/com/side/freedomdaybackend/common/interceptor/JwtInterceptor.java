@@ -63,7 +63,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             // redis refreshToken 존재 확인
             if (redisUtil.notExists(uuid)) {
                 logout(response);
-                throw new CustomException(ErrorCode.JWT_REFRESH_NOT_FOUND); // TODO) 에러코드 추가
+                throw new CustomException(ErrorCode.JWT_REFRESH_NOT_FOUND);
             }
 
             // 재발급 시작

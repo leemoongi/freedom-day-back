@@ -14,6 +14,5 @@ public interface LoanRepositoryCustom {
     StatisticsDto statistics(Long memberId);
     List<StatisticsDto.LoanSimpleTmp> loanSimple(Long memberId);
     List<StatisticsDto.RepaidLoan> repaidLoan(Long memberId);
-    List<StatisticsDto.RepaymentHistoryMonthTmp> repaymentHistoryMonthTmp(Long memberId);
-
+    List<StatisticsDto.RemainingPrincipal> remainingPrincipal(Long memberId);
 }

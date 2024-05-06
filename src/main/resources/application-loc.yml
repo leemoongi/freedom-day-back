@@ -4,31 +4,24 @@ spring:
     activate:
       on-profile: loc
 
+  maria-datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    jdbc-url: jdbc:mariadb://127.0.0.1:3306/api_test
+    username: root
+    password: root
+    maximum-pool-size: 10
+    connection-timeout: 5000 # (ms)
+
   data:
     redis:
       host: localhost
       port: 6379
 
-  # datasource
-  datasource:
-    url: jdbc:mariadb://127.0.0.1:3306/api_test
-    driver-class-name: org.mariadb.jdbc.Driver
-    username: root
-    password: root
-#    maximum-pool-size: 10
-#    connection-timeout: 5000 # (ms)
 
-#  maria-datasource:
-#    driver-class-name: org.mariadb.jdbc.Driver
-#    jdbc-url: jdbc:mariadb://127.0.0.1:3306/api_test
-#    username: root
-#    password: root
-#    maximum-pool-size: 10
-#    connection-timeout: 5000 # (ms)
 
-  # JPA
+# JPA
   jpa:
-#    database-platform: org.hibernate.dialect.MariaDBDialect
+    database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
       ddl-auto: validate
     properties:

@@ -4,21 +4,24 @@ spring:
     activate:
       on-profile: dev
 
+  # datasource
+  maria-datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    jdbc-url: jdbc:mariadb://${rds_host}:3306/freedom_day
+    username: ${rds_username}
+    password: ${rds_password}
+    maximum-pool-size: 10
+    connection-timeout: 5000 # (ms)
+
   data:
     redis:
       host: freedom-day-refreshtoken-redis-ro.v9dkc7.ng.0001.apn2.cache.amazonaws.com
       port: 6379
       password:
 
-
-  datasource:
-    url: jdbc:mariadb://${rds_host}:3306/freedom_day # TODO)
-    driver-class-name: org.mariadb.jdbc.Driver
-    username: ${rds_username}
-    password: ${rds_password}
-
   # JPA
   jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
       ddl-auto: validate # *******
     properties:

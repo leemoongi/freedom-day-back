@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.side.freedomdaybackend.mapper.LoanMapper">
+
+    <select id="selectRepaymentHistoryList" parameterType="Long" resultType="com.side.freedomdaybackend.domain.loan.dto.StatisticsDto$RepaymentHistoryMonthTmp">
+        SELECT
+            L.id,
+            DATE_FORMAT(LRMH.history_date, '%Y-%m') AS history_date,
+            SUM(LRMH.repayment_amount) AS repayment_amount,
+            LRMH.type
+        FROM loan L
+        INNER JOIN loan_repayment_month_history LRMH ON L.id = LRMH.loan_id
+        WHERE L.member_id = #{id}
+        GROUP BY
+            LRMH.history_date
+            , LRMH.type;
+    </select>
+</mapper>

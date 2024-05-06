@@ -1,5 +1,6 @@
 package com.side.freedomdaybackend.domain.loan.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
@@ -21,7 +23,6 @@ public class LoanSimpleDto {
     private Long repaymentAmount; // 상환 완료 금액
     private LocalDateTime expirationDate; // 시작 일시
     private int paymentDate; // 납부일  매월 15일에 납부 -> 15
-
     private int paymentDDay; // 남은 납부일 D-day
     private Long outstandingPrincipal; // 남은 원금
     private int paymentPercentage; // 납부 진행률

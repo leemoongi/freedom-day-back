@@ -75,11 +75,14 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
         return queryFactory
                 .select(
                         Projections.fields(StatisticsDto.class
-                                , loan.totalPrincipal.sum().subtract(loan.repaymentAmount.sum()).as("totalBalance")
-                                , loan.repaymentAmount.sum().as("totalPrincipalRepayment"))
+                                , loan.totalPrincipal.sum().as("totalPrincipal")
+                                , loan.repaymentAmount.sum().as("totalPrincipalRepayment")
+                        )
                 )
                 .from(loan)
-                .where(loan.member.id.eq(memberId))
+                .where(
+                        loan.member.id.eq(memberId)
+                        , loan.status.eq('0'))
                 .fetchOne();
     }
 
@@ -120,23 +123,40 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
                 .fetch();
 
     }
+//
+//    @Override
+//    public List<StatisticsDto.RepaymentHistoryMonthTmp> repaymentHistoryMonthTmp(Long memberId) {
+//        // 월별 상환 기록
+//        return queryFactory
+//                .select(
+//                        Projections.fields(StatisticsDto.RepaymentHistoryMonthTmp.class
+//                                , loanRepaymentMonthHistory.historyDate
+//                                , loanRepaymentMonthHistory.repaymentAmount.sum()
+//                                , loanRepaymentMonthHistory.type
+//                        )
+//                )
+//                .from(loan)
+//                .leftJoin(loanRepaymentMonthHistory)
+//                .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
+//                .where(loan.member.id.eq(memberId))
+//                .groupBy(loanRepaymentMonthHistory.historyDate, loanRepaymentMonthHistory.type)
+//                .fetch();
+//
+//    }
 
     @Override
-
-    public List<StatisticsDto.RepaymentHistoryMonthTmp> repaymentHistoryMonthTmp(Long memberId) {
-        // 월별 상환 기록
+    public List<StatisticsDto.RemainingPrincipal> remainingPrincipal(Long memberId) {
         return queryFactory
                 .select(
-                        Projections.fields(StatisticsDto.RepaymentHistoryMonthTmp.class
-                                , loanRepaymentMonthHistory.historyDate
-                                , loanRepaymentMonthHistory.repaymentAmount
-                                , loanRepaymentMonthHistory.type
-                        )
+                        Projections.fields(StatisticsDto.RemainingPrincipal.class
+                                , loan.purpose
+                                , loan.totalPrincipal.sum().subtract(loan.repaymentAmount.sum()).as("remainingPrincipal"))
                 )
                 .from(loan)
-                .leftJoin(loanRepaymentMonthHistory)
-                .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
-                .where(loan.member.id.eq(memberId))
+                .where(loan.member.id.eq(memberId)
+                        , loan.status.eq('0'))
+                .groupBy(loan.purpose)
                 .fetch();
+
     }
 }

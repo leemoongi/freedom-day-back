@@ -1,0 +1,10 @@
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <settings>
+        <setting name="cacheEnabled" value="false"/>            <!-- 캐싱기능 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/> <!-- 카멜 케이스 VO 매핑 -->
+        <setting name="callSettersOnNulls" value="true"/>
+        <setting name="jdbcTypeForNull" value="NULL"/>          <!-- 쿼리에 보내는 파라미터가 null인 경우, 오류가 발생하는 것 방지 -->
+    </settings>
+</configuration>
