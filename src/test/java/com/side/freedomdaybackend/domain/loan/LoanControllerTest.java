@@ -5,6 +5,7 @@ import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.util.AuthUtil;
 import com.side.freedomdaybackend.domain.RestDocsTest;
 import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
+import com.side.freedomdaybackend.domain.loan.dto.StatisticsDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.notNullValue;
@@ -99,6 +102,127 @@ class LoanControllerTest extends RestDocsTest {
                                         fieldWithPath("loanSimpleDtoList[].paymentPercentage").type(JsonFieldType.NUMBER).description("납부 진행률")
                                 )
                         ));
+    }
+
+    @DisplayName("대출 통계")
+    @Test
+    void loanStatistics() throws Exception {
+
+        // given
+        StatisticsDto statisticsDto = new StatisticsDto();
+        statisticsDto.setTotalPrincipal(30000000);
+        statisticsDto.setTotalPrincipalRepayment(10000000);
+        statisticsDto.setTotalRemainingPrincipal(20000000);
+
+        List<StatisticsDto.LoanSimple> loanSimpleList = new ArrayList<>();
+         loanSimpleList.add(
+                new StatisticsDto.LoanSimple(
+                        "카카오뱅크 청년 전월세",
+                        "주택자금",
+                        9,
+                        LocalDate.of(2024, 5, 16)));
+        loanSimpleList.add(
+                new StatisticsDto.LoanSimple(
+                        "카카오뱅크 신용대출",
+                        "생활비",
+                        9,
+                        LocalDate.of(2024, 5, 16))
+        );
+
+        List<StatisticsDto.RepaidLoan> repaidLoanList = new ArrayList<>();
+        repaidLoanList.add(
+                new StatisticsDto.RepaidLoan(
+                        "우리은행 청년 버팀목"
+                        , "주택자금"
+                        , 200000000
+                )
+        );
+
+        List<StatisticsDto.RepaymentHistoryMonth> rhmList = new ArrayList<>();
+        rhmList.add(
+                new StatisticsDto.RepaymentHistoryMonth(
+                        "2024-02"
+                        , 10000000
+                        , 20
+                        , 50000000
+                )
+        );
+        rhmList.add(
+                new StatisticsDto.RepaymentHistoryMonth(
+                        "2024-03"
+                        , 10000000
+                        , 10
+                        , 0
+                )
+        );
+        rhmList.add(
+                new StatisticsDto.RepaymentHistoryMonth(
+                        "2024-02"
+                        , 10000000
+                        , 10
+                        , 20000000
+                )
+        );
+
+        List<StatisticsDto.RemainingPrincipal> rpList = new ArrayList<>();
+        rpList.add(
+                new StatisticsDto.RemainingPrincipal(
+                        "주택자금"
+                        , 19000000
+                        , 95
+                ));
+      rpList.add(
+                new StatisticsDto.RemainingPrincipal(
+                        "생활비"
+                        , 1000000
+                        , 5
+                ));
+
+        statisticsDto.setLoanList(loanSimpleList);
+        statisticsDto.setRepaidLoanList(repaidLoanList);
+        statisticsDto.setRepaymentHistoryMonthList(rhmList);
+        statisticsDto.setRemainingPrincipalList(rpList);
+
+        // when
+        when(authUtil.checkAuth(any())).thenReturn(2L);
+        when(loanService.statistics(anyLong())).thenReturn(statisticsDto);
+
+        ResultActions perform = mockMvc.perform(get("/loan/loan-statistics")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        // then
+        perform.andExpect(status().isOk())
+
+                // spring rest docs
+                .andDo(
+                        restDocs.document(
+                                responseFields(
+                                        beneathPath("response").withSubsectionId("response"),
+                                        fieldWithPath("totalPrincipal").type(JsonFieldType.NUMBER).description("총 대출 금액"),
+                                        fieldWithPath("totalPrincipalRepayment").type(JsonFieldType.NUMBER).description("총 상환 원금"),
+
+                                        fieldWithPath("loanList[].name").type(JsonFieldType.STRING).description("진행중인 대출 - 대출 이름"),
+                                        fieldWithPath("loanList[].purpose").type(JsonFieldType.STRING).description("진행중인 대출 - 용도"),
+                                        fieldWithPath("loanList[].paymentDDay").type(JsonFieldType.NUMBER).description("진행중인 대출 - 남은 납부일 D-Day"),
+                                        fieldWithPath("loanList[].paymentDate").type(JsonFieldType.STRING).description("진행중인 대출 - 납부 예정일"),
+
+                                        fieldWithPath("repaidLoanList[].name").type(JsonFieldType.STRING).description("종료된 대출 - 대출 이름"),
+                                        fieldWithPath("repaidLoanList[].purpose").type(JsonFieldType.STRING).description("종료된 대출 - 용도"),
+                                        fieldWithPath("repaidLoanList[].repaymentAmount").type(JsonFieldType.NUMBER).description("종료된 대출 - 납부한 금액"),
+
+                                        fieldWithPath("repaymentHistoryMonthList[].historyDate").type(JsonFieldType.STRING).description("월 상환 기록 - 등록 월 ex) yyyy-mm"),
+                                        fieldWithPath("repaymentHistoryMonthList[].repaymentAmount1").type(JsonFieldType.NUMBER).description("월 상환 기록 - 원금 상환"),
+                                        fieldWithPath("repaymentHistoryMonthList[].repaymentAmount2").type(JsonFieldType.NUMBER).description("월 상환 기록 - 이자"),
+                                        fieldWithPath("repaymentHistoryMonthList[].repaymentAmount3").type(JsonFieldType.NUMBER).description("월 상환 기록 - 중도 상환"),
+
+                                        fieldWithPath("totalRemainingPrincipal").type(JsonFieldType.NUMBER).description("남은 총 남은원금"),
+
+                                        fieldWithPath("remainingPrincipalList[].purpose").type(JsonFieldType.STRING).description("원금 퍼센트 - 대출 이름"),
+                                        fieldWithPath("remainingPrincipalList[].remainingPrincipal").type(JsonFieldType.NUMBER).description("원금 퍼센트 - 남은 금액"),
+                                        fieldWithPath("remainingPrincipalList[].percentage").type(JsonFieldType.NUMBER).description("원금 퍼센트 - 백분율")
+                                )
+                        ));
+
     }
 
 }

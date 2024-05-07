@@ -3,22 +3,20 @@ package com.side.freedomdaybackend.domain.loan.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class StatisticsDto {
-    private long totalBalance; // 총 대출 잔액
+    private long totalPrincipal; // 총 대출 금액
     private long totalPrincipalRepayment; // 총 상환 원금
     private List<LoanSimple> loanList; // 상환 예정
     private List<RepaidLoan> repaidLoanList; // 상환 완료
     private List<RepaymentHistoryMonth> repaymentHistoryMonthList; // 월별 상환 기록
-    // 남은 총원금
+    private long totalRemainingPrincipal; // 남은 총 남은원금
     private List<RemainingPrincipal> remainingPrincipalList; // 대출 원금 비중
 
 
@@ -46,7 +44,7 @@ public class StatisticsDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class RepaymentHistoryMonth {
-        private String historyDate;
+        private String historyDate; // 등록 월 ex) yyyy-mm
         private long repaymentAmount1; // 상환 방식 -> 1:원금 2:이자 3:중도상환
         private long repaymentAmount2;
         private long repaymentAmount3;

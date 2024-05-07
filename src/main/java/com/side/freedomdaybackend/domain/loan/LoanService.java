@@ -65,10 +65,12 @@ public class LoanService {
     }
 
     public StatisticsDto statistics(long memberId) {
-
         StatisticsDto statisticsDto = loanRepository.statistics(memberId);
         List<StatisticsDto.LoanSimpleTmp> loanTmpList = loanRepository.loanSimple(memberId);
         List<StatisticsDto.RepaidLoan> repaidLoan = loanRepository.repaidLoan(memberId);
+
+        // 총 남은 원금 = 대출 금액 - 대출 상환 금액
+        statisticsDto.setTotalRemainingPrincipal(statisticsDto.getTotalPrincipal() - statisticsDto.getTotalPrincipalRepayment());
 
         /* LoanList 상환 예정 */
         LocalDate now = LocalDate.now();
@@ -87,7 +89,6 @@ public class LoanService {
 
             loanSimpleList.add(loanSimple);
         }
-
 
         /* RepaymentHistoryMonthList 월별 상환 기록 */
         List<StatisticsDto.RepaymentHistoryMonthTmp> rhmTmpList = loanMapper.selectRepaymentHistoryList(memberId); // 임시
@@ -126,15 +127,11 @@ public class LoanService {
             }
         }
 
-
         /* RemainingPrincipal 대출 원금 비중 */
         List<StatisticsDto.RemainingPrincipal> rpList = loanRepository.remainingPrincipal(memberId);
-        long total = 0;
-        for (StatisticsDto.RemainingPrincipal rp : rpList) {
-            long remainingPrincipal = rp.getRemainingPrincipal();
-            total += remainingPrincipal;
-        }
+        long total = statisticsDto.getTotalRemainingPrincipal();
 
+        // 퍼센테이지 구하기
         for (StatisticsDto.RemainingPrincipal rp : rpList) {
             long remainingPrincipal = rp.getRemainingPrincipal();
             double percentage = ((double) remainingPrincipal / total) * 100;
