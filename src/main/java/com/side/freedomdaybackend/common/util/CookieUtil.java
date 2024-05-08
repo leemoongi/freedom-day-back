@@ -17,7 +17,7 @@ public class CookieUtil {
                 .secure(true)
                 .path("/")
                 .sameSite("None") //개발 완료후 제거
-                .maxAge(-1)
+                .maxAge(3600*3)
                 .build();
     }
 
