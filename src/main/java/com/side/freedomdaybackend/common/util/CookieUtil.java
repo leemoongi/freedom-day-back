@@ -14,9 +14,9 @@ public class CookieUtil {
         return ResponseCookie
                 .from(cookieName, token)
                 .httpOnly(true)
-                .secure(true)
+//                .secure(true)
                 .path("/")
-                .sameSite("None") //개발 완료후 제거
+//                .sameSite("None") //개발 완료후 제거
                 .maxAge(-1)
                 .build();
     }
