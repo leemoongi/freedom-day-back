@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class TestController {
                         "생활비",
                         16,
                         19886317,
-                        LocalDateTime.of(2024, Month.DECEMBER, 04, 0, 0),
+                        LocalDate.of(2024, Month.DECEMBER, 04),
                         15));
         loanDtoList.add(
                 new LoanDto(
@@ -53,7 +54,7 @@ public class TestController {
                         "생활비",
                         16,
                         19886317,
-                        LocalDateTime.of(2024, Month.DECEMBER, 04, 0, 0),
+                        LocalDate.of(2024, Month.DECEMBER, 04),
                         15));
 
         UserLoanDto userLoanDto = new UserLoanDto("이문기", 5800000, 90000000, 2, loanDtoList);
@@ -201,7 +202,7 @@ class LoanDto {
     String purpose; // 용도
     long paymentDDay; // 남은 납부일
     int loanAmount; // 대출 금액
-    LocalDateTime loanExpirationDate;// 만기일
+    LocalDate loanExpirationDate;// 만기일
     int paymentDueDay;// 납부일
 }
 

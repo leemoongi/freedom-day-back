@@ -3,8 +3,8 @@ package com.side.freedomdaybackend.domain.loan;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
+import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
 import com.side.freedomdaybackend.domain.loan.dto.QLoanSimpleDto;
-import com.side.freedomdaybackend.domain.loan.dto.StatisticsDto;
 import com.side.freedomdaybackend.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 
@@ -71,10 +71,10 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
     }
 
     @Override
-    public StatisticsDto statistics(Long memberId) {
+    public LoanStatisticsDto statistics(Long memberId) {
         return queryFactory
                 .select(
-                        Projections.fields(StatisticsDto.class
+                        Projections.fields(LoanStatisticsDto.class
                                 , loan.totalPrincipal.sum().as("totalPrincipal")
                                 , loan.repaymentAmount.sum().as("totalPrincipalRepayment")
                         )
@@ -87,11 +87,11 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
     }
 
     @Override
-    public List<StatisticsDto.LoanSimpleTmp> loanSimple(Long memberId) {
+    public List<LoanStatisticsDto.LoanSimpleTmp> loanSimple(Long memberId) {
         // 상환 예정
         return queryFactory
                 .select(
-                        Projections.fields(StatisticsDto.LoanSimpleTmp.class
+                        Projections.fields(LoanStatisticsDto.LoanSimpleTmp.class
                                 , loan.name
                                 , loan.purpose
                                 , loan.paymentDate
@@ -107,11 +107,11 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
 
 
     @Override
-    public List<StatisticsDto.RepaidLoan> repaidLoan(Long memberId) {
+    public List<LoanStatisticsDto.RepaidLoan> repaidLoan(Long memberId) {
         // 상환 완료
         return queryFactory
                 .select(
-                        Projections.fields(StatisticsDto.RepaidLoan.class
+                        Projections.fields(LoanStatisticsDto.RepaidLoan.class
                                 , loan.name
                                 , loan.purpose
                                 , loan.repaymentAmount)
@@ -125,11 +125,11 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
     }
 //
 //    @Override
-//    public List<StatisticsDto.RepaymentHistoryMonthTmp> repaymentHistoryMonthTmp(Long memberId) {
+//    public List<LoanStatisticsDto.RepaymentHistoryMonthTmp> repaymentHistoryMonthTmp(Long memberId) {
 //        // 월별 상환 기록
 //        return queryFactory
 //                .select(
-//                        Projections.fields(StatisticsDto.RepaymentHistoryMonthTmp.class
+//                        Projections.fields(LoanStatisticsDto.RepaymentHistoryMonthTmp.class
 //                                , loanRepaymentMonthHistory.historyDate
 //                                , loanRepaymentMonthHistory.repaymentAmount.sum()
 //                                , loanRepaymentMonthHistory.type
@@ -145,10 +145,10 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
 //    }
 
     @Override
-    public List<StatisticsDto.RemainingPrincipal> remainingPrincipal(Long memberId) {
+    public List<LoanStatisticsDto.RemainingPrincipal> remainingPrincipal(Long memberId) {
         return queryFactory
                 .select(
-                        Projections.fields(StatisticsDto.RemainingPrincipal.class
+                        Projections.fields(LoanStatisticsDto.RemainingPrincipal.class
                                 , loan.purpose
                                 , loan.totalPrincipal.sum().subtract(loan.repaymentAmount.sum()).as("remainingPrincipal"))
                 )

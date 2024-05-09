@@ -1,11 +1,10 @@
 package com.side.freedomdaybackend.domain.loan.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -28,8 +27,7 @@ public class MyLoanInfoDto {
         private String purpose; // 용도
         private int paymentDDay; // 남은 납부일
         private int outstandingPrincipal; // 남은 원금
-        @JsonFormat(pattern = "yyyy.MM.dd")
-        private LocalDateTime expirationDate; // 만기일
+        private LocalDate expirationDate; // 만기일
         private int paymentDate; // 납부일
         private int paymentPercentage; // 납부 진행률
     }

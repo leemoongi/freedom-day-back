@@ -3,6 +3,7 @@ package com.side.freedomdaybackend.common.util;
 import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.exception.CustomException;
 import com.side.freedomdaybackend.common.exception.ErrorCode;
+import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
@@ -18,7 +19,7 @@ public class AuthUtil {
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
 
-    public Long checkAuth(HttpServletRequest request) {
+    public Long checkAuthReturnId(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         String accessToken = null;
 
@@ -41,5 +42,29 @@ public class AuthUtil {
         }
 
         return memberId;
+    }
+
+    public Member checkAuthReturnMember(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        String accessToken = null;
+
+        if (cookies.length == 0)
+            throw new CustomException(ErrorCode.JWT_ERROR);
+
+        for (Cookie cookie : cookies) {
+            if (Constants.ACCESS_TOKEN.equals(cookie.getName())) accessToken = cookie.getValue();
+        }
+
+        if (accessToken == null)
+            throw new CustomException(ErrorCode.JWT_ERROR);
+
+        Claims claims = jwtUtil.isValidToken(accessToken);
+        String memberIdStr = (String) claims.get(Constants.MEMBER_ID);
+        Long memberId = Long.valueOf(memberIdStr);
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+        return member;
     }
 }

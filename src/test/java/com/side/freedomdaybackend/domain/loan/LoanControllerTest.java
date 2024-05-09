@@ -1,11 +1,11 @@
 package com.side.freedomdaybackend.domain.loan;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.util.AuthUtil;
 import com.side.freedomdaybackend.domain.RestDocsTest;
+import com.side.freedomdaybackend.domain.loan.dto.LoanCreateDto;
+import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
 import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
-import com.side.freedomdaybackend.domain.loan.dto.StatisticsDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +17,16 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LoanController.class)
 class LoanControllerTest extends RestDocsTest {
@@ -59,7 +56,7 @@ class LoanControllerTest extends RestDocsTest {
                         "생활비",
                         20,
                         800000,
-                        LocalDateTime.of(2024, Month.DECEMBER, 3, 22, 0),
+                        LocalDate.of(2024, Month.DECEMBER, 3),
                         16,
                         9));
         loanDtoList.add(
@@ -69,13 +66,13 @@ class LoanControllerTest extends RestDocsTest {
                         "생활비",
                         20,
                         120000,
-                        LocalDateTime.of(2024, Month.DECEMBER, 3, 22, 0),
+                        LocalDate.of(2024, Month.DECEMBER, 3),
                         16,
                         0));
         MyLoanInfoDto myLoanInfoDto = new MyLoanInfoDto(50000L, 8, 2, loanDtoList);
 
         // when
-        when(authUtil.checkAuth(any())).thenReturn(1L);
+        when(authUtil.checkAuthReturnId(any())).thenReturn(1L);
         when(loanService.myLoanList(anyLong())).thenReturn(myLoanInfoDto);
 
         ResultActions perform = mockMvc.perform(get("/loan/user-loan-info")
@@ -109,38 +106,38 @@ class LoanControllerTest extends RestDocsTest {
     void loanStatistics() throws Exception {
 
         // given
-        StatisticsDto statisticsDto = new StatisticsDto();
-        statisticsDto.setTotalPrincipal(30000000);
-        statisticsDto.setTotalPrincipalRepayment(10000000);
-        statisticsDto.setTotalRemainingPrincipal(20000000);
+        LoanStatisticsDto loanStatisticsDto = new LoanStatisticsDto();
+        loanStatisticsDto.setTotalPrincipal(30000000);
+        loanStatisticsDto.setTotalPrincipalRepayment(10000000);
+        loanStatisticsDto.setTotalRemainingPrincipal(20000000);
 
-        List<StatisticsDto.LoanSimple> loanSimpleList = new ArrayList<>();
+        List<LoanStatisticsDto.LoanSimple> loanSimpleList = new ArrayList<>();
          loanSimpleList.add(
-                new StatisticsDto.LoanSimple(
+                new LoanStatisticsDto.LoanSimple(
                         "카카오뱅크 청년 전월세",
                         "주택자금",
                         9,
                         LocalDate.of(2024, 5, 16)));
         loanSimpleList.add(
-                new StatisticsDto.LoanSimple(
+                new LoanStatisticsDto.LoanSimple(
                         "카카오뱅크 신용대출",
                         "생활비",
                         9,
                         LocalDate.of(2024, 5, 16))
         );
 
-        List<StatisticsDto.RepaidLoan> repaidLoanList = new ArrayList<>();
+        List<LoanStatisticsDto.RepaidLoan> repaidLoanList = new ArrayList<>();
         repaidLoanList.add(
-                new StatisticsDto.RepaidLoan(
+                new LoanStatisticsDto.RepaidLoan(
                         "우리은행 청년 버팀목"
                         , "주택자금"
                         , 200000000
                 )
         );
 
-        List<StatisticsDto.RepaymentHistoryMonth> rhmList = new ArrayList<>();
+        List<LoanStatisticsDto.RepaymentHistoryMonth> rhmList = new ArrayList<>();
         rhmList.add(
-                new StatisticsDto.RepaymentHistoryMonth(
+                new LoanStatisticsDto.RepaymentHistoryMonth(
                         "2024-02"
                         , 10000000
                         , 20
@@ -148,7 +145,7 @@ class LoanControllerTest extends RestDocsTest {
                 )
         );
         rhmList.add(
-                new StatisticsDto.RepaymentHistoryMonth(
+                new LoanStatisticsDto.RepaymentHistoryMonth(
                         "2024-03"
                         , 10000000
                         , 10
@@ -156,7 +153,7 @@ class LoanControllerTest extends RestDocsTest {
                 )
         );
         rhmList.add(
-                new StatisticsDto.RepaymentHistoryMonth(
+                new LoanStatisticsDto.RepaymentHistoryMonth(
                         "2024-02"
                         , 10000000
                         , 10
@@ -164,28 +161,28 @@ class LoanControllerTest extends RestDocsTest {
                 )
         );
 
-        List<StatisticsDto.RemainingPrincipal> rpList = new ArrayList<>();
+        List<LoanStatisticsDto.RemainingPrincipal> rpList = new ArrayList<>();
         rpList.add(
-                new StatisticsDto.RemainingPrincipal(
+                new LoanStatisticsDto.RemainingPrincipal(
                         "주택자금"
                         , 19000000
                         , 95
                 ));
       rpList.add(
-                new StatisticsDto.RemainingPrincipal(
+                new LoanStatisticsDto.RemainingPrincipal(
                         "생활비"
                         , 1000000
                         , 5
                 ));
 
-        statisticsDto.setLoanList(loanSimpleList);
-        statisticsDto.setRepaidLoanList(repaidLoanList);
-        statisticsDto.setRepaymentHistoryMonthList(rhmList);
-        statisticsDto.setRemainingPrincipalList(rpList);
+        loanStatisticsDto.setLoanList(loanSimpleList);
+        loanStatisticsDto.setRepaidLoanList(repaidLoanList);
+        loanStatisticsDto.setRepaymentHistoryMonthList(rhmList);
+        loanStatisticsDto.setRemainingPrincipalList(rpList);
 
         // when
-        when(authUtil.checkAuth(any())).thenReturn(2L);
-        when(loanService.statistics(anyLong())).thenReturn(statisticsDto);
+        when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
+        when(loanService.statistics(anyLong())).thenReturn(loanStatisticsDto);
 
         ResultActions perform = mockMvc.perform(get("/loan/loan-statistics")
                 .contentType(MediaType.APPLICATION_JSON));
@@ -223,6 +220,56 @@ class LoanControllerTest extends RestDocsTest {
                                 )
                         ));
 
+
     }
+
+
+    @DisplayName("대출 생성")
+    @Test
+    void create() throws Exception {
+        // given
+        LoanCreateDto loanCreateDto = new LoanCreateDto(
+                "카카오 청년전월세"
+                ,"주택자금"
+                ,""
+                ,100000000
+                ,0
+                ,4.5
+                ,false
+                ,24
+                ,LocalDate.of(2024,Month.JANUARY,1)
+                ,LocalDate.of(2025,Month.DECEMBER,31)
+                ,1
+                ,'M'
+        );
+
+        // when
+        when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
+
+        ResultActions perform = mockMvc.perform(get("/loan/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loanCreateDto)));
+
+        // then
+        perform.andExpect(status().isOk())
+
+                // spring rest docs
+                .andDo(restDocs.document(
+                        requestFields(
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("대출 이름"),
+                                fieldWithPath("purpose").type(JsonFieldType.STRING).description("대출 목적"),
+                                fieldWithPath("bankCode").type(JsonFieldType.STRING).description("은행"),
+                                fieldWithPath("totalPrincipal").type(JsonFieldType.NUMBER).description("총 원금"),
+                                fieldWithPath("repaymentAmount").type(JsonFieldType.NUMBER).description("상환 완료 금액"),
+                                fieldWithPath("interestRate").type(JsonFieldType.NUMBER).description("연 이자율"),
+                                fieldWithPath("variableRate").type(JsonFieldType.BOOLEAN).description("변동금리여부"),
+                                fieldWithPath("loanPeriod").type(JsonFieldType.NUMBER).description("대출 기간"),
+                                fieldWithPath("originationDate").type(JsonFieldType.STRING).description("시작 일시"),
+                                fieldWithPath("expirationDate").type(JsonFieldType.STRING).description("상환 일시"),
+                                fieldWithPath("paymentDate").type(JsonFieldType.NUMBER).description("납부일 매월 15일에 납부 -> 15"),
+                                fieldWithPath("periodUnit").type(JsonFieldType.STRING).description("대출 기간 단위  월:M 일:D"))));
+
+    }
+
 
 }

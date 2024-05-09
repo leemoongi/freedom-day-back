@@ -1,8 +1,10 @@
 package com.side.freedomdaybackend.domain.loan;
 
+import com.side.freedomdaybackend.domain.loan.dto.LoanCreateDto;
 import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
+import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
 import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
-import com.side.freedomdaybackend.domain.loan.dto.StatisticsDto;
+import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.mapper.LoanMapper;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -64,23 +66,23 @@ public class LoanService {
         return myLoanInfoDto;
     }
 
-    public StatisticsDto statistics(long memberId) {
-        StatisticsDto statisticsDto = loanRepository.statistics(memberId);
-        List<StatisticsDto.LoanSimpleTmp> loanTmpList = loanRepository.loanSimple(memberId);
-        List<StatisticsDto.RepaidLoan> repaidLoan = loanRepository.repaidLoan(memberId);
+    public LoanStatisticsDto statistics(long memberId) {
+        LoanStatisticsDto loanStatisticsDto = loanRepository.statistics(memberId);
+        List<LoanStatisticsDto.LoanSimpleTmp> loanTmpList = loanRepository.loanSimple(memberId);
+        List<LoanStatisticsDto.RepaidLoan> repaidLoan = loanRepository.repaidLoan(memberId);
 
         // 총 남은 원금 = 대출 금액 - 대출 상환 금액
-        statisticsDto.setTotalRemainingPrincipal(statisticsDto.getTotalPrincipal() - statisticsDto.getTotalPrincipalRepayment());
+        loanStatisticsDto.setTotalRemainingPrincipal(loanStatisticsDto.getTotalPrincipal() - loanStatisticsDto.getTotalPrincipalRepayment());
 
         /* LoanList 상환 예정 */
         LocalDate now = LocalDate.now();
-        List<StatisticsDto.LoanSimple> loanSimpleList = new ArrayList<StatisticsDto.LoanSimple>();
-        for (StatisticsDto.LoanSimpleTmp tmp : loanTmpList) {
+        List<LoanStatisticsDto.LoanSimple> loanSimpleList = new ArrayList<LoanStatisticsDto.LoanSimple>();
+        for (LoanStatisticsDto.LoanSimpleTmp tmp : loanTmpList) {
             int paymentNumber = tmp.getPaymentDate(); // ex) 16
             int d_day = repaymentCountdown(paymentNumber, now);
             LocalDate paymentDate = getRepaymentDate(paymentNumber, now);
 
-            StatisticsDto.LoanSimple loanSimple = new StatisticsDto.LoanSimple(
+            LoanStatisticsDto.LoanSimple loanSimple = new LoanStatisticsDto.LoanSimple(
                     tmp.getName()
                     , tmp.getPurpose()
                     , d_day
@@ -91,12 +93,12 @@ public class LoanService {
         }
 
         /* RepaymentHistoryMonthList 월별 상환 기록 */
-        List<StatisticsDto.RepaymentHistoryMonthTmp> rhmTmpList = loanMapper.selectRepaymentHistoryList(memberId); // 임시
-        List<StatisticsDto.RepaymentHistoryMonth> rhmList = new ArrayList<StatisticsDto.RepaymentHistoryMonth>(); // response 객체
-        StatisticsDto.RepaymentHistoryMonth rhm = new StatisticsDto.RepaymentHistoryMonth();
+        List<LoanStatisticsDto.RepaymentHistoryMonthTmp> rhmTmpList = loanMapper.selectRepaymentHistoryList(memberId); // 임시
+        List<LoanStatisticsDto.RepaymentHistoryMonth> rhmList = new ArrayList<LoanStatisticsDto.RepaymentHistoryMonth>(); // response 객체
+        LoanStatisticsDto.RepaymentHistoryMonth rhm = new LoanStatisticsDto.RepaymentHistoryMonth();
         // 첫번째 먼저 처리
         if (rhmTmpList.size() > 0) {
-            StatisticsDto.RepaymentHistoryMonthTmp firstTmp = rhmTmpList.get(0);
+            LoanStatisticsDto.RepaymentHistoryMonthTmp firstTmp = rhmTmpList.get(0);
             String historyDate = firstTmp.getHistoryDate();
             int type = firstTmp.getType();
 
@@ -109,14 +111,14 @@ public class LoanService {
         }
 
         for (int i = 1; i < rhmTmpList.size(); i++) {
-            StatisticsDto.RepaymentHistoryMonthTmp tmp = rhmTmpList.get(i);
+            LoanStatisticsDto.RepaymentHistoryMonthTmp tmp = rhmTmpList.get(i);
             int type = tmp.getType();
             String historyDate = tmp.getHistoryDate();
 
             // 새로운 날짜면 객체 새로 생성
             if (!historyDate.equals(rhm.getHistoryDate())) {
                 rhmList.add(rhm);
-                rhm = new StatisticsDto.RepaymentHistoryMonth();
+                rhm = new LoanStatisticsDto.RepaymentHistoryMonth();
                 rhm.setHistoryDate(historyDate);
             }
 
@@ -128,23 +130,41 @@ public class LoanService {
         }
 
         /* RemainingPrincipal 대출 원금 비중 */
-        List<StatisticsDto.RemainingPrincipal> rpList = loanRepository.remainingPrincipal(memberId);
-        long total = statisticsDto.getTotalRemainingPrincipal();
+        List<LoanStatisticsDto.RemainingPrincipal> rpList = loanRepository.remainingPrincipal(memberId);
+        long total = loanStatisticsDto.getTotalRemainingPrincipal();
 
         // 퍼센테이지 구하기
-        for (StatisticsDto.RemainingPrincipal rp : rpList) {
+        for (LoanStatisticsDto.RemainingPrincipal rp : rpList) {
             long remainingPrincipal = rp.getRemainingPrincipal();
             double percentage = ((double) remainingPrincipal / total) * 100;
             rp.setPercentage((int) percentage);
         }
 
-        statisticsDto.setLoanList(loanSimpleList);
-        statisticsDto.setRepaidLoanList(repaidLoan);
-        statisticsDto.setRepaymentHistoryMonthList(rhmList);
-        statisticsDto.setRemainingPrincipalList(rpList);
+        loanStatisticsDto.setLoanList(loanSimpleList);
+        loanStatisticsDto.setRepaidLoanList(repaidLoan);
+        loanStatisticsDto.setRepaymentHistoryMonthList(rhmList);
+        loanStatisticsDto.setRemainingPrincipalList(rpList);
 
-        return statisticsDto;
+        return loanStatisticsDto;
     }
+
+
+    public void create(Member member, LoanCreateDto loanCreateDto) {
+
+        char unit = loanCreateDto.getPeriodUnit();
+
+        // TODO) 날짜에 수정
+        if (unit == 'M') {
+
+        } else if (unit == 'D') {
+
+        }
+
+        Loan loan = loanMapstruct.toLoan(loanCreateDto);
+        loan.setMember(member);
+        loanRepository.save(loan);
+    }
+
 
 
     // 상환일로 D-day 계산
@@ -181,7 +201,6 @@ public class LoanService {
         if (currentDay > paymentNumber) return true;
         return false;
     }
-
 
 
 }

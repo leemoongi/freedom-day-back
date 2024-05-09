@@ -3,7 +3,7 @@
 
 <mapper namespace="com.side.freedomdaybackend.mapper.LoanMapper">
 
-    <select id="selectRepaymentHistoryList" parameterType="Long" resultType="com.side.freedomdaybackend.domain.loan.dto.StatisticsDto$RepaymentHistoryMonthTmp">
+    <select id="selectRepaymentHistoryList" parameterType="Long" resultType="com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto$RepaymentHistoryMonthTmp">
         SELECT
             L.id,
             DATE_FORMAT(LRMH.history_date, '%Y-%m') AS history_date,

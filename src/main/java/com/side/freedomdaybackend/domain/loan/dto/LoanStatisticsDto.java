@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatisticsDto {
+public class LoanStatisticsDto {
     private long totalPrincipal; // 총 대출 금액
     private long totalPrincipalRepayment; // 총 상환 원금
     private List<LoanSimple> loanList; // 상환 예정

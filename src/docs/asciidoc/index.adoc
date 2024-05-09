@@ -48,3 +48,11 @@ operation::loan-controller-test/loan-statistics[snippets='http-request,http-resp
 |===
 | Code | Description
 |===
+
+=== 대출 생성
+operation::loan-controller-test/create[snippets='http-request,http-response,request-fields']
+==== Error Code
+[cols="1,3", options="header"]
+|===
+| Code | Description
+|===
