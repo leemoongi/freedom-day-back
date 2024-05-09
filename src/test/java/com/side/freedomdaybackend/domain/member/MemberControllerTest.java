@@ -2,6 +2,7 @@ package com.side.freedomdaybackend.domain.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.freedomdaybackend.common.constants.Constants;
+import com.side.freedomdaybackend.common.util.AuthUtil;
 import com.side.freedomdaybackend.common.util.CookieUtil;
 import com.side.freedomdaybackend.common.util.JwtUtil;
 import com.side.freedomdaybackend.common.util.RedisUtil;
@@ -9,6 +10,8 @@ import com.side.freedomdaybackend.domain.RestDocsTest;
 import com.side.freedomdaybackend.domain.member.dto.SignInRequestDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInResponseDto;
 import com.side.freedomdaybackend.domain.member.dto.SignUpRequestDto;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,8 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,6 +53,9 @@ class MemberControllerTest extends RestDocsTest {
 
     @MockBean
     private RedisUtil redisUtil;
+
+    @MockBean
+    private AuthUtil authUtil;
 
 
     @DisplayName("로그인")
@@ -143,6 +151,43 @@ class MemberControllerTest extends RestDocsTest {
                                         fieldWithPath("birthDate").type(JsonFieldType.STRING).description("생년월일")
                                 )
                         ));
+
+    }
+
+    @DisplayName("로그아웃")
+    @Test
+    void signOut() throws Exception {
+        // given
+        Claims claims = Jwts.claims();
+        claims.put(Constants.UUID, UUID.randomUUID());
+
+        ResponseCookie acCookie = ResponseCookie
+                .from(Constants.ACCESS_TOKEN)
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        ResponseCookie rfCookie = ResponseCookie
+                .from(Constants.REFRESH_TOKEN)
+                .path("/")
+                .maxAge(0)
+                .build();
+
+        // when
+        when(authUtil.checkAuth(any())).thenReturn(claims);
+        when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
+        when(cookieUtil.deleteToken(Constants.ACCESS_TOKEN)).thenReturn(acCookie);
+        when(cookieUtil.deleteToken(Constants.REFRESH_TOKEN)).thenReturn(rfCookie);
+
+        mockMvc.perform(post("/member/sign-out")
+                        .contentType(MediaType.APPLICATION_JSON))
+
+        // then
+                .andExpect(status().isOk())
+
+                // spring rest docs
+                .andDo(
+                        restDocs.document());
 
     }
 }

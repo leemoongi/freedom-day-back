@@ -2,12 +2,16 @@ package com.side.freedomdaybackend.domain.member;
 
 import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.response.ApiResponse;
+import com.side.freedomdaybackend.common.util.AuthUtil;
 import com.side.freedomdaybackend.common.util.CookieUtil;
 import com.side.freedomdaybackend.common.util.JwtUtil;
 import com.side.freedomdaybackend.common.util.RedisUtil;
 import com.side.freedomdaybackend.domain.member.dto.SignInRequestDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInResponseDto;
 import com.side.freedomdaybackend.domain.member.dto.SignUpRequestDto;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,6 +31,7 @@ public class MemberController {
     private final CookieUtil cookieUtil;
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
+    private final AuthUtil authUtil;
 
     @PostMapping("/sign-in")
     public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestDto signInRequestDto) throws NoSuchAlgorithmException {
@@ -60,6 +65,25 @@ public class MemberController {
         memberService.signUp(signUpRequestDto);
         return new ApiResponse<>();
     }
+
+    @PostMapping("/sign-out")
+    public ApiResponse<String> signOut(HttpServletRequest request, HttpServletResponse response) {
+        // UUID 추출
+        Claims claims = authUtil.checkAuth(request);
+        String uuid = claims.get(Constants.UUID).toString();
+
+        // 레디스에서 제거
+        redisUtil.remove(uuid);
+
+        // 쿠키제거
+        ResponseCookie accessCookie = cookieUtil.deleteToken(Constants.ACCESS_TOKEN);
+        ResponseCookie refreshCookie = cookieUtil.deleteToken(Constants.REFRESH_TOKEN);
+        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+
+        return new ApiResponse<>();
+    }
+
 
     @GetMapping("/email-authentication")
     public ApiResponse<String> emailAuthentication() {
