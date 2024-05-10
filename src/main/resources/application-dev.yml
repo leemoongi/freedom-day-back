@@ -13,11 +13,27 @@ spring:
     maximum-pool-size: 10
     connection-timeout: 5000 # (ms)
 
+ # redis
   data:
     redis:
       host: freedom-day-refreshtoken-redis-ro.v9dkc7.ng.0001.apn2.cache.amazonaws.com
       port: 6379
       password:
+
+  # mail
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${google_smtp_account}
+    password: ${google_smtp_pw}
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
+    templates:
+      path: templates/
 
   # JPA
   jpa:
