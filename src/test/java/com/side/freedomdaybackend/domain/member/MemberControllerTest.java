@@ -191,9 +191,10 @@ class MemberControllerTest extends RestDocsTest {
                         restDocs.document());
 
     }
+
     @DisplayName("이메일 인증 메일 발송")
     @Test
-    void emailAuthentication() throws Exception {
+    void sendMail() throws Exception {
         // given
         EmailAuthenticationDto dto = new EmailAuthenticationDto("newTestTest@naver.com");
 

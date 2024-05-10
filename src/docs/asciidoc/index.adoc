@@ -39,6 +39,15 @@ operation::member-controller-test/sign-out[snippets='http-request,http-response'
 | ACCOUNT-005 | 이미 사용하고 있는 이메일
 |===
 
+=== 이메일 인증 발송
+operation::member-controller-test/send-mail[snippets='http-request,http-response,request-fields']
+==== Error Code
+[cols="1,3", options="header"]
+|===
+| Code | Description
+| ACCOUNT-005 | 이미 사용하고 있는 이메일
+|===
+
 
 == 대출
 === 내 대출 정보
