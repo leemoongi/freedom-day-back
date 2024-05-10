@@ -1,11 +1,9 @@
 package com.side.freedomdaybackend.common.interceptor;
 
-import com.side.freedomdaybackend.common.config.RedisConfig;
 import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.exception.CustomException;
 import com.side.freedomdaybackend.common.exception.ErrorCode;
 import com.side.freedomdaybackend.common.util.CookieUtil;
-import com.side.freedomdaybackend.common.util.EncryptUtil;
 import com.side.freedomdaybackend.common.util.JwtUtil;
 import com.side.freedomdaybackend.common.util.RedisUtil;
 import io.jsonwebtoken.Claims;
@@ -21,8 +19,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -61,7 +57,7 @@ public class JwtInterceptor implements HandlerInterceptor {
             String memberId = (String) claims.get(Constants.MEMBER_ID);
 
             // redis refreshToken 존재 확인
-            if (redisUtil.notExists(uuid)) {
+            if (!redisUtil.exists(uuid)) {
                 logout(response);
                 throw new CustomException(ErrorCode.JWT_REFRESH_NOT_FOUND);
             }

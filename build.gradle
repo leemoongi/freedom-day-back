@@ -53,7 +53,9 @@ dependencies {
 	
 	// mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'com.amazonaws:aws-java-sdk-ses:1.12.3'
+	implementation 'com.amazonaws:aws-java-sdk-ses:1.12.3' // TODO) 삭제예정
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf' // 메일 템플릿용
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect' // 메일 템플릿용
 
 	// jjwt
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'

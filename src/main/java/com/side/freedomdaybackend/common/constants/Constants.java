@@ -17,4 +17,17 @@ public class Constants {
 
     public static final String MEMBER_ID = "memberId";
 
+    public static final String EMAIL = "email";
+
+
+    /**
+     * email status
+     */
+    public static final String EMAIL_NOT_AUTHENTICATED = "not authenticated";
+
+    public static final String EMAIL_AUTHENTICATED = "authenticated";
+
+
+
+
 }

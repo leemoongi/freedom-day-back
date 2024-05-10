@@ -13,8 +13,12 @@ public class RedisUtil {
     private final RedisTemplate<String, String> redisTemplate;
     private final long expireTime = 3600000L * 3; // 3시간
 
-    public void set(String key, String value) {
+    public void set(String key, String value, long expireTime) {
         redisTemplate.opsForValue().set(key, value, expireTime, TimeUnit.MILLISECONDS);
+    }
+
+    public void update(String key, String value) {
+        redisTemplate.opsForValue().set(key, value);
     }
 
     public String get(String key) {
@@ -25,7 +29,7 @@ public class RedisUtil {
         redisTemplate.delete(key);
     }
 
-    public Boolean notExists(String key) {
+    public Boolean exists(String key) {
         return redisTemplate.hasKey(key);
     }
 

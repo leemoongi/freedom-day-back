@@ -1,10 +1,12 @@
 package com.side.freedomdaybackend.domain.member;
 
+import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.exception.CustomException;
 import com.side.freedomdaybackend.common.exception.ErrorCode;
 import com.side.freedomdaybackend.common.util.CookieUtil;
 import com.side.freedomdaybackend.common.util.EncryptUtil;
 import com.side.freedomdaybackend.common.util.JwtUtil;
+import com.side.freedomdaybackend.common.util.RedisUtil;
 import com.side.freedomdaybackend.domain.member.dto.SignInRequestDto;
 import com.side.freedomdaybackend.domain.member.dto.SignUpRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final EncryptUtil encryptUtil;
     private final JwtUtil jwtUtil;
+    private final RedisUtil redisUtil;
     private final CookieUtil cookieUtil;
 
     public Member signIn(SignInRequestDto signInRequestDto) throws NoSuchAlgorithmException {
@@ -50,6 +53,11 @@ public class MemberService {
         if (memberRepository.existsByEmail(email)) { // TODO) exists 성능 문제
             throw new CustomException(ErrorCode.ACCOUNT_EXIST_EMAIL);
         };
+
+        String status = redisUtil.get("emailAUth-" + email);
+        if (status == null || !status.equals(Constants.EMAIL_AUTHENTICATED)){
+            throw new CustomException(ErrorCode.ACCOUNT_EXIST_EMAIL); // TODO) 에러코드 추가, 이메일 인증이 필요합니다.
+        }
 
         // 2. 비밀번호 안호화
         String encryptedPassword = encryptUtil.sha256(password);

@@ -2,14 +2,13 @@ package com.side.freedomdaybackend.domain.member;
 
 import com.side.freedomdaybackend.common.constants.Constants;
 import com.side.freedomdaybackend.common.response.ApiResponse;
-import com.side.freedomdaybackend.common.util.AuthUtil;
-import com.side.freedomdaybackend.common.util.CookieUtil;
-import com.side.freedomdaybackend.common.util.JwtUtil;
-import com.side.freedomdaybackend.common.util.RedisUtil;
+import com.side.freedomdaybackend.common.util.*;
+import com.side.freedomdaybackend.domain.member.dto.EmailAuthenticationDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInRequestDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInResponseDto;
 import com.side.freedomdaybackend.domain.member.dto.SignUpRequestDto;
 import io.jsonwebtoken.Claims;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.UUID;
 
 @RestController
@@ -32,6 +32,7 @@ public class MemberController {
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
     private final AuthUtil authUtil;
+    private final EmailUtil emailutil;
 
     @PostMapping("/sign-in")
     public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestDto signInRequestDto) throws NoSuchAlgorithmException {
@@ -44,7 +45,7 @@ public class MemberController {
         String refreshToken = jwtUtil.createRefreshToken(String.valueOf(member.getId()), uuid);
 
         // 4. 리프레쉬 토큰 저장
-        redisUtil.set(uuid, refreshToken);
+        redisUtil.set(uuid, refreshToken, Duration.ofHours(3).toMillis());
 
         // 5. 헤더에 추가
         ResponseCookie accessCookie = cookieUtil.createToken(Constants.ACCESS_TOKEN, accessToken);
@@ -84,12 +85,18 @@ public class MemberController {
         return new ApiResponse<>();
     }
 
+    @PostMapping("/send-mail")
+    public ApiResponse<String> emailAuthentication(@RequestBody EmailAuthenticationDto dto) throws MessagingException {
+        emailutil.sendAuthUrlMail(dto);
+        return new ApiResponse<>();
+    }
 
     @GetMapping("/email-authentication")
-    public ApiResponse<String> emailAuthentication() {
-        // TODO) 작업중
-        return new ApiResponse<>("test");
+    public ApiResponse<String> emailAuthentication(@RequestParam("token") String token) {
+        emailutil.emailAuthentication(token);
+        return new ApiResponse<>();
     }
+
 
 
 

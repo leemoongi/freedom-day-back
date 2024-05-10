@@ -16,18 +16,18 @@ public class WebConfig implements WebMvcConfigurer {
     private final String[] path = {
             "/member/sign-in",
             "/member/sign-up",
-            "/member/token-reissuance",
+            "/member/send-mail",
             "/member/email-authentication",
             "/docs/index.html"
     };
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(jwtInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns(path)
-                .order(0);
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(jwtInterceptor)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns(path)
+//                .order(0);
+//    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

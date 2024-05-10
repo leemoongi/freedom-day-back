@@ -45,6 +45,18 @@ public class JwtUtil {
                 .compact();
     }
 
+    public String createEmailAuthToken(String email) {
+        Date now = new Date();
+        Date expiration = new Date(now.getTime() + Duration.ofHours(1).toMillis()); // 5분
+
+        return Jwts.builder()
+                .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
+                .setExpiration(expiration)
+                .claim(Constants.EMAIL, email)
+                .signWith(SignatureAlgorithm.HS256, key)
+                .compact();
+    }
+
     public Claims isValidToken(String token) {
 
         return Jwts.parserBuilder()

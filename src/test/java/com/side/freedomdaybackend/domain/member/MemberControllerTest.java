@@ -2,11 +2,9 @@ package com.side.freedomdaybackend.domain.member;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.freedomdaybackend.common.constants.Constants;
-import com.side.freedomdaybackend.common.util.AuthUtil;
-import com.side.freedomdaybackend.common.util.CookieUtil;
-import com.side.freedomdaybackend.common.util.JwtUtil;
-import com.side.freedomdaybackend.common.util.RedisUtil;
+import com.side.freedomdaybackend.common.util.*;
 import com.side.freedomdaybackend.domain.RestDocsTest;
+import com.side.freedomdaybackend.domain.member.dto.EmailAuthenticationDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInRequestDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInResponseDto;
 import com.side.freedomdaybackend.domain.member.dto.SignUpRequestDto;
@@ -56,6 +54,9 @@ class MemberControllerTest extends RestDocsTest {
 
     @MockBean
     private AuthUtil authUtil;
+
+    @MockBean
+    private EmailUtil emailUtil;
 
 
     @DisplayName("로그인")
@@ -188,6 +189,29 @@ class MemberControllerTest extends RestDocsTest {
                 // spring rest docs
                 .andDo(
                         restDocs.document());
+
+    }
+    @DisplayName("이메일 인증 메일 발송")
+    @Test
+    void emailAuthentication() throws Exception {
+        // given
+        EmailAuthenticationDto dto = new EmailAuthenticationDto("newTestTest@naver.com");
+
+        // when
+        mockMvc.perform(post("/member/send-mail")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+
+                // then
+                .andExpect(status().isOk())
+
+                // spring rest docs
+                .andDo(
+                        restDocs.document(
+                                requestFields(
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일")
+                                )
+                        ));
 
     }
 }
