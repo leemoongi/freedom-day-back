@@ -8,12 +8,13 @@ import com.side.freedomdaybackend.domain.loan.dto.QLoanSimpleDto;
 import com.side.freedomdaybackend.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static com.side.freedomdaybackend.domain.loan.QLoan.loan;
 import static com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.QLoanRepaymentMonthHistory.loanRepaymentMonthHistory;
-import static com.side.freedomdaybackend.domain.member.QMember.*;
+import static com.side.freedomdaybackend.domain.member.QMember.member;
 
 @RequiredArgsConstructor
 public class LoanRepositoryImpl implements LoanRepositoryCustom {
@@ -49,25 +50,29 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
     }
 
     @Override
-    public Long findByPreviousMonthPayment(Long memberId) {
-        LocalDateTime previousMonth = LocalDateTime.now().minusMonths(1);
-        LocalDateTime start = LocalDateTime.of(previousMonth.getYear(), previousMonth.getMonth(), 1, 0, 0);
-        LocalDateTime end = LocalDateTime.of(previousMonth.getYear(), previousMonth.getMonth(), 1, 0, 0)
+    public Optional<Long> findByPreviousMonthPayment(Long memberId) {
+        LocalDate previousMonth = LocalDate.now().minusMonths(1);
+        LocalDate start = LocalDate.of(previousMonth.getYear(), previousMonth.getMonth(), 1);
+        LocalDate end = LocalDate.of(previousMonth.getYear(), previousMonth.getMonth(), 1)
                 .plusMonths(1).withDayOfMonth(1).minusDays(1);
 
         return queryFactory
-                .select(loanRepaymentMonthHistory.repaymentAmount.sum())
+                .select(
+                        loanRepaymentMonthHistory.repaymentAmount1.sum()
+                                .add(loanRepaymentMonthHistory.repaymentAmount2.sum())
+                                .add(loanRepaymentMonthHistory.repaymentAmount3.sum())
+                )
                 .from(member)
-                    .leftJoin(loan)
-                    .on(member.eq(loan.member))
-                    .leftJoin(loanRepaymentMonthHistory)
-                    .on(loan.eq(loanRepaymentMonthHistory.loan))
+                .leftJoin(loan)
+                .on(member.eq(loan.member))
+                .leftJoin(loanRepaymentMonthHistory)
+                .on(loan.eq(loanRepaymentMonthHistory.loan))
                 .where(
                         loan.member.id.eq(memberId)
                         , loanRepaymentMonthHistory.historyDate.between(start, end)
                         , loan.status.eq('0'))
-                .groupBy(loan.id)
-                .fetchOne();
+                .groupBy(member.id)
+                .fetchOne().describeConstable();
     }
 
     @Override
@@ -98,9 +103,13 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
                         )
                 )
                 .from(loan)
+                    .leftJoin(loanRepaymentMonthHistory)
+                    .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
                 .where(
                         loan.member.id.eq(memberId)
+                        , loanRepaymentMonthHistory.id.isNull()
                         , loan.status.eq('0'))
+                .groupBy(loan.id)
                 .fetch();
 
     }
@@ -108,41 +117,32 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
 
     @Override
     public List<LoanStatisticsDto.RepaidLoan> repaidLoan(Long memberId) {
-        // 상환 완료
+        LocalDate previousMonth = LocalDate.now().minusMonths(1);
+        LocalDate start = LocalDate.of(previousMonth.getYear(), previousMonth.getMonth(), 1);
+        LocalDate end = LocalDate.of(previousMonth.getYear(), previousMonth.getMonth(), 1)
+                .plusMonths(1).withDayOfMonth(1).minusDays(1);
+
+        // 이번달 상환 내역
         return queryFactory
                 .select(
                         Projections.fields(LoanStatisticsDto.RepaidLoan.class
                                 , loan.name
                                 , loan.purpose
-                                , loan.repaymentAmount)
+                                , loanRepaymentMonthHistory.repaymentAmount1.sum()
+                                                .add(loanRepaymentMonthHistory.repaymentAmount2.sum())
+                                                .add(loanRepaymentMonthHistory.repaymentAmount3.sum()).as("repaymentAmount"))
                 )
                 .from(loan)
+                .leftJoin(loanRepaymentMonthHistory)
+                .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
                 .where(
                         loan.member.id.eq(memberId)
-                        , loan.status.eq('1'))
+                        , loanRepaymentMonthHistory.historyDate.between(start, end)
+                )
+                .groupBy(loan.id)
                 .fetch();
 
     }
-//
-//    @Override
-//    public List<LoanStatisticsDto.RepaymentHistoryMonthTmp> repaymentHistoryMonthTmp(Long memberId) {
-//        // 월별 상환 기록
-//        return queryFactory
-//                .select(
-//                        Projections.fields(LoanStatisticsDto.RepaymentHistoryMonthTmp.class
-//                                , loanRepaymentMonthHistory.historyDate
-//                                , loanRepaymentMonthHistory.repaymentAmount.sum()
-//                                , loanRepaymentMonthHistory.type
-//                        )
-//                )
-//                .from(loan)
-//                .leftJoin(loanRepaymentMonthHistory)
-//                .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
-//                .where(loan.member.id.eq(memberId))
-//                .groupBy(loanRepaymentMonthHistory.historyDate, loanRepaymentMonthHistory.type)
-//                .fetch();
-//
-//    }
 
     @Override
     public List<LoanStatisticsDto.RemainingPrincipal> remainingPrincipal(Long memberId) {
@@ -158,5 +158,24 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
                 .groupBy(loan.purpose)
                 .fetch();
 
+    }
+
+    @Override
+    public List<LoanStatisticsDto.RepaymentHistoryMonth> repaymentHistoryList(long memberId) {
+        return queryFactory
+                .select(
+                        Projections.fields(LoanStatisticsDto.RepaymentHistoryMonth.class
+                                , loanRepaymentMonthHistory.historyDate
+                                , loanRepaymentMonthHistory.repaymentAmount1
+                                , loanRepaymentMonthHistory.repaymentAmount2
+                                , loanRepaymentMonthHistory.repaymentAmount3)
+
+                )
+                .from(loan)
+                .leftJoin(loanRepaymentMonthHistory)
+                .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
+                .where(loan.member.id.eq(memberId))
+                .groupBy(loanRepaymentMonthHistory.historyDate)
+                .fetch();
     }
 }

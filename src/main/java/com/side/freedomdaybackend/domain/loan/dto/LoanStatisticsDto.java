@@ -1,5 +1,6 @@
 package com.side.freedomdaybackend.domain.loan.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,7 +45,8 @@ public class LoanStatisticsDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class RepaymentHistoryMonth {
-        private String historyDate; // 등록 월 ex) yyyy-mm
+        @JsonFormat(pattern = "yyyy-MM")
+        private LocalDate historyDate; // 등록 월 ex) yyyy-mm
         private long repaymentAmount1; // 상환 방식 -> 1:원금 2:이자 3:중도상환
         private long repaymentAmount2;
         private long repaymentAmount3;

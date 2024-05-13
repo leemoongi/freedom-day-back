@@ -4,6 +4,7 @@ import com.side.freedomdaybackend.domain.loan.Loan;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,8 +22,10 @@ public class LoanRepaymentMonthHistory {
     @JoinColumn(name = "loan_id")
     private Loan loan;
 
-    private int type; // 반환 타입   1:원금  2:이자  3:중도상환
-    private Long repaymentAmount; // 금액
-    private LocalDateTime historyDate; // 상환일시
+    private double interestRates;
+    private Long repaymentAmount1; // 원금
+    private Long repaymentAmount2; // 이자
+    private Long repaymentAmount3; // 중도상환
+    private LocalDate historyDate; // 상환일시
 
 }

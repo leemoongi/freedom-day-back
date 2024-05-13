@@ -139,7 +139,7 @@ class LoanControllerTest extends RestDocsTest {
         List<LoanStatisticsDto.RepaymentHistoryMonth> rhmList = new ArrayList<>();
         rhmList.add(
                 new LoanStatisticsDto.RepaymentHistoryMonth(
-                        "2024-02"
+                         LocalDate.of(2024,Month.FEBRUARY,1)
                         , 10000000
                         , 20
                         , 50000000
@@ -147,7 +147,7 @@ class LoanControllerTest extends RestDocsTest {
         );
         rhmList.add(
                 new LoanStatisticsDto.RepaymentHistoryMonth(
-                        "2024-03"
+                        LocalDate.of(2024,Month.MARCH,1)
                         , 10000000
                         , 10
                         , 0
@@ -155,7 +155,7 @@ class LoanControllerTest extends RestDocsTest {
         );
         rhmList.add(
                 new LoanStatisticsDto.RepaymentHistoryMonth(
-                        "2024-02"
+                         LocalDate.of(2024,Month.FEBRUARY,1)
                         , 10000000
                         , 10
                         , 20000000

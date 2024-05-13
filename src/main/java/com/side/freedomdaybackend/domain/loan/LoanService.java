@@ -1,6 +1,10 @@
 package com.side.freedomdaybackend.domain.loan;
 
+import com.side.freedomdaybackend.common.exception.CustomException;
+import com.side.freedomdaybackend.common.exception.ErrorCode;
 import com.side.freedomdaybackend.domain.loan.dto.*;
+import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistory;
+import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistoryRepository;
 import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.mapper.LoanMapper;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
@@ -18,6 +22,7 @@ public class LoanService {
 
     private final MemberRepository memberRepository;
     private final LoanRepository loanRepository;
+    private final LoanRepaymentMonthHistoryRepository loanRepaymentMonthHistoryRepository;
     private final LoanMapstruct loanMapstruct;
     private final LoanMapper loanMapper;
 
@@ -31,7 +36,7 @@ public class LoanService {
         double repaymentAmount = 0; // 상환금액
         double loanAmount = 0; // 남은 원금
         int loanCount = 0; // 개수
-        Long previousMonthPayment = loanRepository.findByPreviousMonthPayment(memberId);; // 지난달 총 납부액
+        Long previousMonthPayment = loanRepository.findByPreviousMonthPayment(memberId).orElse(0L); // 지난달 총 납부액
 
         LocalDate now = LocalDate.now();
         for (LoanSimpleDto loanSimpleDto : loanSimpleDtoList) {
@@ -66,7 +71,6 @@ public class LoanService {
     public LoanStatisticsDto statistics(long memberId) {
         LoanStatisticsDto loanStatisticsDto = loanRepository.statistics(memberId);
         List<LoanStatisticsDto.LoanSimpleTmp> loanTmpList = loanRepository.loanSimple(memberId);
-        List<LoanStatisticsDto.RepaidLoan> repaidLoan = loanRepository.repaidLoan(memberId);
 
         // 총 남은 원금 = 대출 금액 - 대출 상환 금액
         loanStatisticsDto.setTotalRemainingPrincipal(loanStatisticsDto.getTotalPrincipal() - loanStatisticsDto.getTotalPrincipalRepayment());
@@ -89,42 +93,12 @@ public class LoanService {
             loanSimpleList.add(loanSimple);
         }
 
+        /* RepaidLoan 상환 완료 */
+        List<LoanStatisticsDto.RepaidLoan> repaidLoan = loanRepository.repaidLoan(memberId);
+
         /* RepaymentHistoryMonthList 월별 상환 기록 */
-        List<LoanStatisticsDto.RepaymentHistoryMonthTmp> rhmTmpList = loanMapper.selectRepaymentHistoryList(memberId); // 임시
-        List<LoanStatisticsDto.RepaymentHistoryMonth> rhmList = new ArrayList<LoanStatisticsDto.RepaymentHistoryMonth>(); // response 객체
-        LoanStatisticsDto.RepaymentHistoryMonth rhm = new LoanStatisticsDto.RepaymentHistoryMonth();
-        // 첫번째 먼저 처리
-        if (rhmTmpList.size() > 0) {
-            LoanStatisticsDto.RepaymentHistoryMonthTmp firstTmp = rhmTmpList.get(0);
-            String historyDate = firstTmp.getHistoryDate();
-            int type = firstTmp.getType();
+        List<LoanStatisticsDto.RepaymentHistoryMonth> rhmList = loanRepository.repaymentHistoryList(memberId);
 
-            rhm.setHistoryDate(historyDate);
-            switch (type) {
-                case 1 -> rhm.setRepaymentAmount1(firstTmp.getRepaymentAmount());
-                case 2 -> rhm.setRepaymentAmount2(firstTmp.getRepaymentAmount());
-                case 3 -> rhm.setRepaymentAmount3(firstTmp.getRepaymentAmount());
-            }
-        }
-
-        for (int i = 1; i < rhmTmpList.size(); i++) {
-            LoanStatisticsDto.RepaymentHistoryMonthTmp tmp = rhmTmpList.get(i);
-            int type = tmp.getType();
-            String historyDate = tmp.getHistoryDate();
-
-            // 새로운 날짜면 객체 새로 생성
-            if (!historyDate.equals(rhm.getHistoryDate())) {
-                rhmList.add(rhm);
-                rhm = new LoanStatisticsDto.RepaymentHistoryMonth();
-                rhm.setHistoryDate(historyDate);
-            }
-
-            switch (type) {
-                case 1 -> rhm.setRepaymentAmount1(tmp.getRepaymentAmount());
-                case 2 -> rhm.setRepaymentAmount2(tmp.getRepaymentAmount());
-                case 3 -> rhm.setRepaymentAmount3(tmp.getRepaymentAmount());
-            }
-        }
 
         /* RemainingPrincipal 대출 원금 비중 */
         List<LoanStatisticsDto.RemainingPrincipal> rpList = loanRepository.remainingPrincipal(memberId);
@@ -162,10 +136,27 @@ public class LoanService {
         loanRepository.save(loan);
     }
 
-    public void addRepaymentDetails(Member member, LoanAddRepaymentDetails loanAddRepaymentDetails) {
+    public void addRepaymentDetails(Member member, LoanAddRepaymentDetailDto lardDto) {
 
+        long loanId = lardDto.getLoanId();
 
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));
+
+        LocalDate now = LocalDate.now();
+
+        LoanRepaymentMonthHistory entity = LoanRepaymentMonthHistory.builder()
+                .loan(loan)
+                .interestRates(lardDto.getInterestRates())
+                .repaymentAmount1(lardDto.getRepaymentAmount1())
+                .repaymentAmount2(lardDto.getRepaymentAmount2())
+                .repaymentAmount3(lardDto.getRepaymentAmount3())
+                .historyDate(now)
+                .build();
+
+        loanRepaymentMonthHistoryRepository.save(entity);
     }
+
 
 
 
