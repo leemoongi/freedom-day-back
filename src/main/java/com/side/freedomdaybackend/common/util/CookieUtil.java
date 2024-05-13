@@ -25,7 +25,10 @@ public class CookieUtil {
         return ResponseCookie
                 .from(cookieName)
                 .path("/")
-                .maxAge(0)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("None") //개발 완료후 제거
                 .build();
     }
 
