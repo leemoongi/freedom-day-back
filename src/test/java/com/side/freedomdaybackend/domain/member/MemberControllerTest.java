@@ -159,9 +159,6 @@ class MemberControllerTest extends RestDocsTest {
     @Test
     void signOut() throws Exception {
         // given
-        Claims claims = Jwts.claims();
-        claims.put(Constants.UUID, UUID.randomUUID());
-
         ResponseCookie acCookie = ResponseCookie
                 .from(Constants.ACCESS_TOKEN)
                 .path("/")
@@ -175,7 +172,7 @@ class MemberControllerTest extends RestDocsTest {
                 .build();
 
         // when
-        when(authUtil.checkAuth(any())).thenReturn(claims);
+        when(authUtil.getUUID(any())).thenReturn(UUID.randomUUID().toString());
         when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
         when(cookieUtil.deleteToken(Constants.ACCESS_TOKEN)).thenReturn(acCookie);
         when(cookieUtil.deleteToken(Constants.REFRESH_TOKEN)).thenReturn(rfCookie);
