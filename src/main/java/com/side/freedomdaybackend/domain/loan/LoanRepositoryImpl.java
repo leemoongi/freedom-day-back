@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.side.freedomdaybackend.domain.loan.QLoan.loan;
@@ -56,7 +57,7 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
         LocalDate end = LocalDate.of(previousMonth.getYear(), previousMonth.getMonth(), 1)
                 .plusMonths(1).withDayOfMonth(1).minusDays(1);
 
-        return queryFactory
+        return Optional.ofNullable(queryFactory
                 .select(
                         loanRepaymentMonthHistory.repaymentAmount1.sum()
                                 .add(loanRepaymentMonthHistory.repaymentAmount2.sum())
@@ -72,7 +73,7 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
                         , loanRepaymentMonthHistory.historyDate.between(start, end)
                         , loan.status.eq('0'))
                 .groupBy(member.id)
-                .fetchOne().describeConstable();
+                .fetchOne());
     }
 
     @Override
