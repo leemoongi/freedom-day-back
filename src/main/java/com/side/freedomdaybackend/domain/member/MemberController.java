@@ -9,6 +9,7 @@ import com.side.freedomdaybackend.domain.member.dto.SignInResponseDto;
 import com.side.freedomdaybackend.domain.member.dto.SignUpRequestDto;
 import io.jsonwebtoken.Claims;
 import jakarta.mail.MessagingException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -70,8 +71,7 @@ public class MemberController {
     @PostMapping("/sign-out")
     public ApiResponse<String> signOut(HttpServletRequest request, HttpServletResponse response) {
         // UUID 추출
-        Claims claims = authUtil.checkAuth(request);
-        String uuid = claims.get(Constants.UUID).toString();
+        String uuid = authUtil.getUUID(request);
 
         // 레디스에서 제거
         redisUtil.remove(uuid);

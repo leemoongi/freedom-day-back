@@ -2,6 +2,7 @@ package com.side.freedomdaybackend.domain.loan;
 
 import com.side.freedomdaybackend.common.response.ApiResponse;
 import com.side.freedomdaybackend.common.util.AuthUtil;
+import com.side.freedomdaybackend.domain.loan.dto.LoanAddRepaymentDetails;
 import com.side.freedomdaybackend.domain.loan.dto.LoanCreateDto;
 import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
 import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
@@ -49,5 +50,14 @@ public class LoanController {
         loanService.create(member, loanCreateDto);
         return new ApiResponse<>();
     }
+
+//    // 상환 내역 추가
+//    @GetMapping("/add-repayment-details")
+//    public ApiResponse addRepaymentDetails(HttpServletRequest request, @RequestBody LoanAddRepaymentDetails loanAddRepaymentDetails) {
+//        Member member = authUtil.checkAuthReturnMember(request);
+//
+//        loanService.addRepaymentDetails(member, loanAddRepaymentDetails);
+//        return new ApiResponse<>();
+//    }
 
 }

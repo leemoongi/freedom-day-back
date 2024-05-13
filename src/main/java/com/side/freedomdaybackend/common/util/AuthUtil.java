@@ -19,10 +19,6 @@ public class AuthUtil {
     private final JwtUtil jwtUtil;
     private final MemberRepository memberRepository;
 
-    public Claims checkAuth(HttpServletRequest request) {
-        Claims claims = getClaims(request);
-        return claims;
-    }
 
     public Long checkAuthReturnId(HttpServletRequest request) {
         Claims claims = getClaims(request);
@@ -50,7 +46,29 @@ public class AuthUtil {
     }
 
 
+    public String getUUID(HttpServletRequest request) {
+
+        Cookie[] cookies = request.getCookies();
+        String refreshToken = null;
+
+        if (cookies.length == 0)
+            throw new CustomException(ErrorCode.JWT_ERROR);
+
+        for (Cookie cookie : cookies) {
+            if (Constants.REFRESH_TOKEN.equals(cookie.getName())) refreshToken = cookie.getValue();
+        }
+
+        if (refreshToken == null)
+            throw new CustomException(ErrorCode.JWT_ERROR);
+
+        String uuid = (String) jwtUtil.isValidToken(refreshToken).get(Constants.UUID);
+
+        return uuid;
+    }
+
+
     private Claims getClaims(HttpServletRequest request) {
+
         Cookie[] cookies = request.getCookies();
         String accessToken = null;
 

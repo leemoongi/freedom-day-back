@@ -1,9 +1,6 @@
 package com.side.freedomdaybackend.domain.loan;
 
-import com.side.freedomdaybackend.domain.loan.dto.LoanCreateDto;
-import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
-import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
-import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
+import com.side.freedomdaybackend.domain.loan.dto.*;
 import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.mapper.LoanMapper;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
@@ -165,6 +162,11 @@ public class LoanService {
         loanRepository.save(loan);
     }
 
+    public void addRepaymentDetails(Member member, LoanAddRepaymentDetails loanAddRepaymentDetails) {
+
+
+    }
+
 
 
     // 상환일로 D-day 계산
@@ -201,6 +203,7 @@ public class LoanService {
         if (currentDay > paymentNumber) return true;
         return false;
     }
+
 
 
 }
