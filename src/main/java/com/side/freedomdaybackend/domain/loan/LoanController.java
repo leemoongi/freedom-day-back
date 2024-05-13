@@ -51,16 +51,18 @@ public class LoanController {
     // 디테일
     @GetMapping("/detail")
     public ApiResponse detail(HttpServletRequest request, @RequestBody LoanAddRepaymentDetailDto lardDto) {
-        Member member = authUtil.checkAuthReturnMember(request);
+        Long memberId = authUtil.checkAuthReturnId(request);
 
-        loanService.addRepaymentDetails(member, lardDto);
+        loanService.addRepaymentDetails(memberId, lardDto);
         return new ApiResponse<>();
-    }    // 상환 내역 추가
+    }
+
+    // 상환 내역 추가
     @PostMapping("/add-repayment-details")
     public ApiResponse addRepaymentDetails(HttpServletRequest request, @RequestBody LoanAddRepaymentDetailDto lardDto) {
-        Member member = authUtil.checkAuthReturnMember(request);
+        Long memberId = authUtil.checkAuthReturnId(request);
 
-        loanService.addRepaymentDetails(member, lardDto);
+        loanService.addRepaymentDetails(memberId, lardDto);
         return new ApiResponse<>();
     }
 

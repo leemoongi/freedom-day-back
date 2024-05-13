@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class LoanAddRepaymentDetailDto {
 
     private long loanId; // 대출 pk
-    private int interestRates; // 금리
+    private double interestRates; // 금리
     private long repaymentAmount1; // 납입이자
     private long repaymentAmount2; // 납입원금
     private long repaymentAmount3; // 중도상환

@@ -3,6 +3,7 @@ package com.side.freedomdaybackend.domain.loan;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.freedomdaybackend.common.util.AuthUtil;
 import com.side.freedomdaybackend.domain.RestDocsTest;
+import com.side.freedomdaybackend.domain.loan.dto.LoanAddRepaymentDetailDto;
 import com.side.freedomdaybackend.domain.loan.dto.LoanCreateDto;
 import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
 import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
@@ -269,6 +270,43 @@ class LoanControllerTest extends RestDocsTest {
                                 fieldWithPath("expirationDate").type(JsonFieldType.STRING).description("상환 일시"),
                                 fieldWithPath("paymentDate").type(JsonFieldType.NUMBER).description("납부일 매월 15일에 납부 -> 15"),
                                 fieldWithPath("periodUnit").type(JsonFieldType.STRING).description("대출 기간 단위  월:M 일:D"))));
+
+    }
+
+
+    @DisplayName("대출 상새 추가")
+    @Test
+    void addRepaymentDetails() throws Exception {
+        // given
+        LoanAddRepaymentDetailDto lardDto = new LoanAddRepaymentDetailDto(
+                1L
+                ,3.4
+                ,10000
+                ,10000
+                ,10000
+                ,LocalDate.of(2024, Month.APRIL, 3)
+        );
+
+        // when
+        when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
+
+        ResultActions perform = mockMvc.perform(post("/loan/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(lardDto)));
+
+        // then
+        perform.andExpect(status().isOk())
+
+                // spring rest docs
+                .andDo(restDocs.document(
+                        requestFields(
+                                fieldWithPath("loanId").type(JsonFieldType.NUMBER).description("대출"),
+                                fieldWithPath("interestRates").type(JsonFieldType.NUMBER).description("금리"),
+                                fieldWithPath("repaymentAmount1").type(JsonFieldType.NUMBER).description("납입이자"),
+                                fieldWithPath("repaymentAmount2").type(JsonFieldType.NUMBER).description("납입원금"),
+                                fieldWithPath("repaymentAmount3").type(JsonFieldType.NUMBER).description("중도상환"),
+                                fieldWithPath("historyDate").type(JsonFieldType.STRING).description("상환일시")
+                           )));
 
     }
 

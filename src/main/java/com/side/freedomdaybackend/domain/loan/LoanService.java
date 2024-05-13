@@ -136,15 +136,20 @@ public class LoanService {
         loanRepository.save(loan);
     }
 
-    public void addRepaymentDetails(Member member, LoanAddRepaymentDetailDto lardDto) {
-
+    public void addRepaymentDetails(Long memberId, LoanAddRepaymentDetailDto lardDto) {
+        // 대출 존재 확인
         long loanId = lardDto.getLoanId();
-
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));
 
-        LocalDate now = LocalDate.now();
+        // 사용자 일치 여부 확인
+        Member member = loan.getMember();
+        if (member.getId().equals(memberId)) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+        };
 
+        // entity
+        LocalDate now = LocalDate.now();
         LoanRepaymentMonthHistory entity = LoanRepaymentMonthHistory.builder()
                 .loan(loan)
                 .interestRates(lardDto.getInterestRates())
@@ -156,8 +161,6 @@ public class LoanService {
 
         loanRepaymentMonthHistoryRepository.save(entity);
     }
-
-
 
 
     // 상환일로 D-day 계산
