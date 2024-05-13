@@ -56,7 +56,7 @@ public class MemberService {
 
         String status = redisUtil.get("emailAUth-" + email);
         if (status == null || !status.equals(Constants.EMAIL_AUTHENTICATED)){
-            throw new CustomException(ErrorCode.ACCOUNT_EXIST_EMAIL); // TODO) 에러코드 추가, 이메일 인증이 필요합니다.
+            throw new CustomException(ErrorCode.ACCOUNT_EMAIL_ERROR);
         }
 
         // 2. 비밀번호 안호화

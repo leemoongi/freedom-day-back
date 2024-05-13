@@ -26,6 +26,7 @@ public enum ErrorCode {
     ACCOUNT_NOT_ACTIVE("ACCOUNT-003", 401,"비활성화된 계정입니다."),
     ACCOUNT_LOCK("ACCOUNT-004", 401,"비밀번호가 5번 틀렸습니다. 계정이 잠금됩니다."),
     ACCOUNT_EXIST_EMAIL("ACCOUNT-005", 400, "이미 존재하는 이메일입니다."),
+    ACCOUNT_EMAIL_ERROR("ACCOUNT-006", 400, "이메일 인증이 필요합니다."),
 
     ;
 
