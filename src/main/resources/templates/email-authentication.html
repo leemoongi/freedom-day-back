@@ -4,7 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-    <P>이메일 인증 코드 : </P>
-    <p th:text="${url}"></p>
+<p>안녕하세요. 해방의날 입니다.</p>
+<p>본 메일은 이메일 확인을 위한 인증용 메일입니다.</p>
+<p>아래 링크를 클릭하여 메일 본인 소유를 확인해 주세요.</p>
+<a th:href="${url}" style="background-color: #00BFFF; color: white; padding: 10px 20px; text-align: center; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border: none; border-radius: 4px; text-decoration: none;">메일주소 보이스피싱 인증</a>
 </body>
 </html>

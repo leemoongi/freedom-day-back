@@ -31,6 +31,8 @@ public class EmailUtil {
     private final JwtUtil jwtUtil;
     private final RedisUtil redisUtil;
 
+    private static String EMAIL_URL = "https://www.freedom-day.site/api/member/email-authentication?token=";
+
     public void sendAuthUrlMail(EmailAuthenticationDto dto) throws MessagingException {
         String email = dto.getEmail();
 
@@ -38,10 +40,10 @@ public class EmailUtil {
         redisUtil.set("emailAUth-" + email , Constants.EMAIL_NOT_AUTHENTICATED, Duration.ofHours(1).toMillis());
 
         HashMap<String, Object> templateModel = new HashMap<>();
-        templateModel.put("url", "https://www.freedom-day.site/api/member/email-authentication?token=" + emailAuthToken);
+        templateModel.put("url", EMAIL_URL + emailAuthToken);
 //        templateModel.put("url", "http://localhost:8080/api/member/email-authentication?token=" + emailAuthToken);
 
-        String subject = String.format("[해방의날] 이메일 인증");
+        String subject = String.format("해방의날");
         Context thymeleafContext = new Context();
         thymeleafContext.setVariables(templateModel);
         String htmlBody = templateEngine.process("email-authentication.html", thymeleafContext);
