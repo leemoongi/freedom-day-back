@@ -9,10 +9,7 @@ import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
 import com.side.freedomdaybackend.domain.member.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,7 +40,7 @@ public class LoanController {
         return new ApiResponse<>(loanStatisticsDto);
     }
 
-    @GetMapping("/create")
+    @PostMapping("/create")
     public ApiResponse create(HttpServletRequest request, @RequestBody LoanCreateDto loanCreateDto) {
         Member member = authUtil.checkAuthReturnMember(request);
 
@@ -52,7 +49,7 @@ public class LoanController {
     }
 
 //    // 상환 내역 추가
-//    @GetMapping("/add-repayment-details")
+//    @PostMapping("/add-repayment-details")
 //    public ApiResponse addRepaymentDetails(HttpServletRequest request, @RequestBody LoanAddRepaymentDetails loanAddRepaymentDetails) {
 //        Member member = authUtil.checkAuthReturnMember(request);
 //

@@ -25,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -246,7 +247,7 @@ class LoanControllerTest extends RestDocsTest {
         // when
         when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
 
-        ResultActions perform = mockMvc.perform(get("/loan/create")
+        ResultActions perform = mockMvc.perform(post("/loan/create")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(loanCreateDto)));
 
