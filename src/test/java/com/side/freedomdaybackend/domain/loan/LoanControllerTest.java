@@ -3,10 +3,7 @@ package com.side.freedomdaybackend.domain.loan;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.side.freedomdaybackend.common.util.AuthUtil;
 import com.side.freedomdaybackend.domain.RestDocsTest;
-import com.side.freedomdaybackend.domain.loan.dto.LoanAddRepaymentDetailDto;
-import com.side.freedomdaybackend.domain.loan.dto.LoanCreateDto;
-import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
-import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
+import com.side.freedomdaybackend.domain.loan.dto.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -274,7 +271,7 @@ class LoanControllerTest extends RestDocsTest {
     }
 
 
-    @DisplayName("대출 상새 추가")
+    @DisplayName("대출 상세")
     @Test
     void addRepaymentDetails() throws Exception {
         // given
@@ -307,6 +304,49 @@ class LoanControllerTest extends RestDocsTest {
                         )));
 
     }
+
+
+//    @DisplayName("대출 상세 추가")
+//    @Test
+//    void detail() throws Exception {
+//        // given
+//        LoanDetailRequestDto loanDetailRequestDto = new LoanDetailRequestDto(2L);
+//        LoanDetailResponseDto loanDetailResponseDto = new LoanDetailResponseDto();
+//
+//        // when
+//        when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
+//        when(loanService.detail(any(), any())).thenReturn(loanDetailResponseDto);
+//
+//        ResultActions perform = mockMvc.perform(get("/loan/detail")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(loanDetailRequestDto)));
+//
+//        // then
+//        perform.andExpect(status().isOk())
+//
+//                // spring rest docs
+//                .andDo(restDocs.document(
+//                        requestFields(
+//                                fieldWithPath("loanId").type(JsonFieldType.NUMBER).description("대출 pk")
+//                        ),
+//                        responseFields(
+//                                beneathPath("response").withSubsectionId("response"),
+//                                fieldWithPath("name").type(JsonFieldType.NUMBER).description("이름"),
+//                                fieldWithPath("purpose").type(JsonFieldType.NUMBER).description("은행 코드"),
+//                                fieldWithPath("repaymentHistoryMonthList[].historyDate").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 등록 월"),
+//                                fieldWithPath("repaymentHistoryMonthList[].repaymentAmount1").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 원금"),
+//                                fieldWithPath("repaymentHistoryMonthList[].repaymentAmount2").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 이자"),
+//                                fieldWithPath("repaymentHistoryMonthList[].repaymentAmount3").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 중도상환"),
+//                                fieldWithPath("totalPrincipal").type(JsonFieldType.NUMBER).description("대출 금액"),
+//                                fieldWithPath("loanPeriod").type(JsonFieldType.NUMBER).description("대출 기간"),
+//                                fieldWithPath("interestRate").type(JsonFieldType.NUMBER).description("이자율")
+//
+//
+//
+//                        )
+//                ));
+//
+//    }
 
 
 }

@@ -2,15 +2,12 @@ package com.side.freedomdaybackend.domain.loan;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
-import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
-import com.side.freedomdaybackend.domain.loan.dto.QLoanSimpleDto;
+import com.side.freedomdaybackend.domain.loan.dto.*;
 import com.side.freedomdaybackend.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.side.freedomdaybackend.domain.loan.QLoan.loan;
@@ -164,7 +161,7 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
     }
 
     @Override
-    public List<LoanStatisticsDto.RepaymentHistoryMonth> repaymentHistoryList(long memberId) {
+    public List<LoanStatisticsDto.RepaymentHistoryMonth> repaymentHistoryList(Long memberId) {
         return queryFactory
                 .select(
                         Projections.fields(LoanStatisticsDto.RepaymentHistoryMonth.class
@@ -172,13 +169,29 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
                                 , loanRepaymentMonthHistory.repaymentAmount1
                                 , loanRepaymentMonthHistory.repaymentAmount2
                                 , loanRepaymentMonthHistory.repaymentAmount3)
-
                 )
                 .from(loan)
                 .innerJoin(loanRepaymentMonthHistory)
                 .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
                 .where(loan.member.id.eq(memberId))
                 .groupBy(loanRepaymentMonthHistory.historyDate)
+                .fetch();
+    }
+
+    @Override
+    public List<LoanDetailResponseDto.RepaymentHistoryMonth> detailRepaymentMonthHistory(Long loanId) {
+        return queryFactory
+                .select(
+                        Projections.fields(LoanDetailResponseDto.RepaymentHistoryMonth.class
+                                , loanRepaymentMonthHistory.historyDate
+                                , loanRepaymentMonthHistory.repaymentAmount1
+                                , loanRepaymentMonthHistory.repaymentAmount2
+                                , loanRepaymentMonthHistory.repaymentAmount3)
+                )
+                .from(loan)
+                .innerJoin(loanRepaymentMonthHistory)
+                .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
+                .where(loan.id.eq(loanId))
                 .fetch();
     }
 }

@@ -28,6 +28,9 @@ public enum ErrorCode {
     ACCOUNT_EXIST_EMAIL("ACCOUNT-005", 400, "이미 존재하는 이메일입니다."),
     ACCOUNT_EMAIL_ERROR("ACCOUNT-006", 400, "이메일 인증이 필요합니다."),
 
+    // LOAN : 대출
+    LOAN_NOT_FOUND("LOAN-001",404, "대출이 존재하지 않습니다."),
+
     ;
 
     public String code;

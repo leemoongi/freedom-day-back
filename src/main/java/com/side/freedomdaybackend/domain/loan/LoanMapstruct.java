@@ -1,6 +1,7 @@
 package com.side.freedomdaybackend.domain.loan;
 
 import com.side.freedomdaybackend.domain.loan.dto.*;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -18,7 +19,8 @@ public interface LoanMapstruct {
     @Mapping(target = "paymentPercentage", ignore = true)
     LoanSimpleDto toLoanDto(Loan entity);
 
-    LoanDetailRequestDto toLoanDetailRequestDto(Loan entity);
+    @BeanMapping(ignoreByDefault = true)
+    LoanDetailResponseDto toLoanDetailResponseDto(Loan entity);
 
     // dto -> entity
     @Mapping(target = "id", ignore = true)

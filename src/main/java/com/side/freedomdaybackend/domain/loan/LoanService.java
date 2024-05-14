@@ -132,7 +132,9 @@ public class LoanService {
             if (orYM.equals(pollYM)) {
                 rhmList.add(poll);
                 poll = queue.poll();
-                pollYM = YearMonth.from(poll.getHistoryDate());
+
+                if (!queue.isEmpty())
+                    pollYM = YearMonth.from(poll.getHistoryDate());
                 // 해당 달에 기록이 없음
             } else {
                 rhmList.add(new LoanStatisticsDto.RepaymentHistoryMonth(LocalDate.of(orYM.getYear(),orYM.getMonth(),1), 0, 0, 0));
@@ -161,27 +163,51 @@ public class LoanService {
 
 
     public void create(Member member, LoanCreateDto loanCreateDto) {
-
         char unit = loanCreateDto.getPeriodUnit();
-
-        // TODO) 날짜에 수정
-        if (unit == 'M') {
-
-        } else if (unit == 'D') {
-
-        }
 
         Loan loan = loanMapstruct.toLoan(loanCreateDto);
         loan.setMember(member);
         loanRepository.save(loan);
     }
 
-    public void detail(Long memberId, LoanDetailRequestDto loanDetailRequestDto) {
-        long loanId = loanDetailRequestDto.getLoanId();
+    public LoanDetailResponseDto detail(Long memberId, LoanDetailRequestDto loanDetailRequestDto) {
+        Long loanId = loanDetailRequestDto.getLoanId();
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));// TODO) 에러코드 추가
+                .orElseThrow(() -> new CustomException(ErrorCode.LOAN_NOT_FOUND));
 
-//        loanMapstruct.toLoanDetailRequestDto
+        // 해당유저의 대출이 아닐경우
+        if (!loan.getMember().getId().equals(memberId))
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR); // TODO) 에러코드 추가
+
+        // response 객체
+        LoanDetailResponseDto loanDetailResponseDto = loanMapstruct.toLoanDetailResponseDto(loan);
+
+        // 월별 상세 정보
+        List<LoanDetailResponseDto.RepaymentHistoryMonth> rhmDto = loanRepository.detailRepaymentMonthHistory(loanId);
+
+        LocalDate now = LocalDate.now();
+        LocalDate originationDate = loan.getOriginationDate();
+        LocalDate expirationDate = loan.getExpirationDate();
+
+        YearMonth orYM = YearMonth.from(originationDate);
+        YearMonth exYM = YearMonth.from(expirationDate);
+        YearMonth nowYM = YearMonth.from(now);
+
+        YearMonth ym = null; // 이 객체로 계산함
+
+        // 종료날짜가 미래면 현재날짜로 세팅
+        if (exYM.isAfter(nowYM)) ym = nowYM;
+        else ym = exYM;
+
+        long between = ChronoUnit.MONTHS.between(orYM, ym);
+
+
+        // TODO) 수정중
+
+        loanDetailResponseDto.setRepaymentHistoryMonthList(rhmDto);
+
+        return loanDetailResponseDto;
+
     }
 
     public void addRepaymentDetails(Long memberId, LoanAddRepaymentDetailDto lardDto) {

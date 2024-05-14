@@ -25,16 +25,16 @@ public class LoanController {
     public ApiResponse userLoanInfo(HttpServletRequest request) {
         Long memberId = authUtil.checkAuthReturnId(request);
 
-        MyLoanInfoDto myLoanInfoDto = loanService.myLoanList(memberId);
-        return new ApiResponse<>(myLoanInfoDto);
+        MyLoanInfoDto dto = loanService.myLoanList(memberId);
+        return new ApiResponse<>(dto);
     }
 
     @GetMapping("/loan-statistics")
     public ApiResponse loanStatistics(HttpServletRequest request) {
         Long memberId = authUtil.checkAuthReturnId(request);
 
-        LoanStatisticsDto loanStatisticsDto = loanService.statistics(memberId);
-        return new ApiResponse<>(loanStatisticsDto);
+        LoanStatisticsDto dto = loanService.statistics(memberId);
+        return new ApiResponse<>(dto);
     }
 
     @PostMapping("/create")
@@ -45,13 +45,12 @@ public class LoanController {
         return new ApiResponse<>();
     }
 
-    // 디테일
     @GetMapping("/detail")
     public ApiResponse detail(HttpServletRequest request, @RequestBody LoanDetailRequestDto loanDetailRequestDto) {
         Long memberId = authUtil.checkAuthReturnId(request);
 
-        loanService.detail(memberId, loanDetailRequestDto);
-        return new ApiResponse<>();
+        LoanDetailResponseDto dto = loanService.detail(memberId, loanDetailRequestDto);
+        return new ApiResponse<>(dto);
     }
 
     @PostMapping("/add-repayment-details")

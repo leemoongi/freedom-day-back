@@ -1,5 +1,7 @@
 package com.side.freedomdaybackend.domain.loan;
 
+import com.side.freedomdaybackend.domain.loan.dto.LoanDetailRequestDto;
+import com.side.freedomdaybackend.domain.loan.dto.LoanDetailResponseDto;
 import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
 import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
 import com.side.freedomdaybackend.domain.member.Member;
@@ -16,5 +18,6 @@ public interface LoanRepositoryCustom {
     List<LoanStatisticsDto.LoanSimpleTmp> loanSimple(Long memberId);
     List<LoanStatisticsDto.RepaidLoan> repaidLoan(Long memberId);
     List<LoanStatisticsDto.RemainingPrincipal> remainingPrincipal(Long memberId);
-    List<LoanStatisticsDto.RepaymentHistoryMonth> repaymentHistoryList(long memberId);
+    List<LoanStatisticsDto.RepaymentHistoryMonth> repaymentHistoryList(Long memberId);
+    List<LoanDetailResponseDto.RepaymentHistoryMonth> detailRepaymentMonthHistory(Long loanId);
 }
