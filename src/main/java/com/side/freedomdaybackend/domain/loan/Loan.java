@@ -32,9 +32,8 @@ public class Loan {
     private String bankCode; // 은행
     private Long totalPrincipal; // 총 원금
     private Long repaymentAmount; // 상환 완료 금액
-    private int interestRate; // 연 이자율
+    private double interestRate; // 연 이자율
     private int loanPeriod; // 대출 기간  TODO) 기간에 대한 정보를 어떻게 저장할지 결졍해야함
-//    @JsonProperty("isVariableRate")
     private boolean variableRate; // 변동금리여부  0: false  1:true
     private LocalDate originationDate; // 시작 일시
     private LocalDate expirationDate; // 상환 일시
@@ -44,4 +43,11 @@ public class Loan {
     public void setMember(Member member) {
         this.member = member;
     }
+
+    public void addRepaymentAmount(double interestRate, long repaymentAmount) {
+        this.interestRate = interestRate;
+        this.repaymentAmount += repaymentAmount;
+    }
+
+
 }

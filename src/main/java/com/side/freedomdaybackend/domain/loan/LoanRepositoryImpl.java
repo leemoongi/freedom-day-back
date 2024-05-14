@@ -173,7 +173,7 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
 
                 )
                 .from(loan)
-                .leftJoin(loanRepaymentMonthHistory)
+                .innerJoin(loanRepaymentMonthHistory)
                 .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
                 .where(loan.member.id.eq(memberId))
                 .groupBy(loanRepaymentMonthHistory.historyDate)

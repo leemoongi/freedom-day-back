@@ -148,6 +148,13 @@ public class LoanService {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         };
 
+        double interestRates = lardDto.getInterestRates();
+        long repaymentAmount2 = lardDto.getRepaymentAmount2(); // 납입원금
+        long repaymentAmount3 = lardDto.getRepaymentAmount3(); // 중도상환
+
+        // 대출 상환내역 추가
+        loan.addRepaymentAmount(interestRates, repaymentAmount2 + repaymentAmount3);
+
         // entity
         LocalDate now = LocalDate.now();
         LoanRepaymentMonthHistory entity = LoanRepaymentMonthHistory.builder()
