@@ -53,11 +53,10 @@ public class LoanController {
     public ApiResponse detail(HttpServletRequest request, @RequestBody LoanAddRepaymentDetailDto lardDto) {
         Long memberId = authUtil.checkAuthReturnId(request);
 
-        loanService.addRepaymentDetails(memberId, lardDto);
+        loanService.detail(memberId, lardDto);
         return new ApiResponse<>();
     }
 
-    // 상환 내역 추가
     @PostMapping("/add-repayment-details")
     public ApiResponse addRepaymentDetails(HttpServletRequest request, @RequestBody LoanAddRepaymentDetailDto lardDto) {
         Long memberId = authUtil.checkAuthReturnId(request);

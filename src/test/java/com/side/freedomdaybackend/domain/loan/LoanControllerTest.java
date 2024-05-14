@@ -284,7 +284,6 @@ class LoanControllerTest extends RestDocsTest {
                 ,10000
                 ,10000
                 ,10000
-                ,LocalDate.of(2024, Month.APRIL, 3)
         );
 
         // when
@@ -304,9 +303,8 @@ class LoanControllerTest extends RestDocsTest {
                                 fieldWithPath("interestRates").type(JsonFieldType.NUMBER).description("금리"),
                                 fieldWithPath("repaymentAmount1").type(JsonFieldType.NUMBER).description("납입이자"),
                                 fieldWithPath("repaymentAmount2").type(JsonFieldType.NUMBER).description("납입원금"),
-                                fieldWithPath("repaymentAmount3").type(JsonFieldType.NUMBER).description("중도상환"),
-                                fieldWithPath("historyDate").type(JsonFieldType.STRING).description("상환일시")
-                           )));
+                                fieldWithPath("repaymentAmount3").type(JsonFieldType.NUMBER).description("중도상환")
+                        )));
 
     }
 

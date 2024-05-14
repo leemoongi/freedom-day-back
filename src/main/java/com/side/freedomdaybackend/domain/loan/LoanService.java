@@ -165,7 +165,6 @@ public class LoanService {
                 .repaymentAmount1(lardDto.getRepaymentAmount1())
                 .repaymentAmount2(lardDto.getRepaymentAmount2())
                 .repaymentAmount3(lardDto.getRepaymentAmount3())
-                .historyDate(now)
                 .build();
 
         loanRepaymentMonthHistoryRepository.save(entity);
@@ -198,6 +197,8 @@ public class LoanService {
         return date;
     }
 
+    public void detail(Long memberId, LoanAddRepaymentDetailDto lardDto) {
+    }
 
     public boolean isPaidThisMonth(int paymentNumber, LocalDate now) {
         int currentDay = now.getDayOfMonth();
@@ -206,7 +207,5 @@ public class LoanService {
         if (currentDay > paymentNumber) return true;
         return false;
     }
-
-
 
 }
