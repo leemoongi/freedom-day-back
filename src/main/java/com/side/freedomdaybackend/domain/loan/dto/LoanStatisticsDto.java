@@ -45,6 +45,7 @@ public class LoanStatisticsDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class RepaymentHistoryMonth {
+        // @Convert(converter = YearMonthConverter.class)
         @JsonFormat(pattern = "yyyy-MM")
         private LocalDate historyDate; // 등록 월 ex) yyyy-mm
         private long repaymentAmount1; // 상환 방식 -> 1:원금 2:이자 3:중도상환
@@ -68,6 +69,16 @@ public class LoanStatisticsDto {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class Tmp {
+        private long totalPrincipal; // 총 대출 금액
+        private long totalPrincipalRepayment; // 총 상환 원금
+        private LocalDate originationDate; // 시작날짜
+        private LocalDate expirationDate; // 종료날짜
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class LoanSimpleTmp {
         private String name; // 대출 이름
         private String purpose; // 용도
@@ -75,12 +86,24 @@ public class LoanStatisticsDto {
         private int paymentDate; // 납부일자 ex) 16
     }
 
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     public static class RepaymentHistoryMonthTmp {
-        private int type;
-        private long repaymentAmount; // 상환 방식 -> 1:원금 2:이자 3:중도상환
-        private String historyDate;
+        private LocalDate historyDate; // 등록 월 ex) yyyy-mm
+        private long repaymentAmount1; // 상환 방식 -> 1:원금 2:이자 3:중도상환
+        private long repaymentAmount2;
+        private long repaymentAmount3;
     }
+
+//    @Data
+//    @AllArgsConstructor
+//    @NoArgsConstructor
+//    public static class RepaymentHistoryMonthTmp {
+//        private LocalDate originationDate;
+//        private LocalDate expirationDate;
+//        private RepaymentHistoryMonth repaymentHistoryMonth;
+//    }
+
 }

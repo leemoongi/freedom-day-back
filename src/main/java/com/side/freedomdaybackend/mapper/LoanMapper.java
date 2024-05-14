@@ -8,7 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface LoanMapper {
-    List<LoanStatisticsDto.RepaymentHistoryMonthTmp> selectRepaymentHistoryList(long memberId);
+//    List<LoanStatisticsDto.RepaymentHistoryMonthTmp> selectRepaymentHistoryList(long memberId);
 
 }
 

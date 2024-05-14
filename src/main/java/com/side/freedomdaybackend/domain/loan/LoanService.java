@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +74,8 @@ public class LoanService {
     }
 
     public LoanStatisticsDto statistics(long memberId) {
-        LoanStatisticsDto loanStatisticsDto = loanRepository.statistics(memberId);
+        LoanStatisticsDto.Tmp statisticsTmp = loanRepository.statistics(memberId); // 임시 객체
+        LoanStatisticsDto loanStatisticsDto = loanMapstruct.toLoanStatisticsDto(statisticsTmp); // response 객체
         List<LoanStatisticsDto.LoanSimpleTmp> loanTmpList = loanRepository.loanSimple(memberId);
 
         // 총 남은 원금 = 대출 금액 - 대출 상환 금액
@@ -100,7 +104,41 @@ public class LoanService {
 
         /* RepaymentHistoryMonthList 월별 상환 기록 */
         List<LoanStatisticsDto.RepaymentHistoryMonth> rhmList = loanRepository.repaymentHistoryList(memberId);
+        LocalDate originationDate = statisticsTmp.getOriginationDate();
+        LocalDate expirationDate = statisticsTmp.getExpirationDate();
 
+        YearMonth orYM = YearMonth.from(originationDate);
+        YearMonth exYM = YearMonth.from(expirationDate);
+        YearMonth nowYM = YearMonth.from(now);
+
+        YearMonth ym = null; // 이 객체로 계산함
+
+        // 종료날짜가 미래면 현재날짜로 세팅
+        if (exYM.isAfter(nowYM)) ym = nowYM;
+        else ym = exYM;
+
+        long between = ChronoUnit.MONTHS.between(orYM, ym);
+
+        Queue<LoanStatisticsDto.RepaymentHistoryMonth> queue = new LinkedList(rhmList);
+        rhmList = new ArrayList<>(); // 담을 리스트 초기화
+
+        LoanStatisticsDto.RepaymentHistoryMonth poll = queue.poll();
+
+        YearMonth pollYM = null;
+        if (poll != null) pollYM = YearMonth.from(poll.getHistoryDate());
+
+        for (int i = 0; i < between; i++) {
+            // 해당 달에 기록이 있음
+            if (orYM.equals(pollYM)) {
+                rhmList.add(poll);
+                poll = queue.poll();
+                pollYM = YearMonth.from(poll.getHistoryDate());
+                // 해당 달에 기록이 없음
+            } else {
+                rhmList.add(new LoanStatisticsDto.RepaymentHistoryMonth(LocalDate.of(orYM.getYear(),orYM.getMonth(),1), 0, 0, 0));
+            }
+            orYM = orYM.plusMonths(1);
+        }
 
         /* RemainingPrincipal 대출 원금 비중 */
         List<LoanStatisticsDto.RemainingPrincipal> rpList = loanRepository.remainingPrincipal(memberId);
@@ -136,6 +174,14 @@ public class LoanService {
         Loan loan = loanMapstruct.toLoan(loanCreateDto);
         loan.setMember(member);
         loanRepository.save(loan);
+    }
+
+    public void detail(Long memberId, LoanDetailRequestDto loanDetailRequestDto) {
+        long loanId = loanDetailRequestDto.getLoanId();
+        Loan loan = loanRepository.findById(loanId)
+                .orElseThrow(() -> new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));// TODO) 에러코드 추가
+
+//        loanMapstruct.toLoanDetailRequestDto
     }
 
     public void addRepaymentDetails(Long memberId, LoanAddRepaymentDetailDto lardDto) {
@@ -197,8 +243,6 @@ public class LoanService {
         return date;
     }
 
-    public void detail(Long memberId, LoanAddRepaymentDetailDto lardDto) {
-    }
 
     public boolean isPaidThisMonth(int paymentNumber, LocalDate now) {
         int currentDay = now.getDayOfMonth();

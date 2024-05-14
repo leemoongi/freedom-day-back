@@ -77,12 +77,14 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
     }
 
     @Override
-    public LoanStatisticsDto statistics(Long memberId) {
+    public LoanStatisticsDto.Tmp statistics(Long memberId) {
         return queryFactory
                 .select(
-                        Projections.fields(LoanStatisticsDto.class
+                        Projections.fields(LoanStatisticsDto.Tmp.class
                                 , loan.totalPrincipal.sum().as("totalPrincipal")
                                 , loan.repaymentAmount.sum().as("totalPrincipalRepayment")
+                                , loan.originationDate
+                                , loan.expirationDate
                         )
                 )
                 .from(loan)

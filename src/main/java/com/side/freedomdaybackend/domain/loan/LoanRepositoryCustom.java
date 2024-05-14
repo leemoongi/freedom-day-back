@@ -12,7 +12,7 @@ public interface LoanRepositoryCustom {
 
     List<LoanSimpleDto> findByLoanList(Long memberId);
     Optional<Long> findByPreviousMonthPayment(Long memberId);
-    LoanStatisticsDto statistics(Long memberId);
+    LoanStatisticsDto.Tmp statistics(Long memberId);
     List<LoanStatisticsDto.LoanSimpleTmp> loanSimple(Long memberId);
     List<LoanStatisticsDto.RepaidLoan> repaidLoan(Long memberId);
     List<LoanStatisticsDto.RemainingPrincipal> remainingPrincipal(Long memberId);

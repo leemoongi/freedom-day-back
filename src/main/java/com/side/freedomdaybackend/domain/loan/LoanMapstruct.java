@@ -1,8 +1,6 @@
 package com.side.freedomdaybackend.domain.loan;
 
-import com.side.freedomdaybackend.domain.loan.dto.LoanCreateDto;
-import com.side.freedomdaybackend.domain.loan.dto.LoanSimpleDto;
-import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
+import com.side.freedomdaybackend.domain.loan.dto.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -20,6 +18,8 @@ public interface LoanMapstruct {
     @Mapping(target = "paymentPercentage", ignore = true)
     LoanSimpleDto toLoanDto(Loan entity);
 
+    LoanDetailRequestDto toLoanDetailRequestDto(Loan entity);
+
     // dto -> entity
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "member", ignore = true)
@@ -30,5 +30,12 @@ public interface LoanMapstruct {
 
     // dto -> dto
     List<MyLoanInfoDto.LoanSimpleDto> toLoanSimpleDto(List<LoanSimpleDto> dto);
+
+    @Mapping(target = "loanList", ignore = true)
+    @Mapping(target = "repaidLoanList", ignore = true)
+    @Mapping(target = "repaymentHistoryMonthList", ignore = true)
+    @Mapping(target = "totalRemainingPrincipal", ignore = true)
+    @Mapping(target = "remainingPrincipalList", ignore = true)
+    LoanStatisticsDto toLoanStatisticsDto (LoanStatisticsDto.Tmp dto);
 
 }

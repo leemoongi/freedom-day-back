@@ -2,10 +2,7 @@ package com.side.freedomdaybackend.domain.loan;
 
 import com.side.freedomdaybackend.common.response.ApiResponse;
 import com.side.freedomdaybackend.common.util.AuthUtil;
-import com.side.freedomdaybackend.domain.loan.dto.LoanAddRepaymentDetailDto;
-import com.side.freedomdaybackend.domain.loan.dto.LoanCreateDto;
-import com.side.freedomdaybackend.domain.loan.dto.MyLoanInfoDto;
-import com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto;
+import com.side.freedomdaybackend.domain.loan.dto.*;
 import com.side.freedomdaybackend.domain.member.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -50,10 +47,10 @@ public class LoanController {
 
     // 디테일
     @GetMapping("/detail")
-    public ApiResponse detail(HttpServletRequest request, @RequestBody LoanAddRepaymentDetailDto lardDto) {
+    public ApiResponse detail(HttpServletRequest request, @RequestBody LoanDetailRequestDto loanDetailRequestDto) {
         Long memberId = authUtil.checkAuthReturnId(request);
 
-        loanService.detail(memberId, lardDto);
+        loanService.detail(memberId, loanDetailRequestDto);
         return new ApiResponse<>();
     }
 
