@@ -10,6 +10,7 @@ import com.side.freedomdaybackend.mapper.LoanMapper;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LoanService {
 
     private final MemberRepository memberRepository;

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -44,7 +44,6 @@ public class MemberService {
     }
 
 
-    @Transactional
     public void signUp(SignUpRequestDto signUpRequestDto) throws NoSuchAlgorithmException {
         // 1. 이메일 중복여부 검사
         String email = signUpRequestDto.getEmail();
