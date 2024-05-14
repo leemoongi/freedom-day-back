@@ -183,7 +183,7 @@ public class LoanService {
         LoanDetailResponseDto loanDetailResponseDto = loanMapstruct.toLoanDetailResponseDto(loan);
 
         // 월별 상세 정보
-        List<LoanDetailResponseDto.RepaymentHistoryMonth> rhmDto = loanRepository.detailRepaymentMonthHistory(loanId);
+        List<LoanDetailResponseDto.RepaymentHistoryMonth> rhmList = loanRepository.detailRepaymentMonthHistory(loanId);
 
         LocalDate now = LocalDate.now();
         LocalDate originationDate = loan.getOriginationDate();
@@ -201,10 +201,30 @@ public class LoanService {
 
         long between = ChronoUnit.MONTHS.between(orYM, ym);
 
+        Queue<LoanDetailResponseDto.RepaymentHistoryMonth> queue = new LinkedList(rhmList);
+        rhmList = new ArrayList<>(); // 담을 리스트 초기화
 
-        // TODO) 수정중
+        LoanDetailResponseDto.RepaymentHistoryMonth poll = queue.poll();
 
-        loanDetailResponseDto.setRepaymentHistoryMonthList(rhmDto);
+        YearMonth pollYM = null;
+        if (poll != null) pollYM = YearMonth.from(poll.getHistoryDate());
+
+        for (int i = 0; i < between; i++) {
+            // 해당 달에 기록이 있음
+            if (orYM.equals(pollYM)) {
+                rhmList.add(poll);
+                poll = queue.poll();
+
+                if (!queue.isEmpty())
+                    pollYM = YearMonth.from(poll.getHistoryDate());
+                // 해당 달에 기록이 없음
+            } else {
+                rhmList.add(new LoanDetailResponseDto.RepaymentHistoryMonth(LocalDate.of(orYM.getYear(),orYM.getMonth(),1), 0, 0, 0));
+            }
+            orYM = orYM.plusMonths(1);
+        }
+
+        loanDetailResponseDto.setRepaymentHistoryMonthList(rhmList);
 
         return loanDetailResponseDto;
 
@@ -229,6 +249,8 @@ public class LoanService {
         // 대출 상환내역 추가
         loan.addRepaymentAmount(interestRates, repaymentAmount2 + repaymentAmount3);
 
+        // TODO) 히스토리 칼럼에 조건 검사
+
         // entity
         LocalDate now = LocalDate.now();
         LoanRepaymentMonthHistory entity = LoanRepaymentMonthHistory.builder()
@@ -237,6 +259,7 @@ public class LoanService {
                 .repaymentAmount1(lardDto.getRepaymentAmount1())
                 .repaymentAmount2(lardDto.getRepaymentAmount2())
                 .repaymentAmount3(lardDto.getRepaymentAmount3())
+                .historyDate(lardDto.getHistoryDate())
                 .build();
 
         loanRepaymentMonthHistoryRepository.save(entity);

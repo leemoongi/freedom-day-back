@@ -20,6 +20,12 @@ public interface LoanMapstruct {
     LoanSimpleDto toLoanDto(Loan entity);
 
     @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "purpose", source = "purpose")
+    @Mapping(target = "bankCode", source = "bankCode")
+    @Mapping(target = "totalPrincipal", source = "totalPrincipal")
+    @Mapping(target = "loanPeriod", source = "loanPeriod")
+    @Mapping(target = "interestRate", source = "interestRate")
     LoanDetailResponseDto toLoanDetailResponseDto(Loan entity);
 
     // dto -> entity
