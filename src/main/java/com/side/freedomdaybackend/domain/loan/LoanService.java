@@ -144,7 +144,7 @@ public class LoanService {
 
         // 사용자 일치 여부 확인
         Member member = loan.getMember();
-        if (member.getId().equals(memberId)) {
+        if (!member.getId().equals(memberId)) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
         };
 
