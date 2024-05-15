@@ -25,7 +25,7 @@ public class LoanDetailResponseDto {
     private LocalDate originationDate; // 대출 실행일
     private long loanPeriod; // 대출 기간
     private double interestRate; // 이자율
-    private RepaymentMethod repaymentMethod; // BR: 만기일시, EPI: 월리금균등, EP: 원금균등
+    private String repaymentMethod; // 상환 방식
 
     @Data
     @AllArgsConstructor

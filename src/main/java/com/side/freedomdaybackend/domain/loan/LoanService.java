@@ -185,10 +185,18 @@ public class LoanService {
         // response 객체
         LoanDetailResponseDto loanDetailResponseDto = loanMapstruct.toLoanDetailResponseDto(loan);
 
+        // 남은 원금
         Long totalPrincipal = loan.getTotalPrincipal();
         Long repaymentAmount = loan.getRepaymentAmount();
-
         loanDetailResponseDto.setOutstandingPrincipal(totalPrincipal - repaymentAmount);
+
+        //
+        RepaymentMethod repaymentMethod = loan.getRepaymentMethod();
+        switch (repaymentMethod) {
+            case BULLET_REPAYMENT -> loanDetailResponseDto.setRepaymentMethod("만기일시");
+            case EQUAL_PRINCIPAL_AND_INTEREST -> loanDetailResponseDto.setRepaymentMethod("원리금균등");
+            case EQUAL_PRINCIPAL -> loanDetailResponseDto.setRepaymentMethod("원금균등");
+        }
 
         // 월별 상세 정보
         List<LoanDetailResponseDto.RepaymentHistoryMonth> rhmList = loanRepository.detailRepaymentMonthHistory(loanId);
