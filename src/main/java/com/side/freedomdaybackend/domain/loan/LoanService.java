@@ -1,5 +1,6 @@
 package com.side.freedomdaybackend.domain.loan;
 
+import com.side.freedomdaybackend.common.converter.RepaymentMethodConverter;
 import com.side.freedomdaybackend.common.exception.CustomException;
 import com.side.freedomdaybackend.common.exception.ErrorCode;
 import com.side.freedomdaybackend.domain.loan.dto.*;
@@ -8,6 +9,7 @@ import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepa
 import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.mapper.LoanMapper;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
+import jakarta.persistence.Convert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -182,6 +184,12 @@ public class LoanService {
 
         // response 객체
         LoanDetailResponseDto loanDetailResponseDto = loanMapstruct.toLoanDetailResponseDto(loan);
+
+        Long totalPrincipal = loan.getTotalPrincipal();
+        Long repaymentAmount = loan.getRepaymentAmount();
+
+//        private RepaymentMethod repaymentMethod; // BR: 만기일시, EPI: 월리금균등, EP: 원금균등
+        loanDetailResponseDto.setOutstandingPrincipal(totalPrincipal - repaymentAmount);
 
         // 월별 상세 정보
         List<LoanDetailResponseDto.RepaymentHistoryMonth> rhmList = loanRepository.detailRepaymentMonthHistory(loanId);

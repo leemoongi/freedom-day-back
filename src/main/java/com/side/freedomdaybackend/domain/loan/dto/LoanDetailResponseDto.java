@@ -15,8 +15,11 @@ public class LoanDetailResponseDto {
     private String name; // 이름
     private String purpose; // 목적
     private String bankCode; // 은행 코드
+    private long outstandingPrincipal; // 남은 원금
+    private long repaymentAmount; // 상환 완료 금액
     private List<RepaymentHistoryMonth> repaymentHistoryMonthList;
     private long totalPrincipal; // 대출 금액
+    private LocalDate originationDate; // 대출 실행일
     private long loanPeriod; // 대출 기간
     private double interestRate; // 이자율
 

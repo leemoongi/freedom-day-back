@@ -23,9 +23,11 @@ public interface LoanMapstruct {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "purpose", source = "purpose")
     @Mapping(target = "bankCode", source = "bankCode")
+    @Mapping(target = "repaymentAmount", source = "repaymentAmount")
     @Mapping(target = "totalPrincipal", source = "totalPrincipal")
     @Mapping(target = "loanPeriod", source = "loanPeriod")
     @Mapping(target = "interestRate", source = "interestRate")
+    @Mapping(target = "originationDate", source = "originationDate")
     LoanDetailResponseDto toLoanDetailResponseDto(Loan entity);
 
     // dto -> entity

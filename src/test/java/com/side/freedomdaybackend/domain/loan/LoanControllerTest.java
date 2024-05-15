@@ -282,8 +282,11 @@ class LoanControllerTest extends RestDocsTest {
                 "우리은행 청년버팀목"
                 , "주택자금"
                 , "TEST"
+                , 100000000
+                , 100000000
                 , null
                 , 200000000
+                , LocalDate.of(2024, Month.APRIL, 12)
                 , 0
                 , 2.1
         );
@@ -322,12 +325,15 @@ class LoanControllerTest extends RestDocsTest {
                                 fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
                                 fieldWithPath("purpose").type(JsonFieldType.STRING).description("목적"),
                                 fieldWithPath("bankCode").type(JsonFieldType.STRING).description("은행 코드"),
+                                fieldWithPath("outstandingPrincipal").type(JsonFieldType.NUMBER).description("남은 원금"),
+                                fieldWithPath("repaymentAmount").type(JsonFieldType.NUMBER).description("상환 완료 금액"),
                                 fieldWithPath("repaymentHistoryMonthList[].historyDate").type(JsonFieldType.STRING).description("상환 내역 리스트 - 등록 월"),
                                 fieldWithPath("repaymentHistoryMonthList[].interestRate").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 이자율"),
                                 fieldWithPath("repaymentHistoryMonthList[].repaymentAmount1").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 원금"),
                                 fieldWithPath("repaymentHistoryMonthList[].repaymentAmount2").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 이자"),
                                 fieldWithPath("repaymentHistoryMonthList[].repaymentAmount3").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 중도상환"),
                                 fieldWithPath("totalPrincipal").type(JsonFieldType.NUMBER).description("대출 금액"),
+                                fieldWithPath("originationDate").type(JsonFieldType.STRING).description("대출 실행일"),
                                 fieldWithPath("loanPeriod").type(JsonFieldType.NUMBER).description("대출 기간"),
                                 fieldWithPath("interestRate").type(JsonFieldType.NUMBER).description("이자율")
 
