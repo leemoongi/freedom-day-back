@@ -76,6 +76,14 @@ operation::loan-controller-test/create[snippets='http-request,http-response,requ
 | Code | Description
 |===
 
+=== 대출 상세
+operation::loan-controller-test/detail[snippets='http-request,http-response,request-fields,response-fields-response']
+==== Error Code
+[cols="1,3", options="header"]
+|===
+| Code | Description
+|===
+
 === 대출 내역 추가
 operation::loan-controller-test/add-repayment-details[snippets='http-request,http-response,request-fields']
 ==== Error Code
