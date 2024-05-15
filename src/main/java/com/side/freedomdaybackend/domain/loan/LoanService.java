@@ -219,7 +219,7 @@ public class LoanService {
                     pollYM = YearMonth.from(poll.getHistoryDate());
                 // 해당 달에 기록이 없음
             } else {
-                rhmList.add(new LoanDetailResponseDto.RepaymentHistoryMonth(LocalDate.of(orYM.getYear(),orYM.getMonth(),1), 0, 0, 0));
+                rhmList.add(new LoanDetailResponseDto.RepaymentHistoryMonth(LocalDate.of(orYM.getYear(),orYM.getMonth(),1),0 , 0, 0, 0));
             }
             orYM = orYM.plusMonths(1);
         }

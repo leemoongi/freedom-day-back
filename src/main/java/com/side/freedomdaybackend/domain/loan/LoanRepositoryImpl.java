@@ -184,6 +184,7 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
                 .select(
                         Projections.fields(LoanDetailResponseDto.RepaymentHistoryMonth.class
                                 , loanRepaymentMonthHistory.historyDate
+                                , loanRepaymentMonthHistory.interestRates
                                 , loanRepaymentMonthHistory.repaymentAmount1
                                 , loanRepaymentMonthHistory.repaymentAmount2
                                 , loanRepaymentMonthHistory.repaymentAmount3)

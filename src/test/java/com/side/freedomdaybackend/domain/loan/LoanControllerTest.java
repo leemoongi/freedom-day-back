@@ -275,6 +275,73 @@ class LoanControllerTest extends RestDocsTest {
 
     @DisplayName("대출 상세")
     @Test
+    void detail() throws Exception {
+        // given
+        LoanDetailRequestDto loanDetailRequestDto = new LoanDetailRequestDto(2L);
+        LoanDetailResponseDto loanDetailResponseDto = new LoanDetailResponseDto(
+                "우리은행 청년버팀목"
+                , "주택자금"
+                , "TEST"
+                , null
+                , 200000000
+                , 0
+                , 2.1
+        );
+
+        List<LoanDetailResponseDto.RepaymentHistoryMonth> list = new ArrayList<>();
+        LoanDetailResponseDto.RepaymentHistoryMonth repaymentHistoryMonth = new LoanDetailResponseDto.RepaymentHistoryMonth(
+                LocalDate.of(2024, Month.APRIL, 1)
+                , 2.1
+                , 1000000
+                , 1000000
+                , 0
+        );
+        list.add(repaymentHistoryMonth);
+
+        loanDetailResponseDto.setRepaymentHistoryMonthList(list);
+
+
+        // when
+        when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
+        when(loanService.detail(any(), any())).thenReturn(loanDetailResponseDto);
+
+        ResultActions perform = mockMvc.perform(get("/loan/detail")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(loanDetailRequestDto)));
+
+        // then
+        perform.andExpect(status().isOk())
+
+                // spring rest docs
+                .andDo(restDocs.document(
+                        requestFields(
+                                fieldWithPath("loanId").type(JsonFieldType.NUMBER).description("대출 pk")
+                        ),
+                        responseFields(
+                                beneathPath("response").withSubsectionId("response"),
+                                fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+                                fieldWithPath("purpose").type(JsonFieldType.STRING).description("목적"),
+                                fieldWithPath("bankCode").type(JsonFieldType.STRING).description("은행 코드"),
+                                fieldWithPath("repaymentHistoryMonthList[].historyDate").type(JsonFieldType.STRING).description("상환 내역 리스트 - 등록 월"),
+                                fieldWithPath("repaymentHistoryMonthList[].interestRate").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 이자율"),
+                                fieldWithPath("repaymentHistoryMonthList[].repaymentAmount1").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 원금"),
+                                fieldWithPath("repaymentHistoryMonthList[].repaymentAmount2").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 이자"),
+                                fieldWithPath("repaymentHistoryMonthList[].repaymentAmount3").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 중도상환"),
+                                fieldWithPath("totalPrincipal").type(JsonFieldType.NUMBER).description("대출 금액"),
+                                fieldWithPath("loanPeriod").type(JsonFieldType.NUMBER).description("대출 기간"),
+                                fieldWithPath("interestRate").type(JsonFieldType.NUMBER).description("이자율")
+
+
+
+                        )
+                ));
+
+    }
+
+
+
+    @DisplayName("대출 상세 추가")
+    @Test
     void addRepaymentDetails() throws Exception {
         // given
         LoanAddRepaymentDetailDto lardDto = new LoanAddRepaymentDetailDto(
@@ -309,48 +376,6 @@ class LoanControllerTest extends RestDocsTest {
 
     }
 
-
-//    @DisplayName("대출 상세 추가")
-//    @Test
-//    void detail() throws Exception {
-//        // given
-//        LoanDetailRequestDto loanDetailRequestDto = new LoanDetailRequestDto(2L);
-//        LoanDetailResponseDto loanDetailResponseDto = new LoanDetailResponseDto();
-//
-//        // when
-//        when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
-//        when(loanService.detail(any(), any())).thenReturn(loanDetailResponseDto);
-//
-//        ResultActions perform = mockMvc.perform(get("/loan/detail")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(loanDetailRequestDto)));
-//
-//        // then
-//        perform.andExpect(status().isOk())
-//
-//                // spring rest docs
-//                .andDo(restDocs.document(
-//                        requestFields(
-//                                fieldWithPath("loanId").type(JsonFieldType.NUMBER).description("대출 pk")
-//                        ),
-//                        responseFields(
-//                                beneathPath("response").withSubsectionId("response"),
-//                                fieldWithPath("name").type(JsonFieldType.NUMBER).description("이름"),
-//                                fieldWithPath("purpose").type(JsonFieldType.NUMBER).description("은행 코드"),
-//                                fieldWithPath("repaymentHistoryMonthList[].historyDate").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 등록 월"),
-//                                fieldWithPath("repaymentHistoryMonthList[].repaymentAmount1").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 원금"),
-//                                fieldWithPath("repaymentHistoryMonthList[].repaymentAmount2").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 이자"),
-//                                fieldWithPath("repaymentHistoryMonthList[].repaymentAmount3").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 중도상환"),
-//                                fieldWithPath("totalPrincipal").type(JsonFieldType.NUMBER).description("대출 금액"),
-//                                fieldWithPath("loanPeriod").type(JsonFieldType.NUMBER).description("대출 기간"),
-//                                fieldWithPath("interestRate").type(JsonFieldType.NUMBER).description("이자율")
-//
-//
-//
-//                        )
-//                ));
-//
-//    }
 
 
 }

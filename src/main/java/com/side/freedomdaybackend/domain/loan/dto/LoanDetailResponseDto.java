@@ -15,12 +15,10 @@ public class LoanDetailResponseDto {
     private String name; // 이름
     private String purpose; // 목적
     private String bankCode; // 은행 코드
-//    private int percentage; // 퍼센트
-
     private List<RepaymentHistoryMonth> repaymentHistoryMonthList;
     private long totalPrincipal; // 대출 금액
     private long loanPeriod; // 대출 기간
-    private long interestRate; // 이자율
+    private double interestRate; // 이자율
 
     @Data
     @AllArgsConstructor
@@ -28,6 +26,7 @@ public class LoanDetailResponseDto {
     public static class RepaymentHistoryMonth {
         @JsonFormat(pattern = "yyyy-MM")
         private LocalDate historyDate; // 등록 월 ex) yyyy-mm
+        private double interestRate; // 이자율
         private long repaymentAmount1; // 상환 방식 -> 1:원금 2:이자 3:중도상환
         private long repaymentAmount2;
         private long repaymentAmount3;
