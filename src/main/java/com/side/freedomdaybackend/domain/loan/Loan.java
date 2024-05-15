@@ -1,5 +1,6 @@
 package com.side.freedomdaybackend.domain.loan;
 
+import com.side.freedomdaybackend.common.converter.RepaymentMethodConverter;
 import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepaymentMonthHistory;
 import com.side.freedomdaybackend.domain.member.Member;
 import jakarta.persistence.*;
@@ -37,10 +38,11 @@ public class Loan {
     private LocalDate originationDate; // 시작 일시
     private LocalDate expirationDate; // 상환 일시
     private int paymentDate; // 납부일  매월 15일에 납부 -> 15
-//    private RepaymentMethod repaymentMethods; //
+    @Convert(converter = RepaymentMethodConverter.class)
+    private RepaymentMethod repaymentMethod; // BR: 만기일시, EPI: 월리금균등, EP: 원금균등
     private Character status; // 0:진행중  1: 만료됨
 
-    public void setCreateBefor(Member member) {
+    public void setCreateBefore(Member member) {
         this.member = member;
         this.status = '0';
     }
@@ -49,23 +51,4 @@ public class Loan {
         this.interestRate = interestRate;
         this.repaymentAmount += repaymentAmount;
     }
-
-    private static enum RepaymentMethod {
-        BULLET_REPAYMENT("BR"),              // 만기일시
-        EQUAL_PRINCIPAL_AND_INTEREST("EPI"), // 월리금균등
-        EQUAL_PRINCIPAL("EP");                // 원금균등
-
-        private String value;
-
-        private RepaymentMethod(String season) {
-            this.value = season;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-    }
-
-
 }

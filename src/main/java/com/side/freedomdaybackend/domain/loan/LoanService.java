@@ -166,7 +166,7 @@ public class LoanService {
         char unit = loanCreateDto.getPeriodUnit();
 
         Loan loan = loanMapstruct.toLoan(loanCreateDto);
-        loan.setCreateBefor(member);
+        loan.setCreateBefore(member);
         loanRepository.save(loan);
     }
 
@@ -227,7 +227,6 @@ public class LoanService {
         loanDetailResponseDto.setRepaymentHistoryMonthList(rhmList);
 
         return loanDetailResponseDto;
-
     }
 
     public void addRepaymentDetails(Long memberId, LoanAddRepaymentDetailDto lardDto) {

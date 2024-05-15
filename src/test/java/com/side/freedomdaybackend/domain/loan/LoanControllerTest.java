@@ -240,6 +240,7 @@ class LoanControllerTest extends RestDocsTest {
                 ,LocalDate.of(2025,Month.DECEMBER,31)
                 ,1
                 ,'M'
+                ,RepaymentMethod.BULLET_REPAYMENT
         );
 
         // when
@@ -266,7 +267,8 @@ class LoanControllerTest extends RestDocsTest {
                                 fieldWithPath("originationDate").type(JsonFieldType.STRING).description("시작 일시"),
                                 fieldWithPath("expirationDate").type(JsonFieldType.STRING).description("상환 일시"),
                                 fieldWithPath("paymentDate").type(JsonFieldType.NUMBER).description("납부일 매월 15일에 납부 -> 15"),
-                                fieldWithPath("periodUnit").type(JsonFieldType.STRING).description("대출 기간 단위  월:M 일:D"))));
+                                fieldWithPath("periodUnit").type(JsonFieldType.STRING).description("대출 기간 단위  월:M 일:D"),
+                                fieldWithPath("repaymentMethod").type(JsonFieldType.STRING).description("상환 방법 BR:만기일시 / EPI:월리금균등 / EP:원금균등 "))));
 
     }
 
