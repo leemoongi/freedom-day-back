@@ -166,7 +166,7 @@ public class LoanService {
         char unit = loanCreateDto.getPeriodUnit();
 
         Loan loan = loanMapstruct.toLoan(loanCreateDto);
-        loan.setMember(member);
+        loan.setCreateBefor(member);
         loanRepository.save(loan);
     }
 
