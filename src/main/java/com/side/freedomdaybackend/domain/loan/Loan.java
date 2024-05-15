@@ -42,7 +42,7 @@ public class Loan {
 
     public void setCreateBefor(Member member) {
         this.member = member;
-        this.status = 0;
+        this.status = '0';
     }
 
     public void addRepaymentAmount(double interestRate, long repaymentAmount) {
@@ -50,22 +50,22 @@ public class Loan {
         this.repaymentAmount += repaymentAmount;
     }
 
-//    private static enum RepaymentMethod {
-//        BULLET_REPAYMENT("BR"),              // 만기일시
-//        EQUAL_PRINCIPAL_AND_INTEREST("EPI"), // 월리금균등
-//        EQUAL_PRINCIPAL("EP");                // 원금균등
-//
-//        private String value;
-//
-//        private RepaymentMethod(String season) {
-//            this.value = season;
-//        }
-//
-//        public String getValue() {
-//            return value;
-//        }
-//
-//    }
+    private static enum RepaymentMethod {
+        BULLET_REPAYMENT("BR"),              // 만기일시
+        EQUAL_PRINCIPAL_AND_INTEREST("EPI"), // 월리금균등
+        EQUAL_PRINCIPAL("EP");                // 원금균등
+
+        private String value;
+
+        private RepaymentMethod(String season) {
+            this.value = season;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+    }
 
 
 }
