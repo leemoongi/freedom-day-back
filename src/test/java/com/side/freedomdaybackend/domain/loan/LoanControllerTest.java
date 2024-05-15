@@ -289,6 +289,7 @@ class LoanControllerTest extends RestDocsTest {
                 , LocalDate.of(2024, Month.APRIL, 12)
                 , 0
                 , 2.1
+                , RepaymentMethod.BULLET_REPAYMENT
         );
 
         List<LoanDetailResponseDto.RepaymentHistoryMonth> list = new ArrayList<>();
@@ -335,7 +336,8 @@ class LoanControllerTest extends RestDocsTest {
                                 fieldWithPath("totalPrincipal").type(JsonFieldType.NUMBER).description("대출 금액"),
                                 fieldWithPath("originationDate").type(JsonFieldType.STRING).description("대출 실행일"),
                                 fieldWithPath("loanPeriod").type(JsonFieldType.NUMBER).description("대출 기간"),
-                                fieldWithPath("interestRate").type(JsonFieldType.NUMBER).description("이자율")
+                                fieldWithPath("interestRate").type(JsonFieldType.NUMBER).description("이자율"),
+                                fieldWithPath("repaymentMethod").type(JsonFieldType.STRING).description("BR: 만기일시, EPI: 월리금균등, EP: 원금균등")
 
 
 

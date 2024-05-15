@@ -188,7 +188,6 @@ public class LoanService {
         Long totalPrincipal = loan.getTotalPrincipal();
         Long repaymentAmount = loan.getRepaymentAmount();
 
-//        private RepaymentMethod repaymentMethod; // BR: 만기일시, EPI: 월리금균등, EP: 원금균등
         loanDetailResponseDto.setOutstandingPrincipal(totalPrincipal - repaymentAmount);
 
         // 월별 상세 정보
