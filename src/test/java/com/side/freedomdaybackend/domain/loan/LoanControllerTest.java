@@ -311,16 +311,13 @@ class LoanControllerTest extends RestDocsTest {
 
         ResultActions perform = mockMvc.perform(get("/loan/detail")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(loanDetailRequestDto)));
+                .param("loanId", "2"));
 
         // then
         perform.andExpect(status().isOk())
 
                 // spring rest docs
                 .andDo(restDocs.document(
-                        requestFields(
-                                fieldWithPath("loanId").type(JsonFieldType.NUMBER).description("대출 pk")
-                        ),
                         responseFields(
                                 beneathPath("response").withSubsectionId("response"),
                                 fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
@@ -338,9 +335,6 @@ class LoanControllerTest extends RestDocsTest {
                                 fieldWithPath("loanPeriod").type(JsonFieldType.NUMBER).description("대출 기간"),
                                 fieldWithPath("interestRate").type(JsonFieldType.NUMBER).description("이자율"),
                                 fieldWithPath("repaymentMethod").type(JsonFieldType.STRING).description("상환 방식 ex) 만기일시")
-
-
-
                         )
                 ));
 

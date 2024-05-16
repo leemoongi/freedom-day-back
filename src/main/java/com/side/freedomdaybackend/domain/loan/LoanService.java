@@ -1,6 +1,5 @@
 package com.side.freedomdaybackend.domain.loan;
 
-import com.side.freedomdaybackend.common.converter.RepaymentMethodConverter;
 import com.side.freedomdaybackend.common.exception.CustomException;
 import com.side.freedomdaybackend.common.exception.ErrorCode;
 import com.side.freedomdaybackend.domain.loan.dto.*;
@@ -9,7 +8,6 @@ import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepa
 import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.mapper.LoanMapper;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
-import jakarta.persistence.Convert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -173,8 +171,7 @@ public class LoanService {
         loanRepository.save(loan);
     }
 
-    public LoanDetailResponseDto detail(Long memberId, LoanDetailRequestDto loanDetailRequestDto) {
-        Long loanId = loanDetailRequestDto.getLoanId();
+    public LoanDetailResponseDto detail(Long memberId, Long loanId) {
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new CustomException(ErrorCode.LOAN_NOT_FOUND));
 

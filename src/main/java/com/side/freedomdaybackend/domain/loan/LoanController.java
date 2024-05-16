@@ -46,10 +46,10 @@ public class LoanController {
     }
 
     @GetMapping("/detail")
-    public ApiResponse detail(HttpServletRequest request, @RequestBody LoanDetailRequestDto loanDetailRequestDto) {
+    public ApiResponse detail(HttpServletRequest request, @RequestParam(name = "loanId") Long loanId) {
         Long memberId = authUtil.checkAuthReturnId(request);
 
-        LoanDetailResponseDto dto = loanService.detail(memberId, loanDetailRequestDto);
+        LoanDetailResponseDto dto = loanService.detail(memberId, loanId);
         return new ApiResponse<>(dto);
     }
 
