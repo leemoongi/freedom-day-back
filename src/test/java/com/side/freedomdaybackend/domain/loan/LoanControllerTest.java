@@ -364,7 +364,7 @@ class LoanControllerTest extends RestDocsTest {
         // when
         when(authUtil.checkAuthReturnId(any())).thenReturn(2L);
 
-        ResultActions perform = mockMvc.perform(post("/loan/create")
+        ResultActions perform = mockMvc.perform(post("/loan/add-repayment-details")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(lardDto)));
 
