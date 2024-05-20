@@ -138,7 +138,7 @@ public class LoanService {
                 }
                 // 해당 달에 기록이 없음
             } else {
-                rhmList.add(new LoanStatisticsDto.RepaymentHistoryMonth(LocalDate.of(orYM.getYear(),orYM.getMonth(),1), 0, 0, 0, true));
+                rhmList.add(new LoanStatisticsDto.RepaymentHistoryMonth(LocalDate.of(orYM.getYear(),orYM.getMonth(),1), 0, 0, 0));
             }
             orYM = orYM.plusMonths(1);
         }
