@@ -90,4 +90,7 @@ operation::loan-controller-test/add-repayment-details[snippets='http-request,htt
 [cols="1,3", options="header"]
 |===
 | Code | Description
+| LOAN-001 | 존재하지 않은 대출
+| LOAN-002 | 상환 내역이 이미 존재함
+| LOAN-003 | 대출을 추가할 권한이 없음 ex) 주인아님
 |===

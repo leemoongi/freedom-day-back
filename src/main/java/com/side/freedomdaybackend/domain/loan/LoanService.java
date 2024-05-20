@@ -8,6 +8,7 @@ import com.side.freedomdaybackend.domain.loan.loanRepaymentMonthHistory.LoanRepa
 import com.side.freedomdaybackend.domain.member.Member;
 import com.side.freedomdaybackend.mapper.LoanMapper;
 import com.side.freedomdaybackend.domain.member.MemberRepository;
+import com.side.freedomdaybackend.mapper.vo.ExistsHistoryDateVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -247,12 +245,12 @@ public class LoanService {
         // 대출 존재 확인
         long loanId = lardDto.getLoanId();
         Loan loan = loanRepository.findById(loanId)
-                .orElseThrow(() -> new CustomException(ErrorCode.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new CustomException(ErrorCode.LOAN_NOT_FOUND));
 
         // 사용자 일치 여부 확인
         Member member = loan.getMember();
         if (!member.getId().equals(memberId)) {
-            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
+            throw new CustomException(ErrorCode.LOAN_UNAUTHORIZED);
         };
 
         double interestRates = lardDto.getInterestRates();
@@ -261,8 +259,13 @@ public class LoanService {
 
         // 대출 상환내역 추가
         loan.addRepaymentAmount(interestRates, repaymentAmount2 + repaymentAmount3);
+        String str = lardDto.getHistoryDate().toString();
+        String subHistoryDate = str.substring(0,7);
 
-        // TODO) 히스토리 칼럼에 조건 검사
+        // 해당월에 대출 내역이 있는지 체크
+        if (loanMapper.existsHistoryDate(new ExistsHistoryDateVo(loanId, subHistoryDate))) {
+            throw new CustomException(ErrorCode.LOAN_REPAYMENT_HISTORY_EXIST);
+        }
 
         // entity
         LocalDate now = LocalDate.now();

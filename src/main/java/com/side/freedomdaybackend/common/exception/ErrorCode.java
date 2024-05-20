@@ -30,6 +30,8 @@ public enum ErrorCode {
 
     // LOAN : 대출
     LOAN_NOT_FOUND("LOAN-001",404, "대출이 존재하지 않습니다."),
+    LOAN_REPAYMENT_HISTORY_EXIST("LOAN-002",404, "해당 월에 상환 내역이 존재합니다."),
+    LOAN_UNAUTHORIZED("LOAN-003",401, "해당 대출에 권한이 없습니다."),
 
     ;
 

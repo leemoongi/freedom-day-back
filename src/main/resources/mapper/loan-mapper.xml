@@ -19,6 +19,16 @@
             LRMH.history_date;
     </select>
 
+    <select id="existsHistoryDate" parameterType="com.side.freedomdaybackend.mapper.vo.ExistsHistoryDateVo" resultType="boolean">
+        SELECT CASE
+                   WHEN EXISTS (SELECT LRMH.id
+                                FROM loan_repayment_month_history LRMH
+                                WHERE LRMH.loan_id = #{loanId}
+                                  AND DATE_FORMAT(LRMH.history_date, '%Y-%m') = #{historyDate}) THEN TRUE
+                   ELSE FALSE
+                   END AS has_history_date;
+    </select>
+
 <!--    <select id="selectRepaymentHistoryList" parameterType="Long" resultType="com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto$RepaymentHistoryMonthTmp">-->
 <!--        SELECT-->
 <!--            L.id,-->
