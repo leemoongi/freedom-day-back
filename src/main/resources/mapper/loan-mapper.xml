@@ -3,17 +3,33 @@
 
 <mapper namespace="com.side.freedomdaybackend.mapper.LoanMapper">
 
-    <select id="selectRepaymentHistoryList" parameterType="Long" resultType="com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto$RepaymentHistoryMonthTmp">
+    <select id="selectRepaymentHistoryList" parameterType="Long" resultType="com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto$RepaymentHistoryMonth">
         SELECT
-            L.id,
-            DATE_FORMAT(LRMH.history_date, '%Y-%m') AS history_date,
-            SUM(LRMH.repayment_amount) AS repayment_amount,
-            LRMH.type
+            LRMH.id
+             , LRMH.history_date
+             , SUM(LRMH.repayment_amount1) as repayment_amount1
+             , SUM(LRMH.repayment_amount2) as repayment_amount2
+             , SUM(LRMH.repayment_amount3) as repayment_amount3
         FROM loan L
-        INNER JOIN loan_repayment_month_history LRMH ON L.id = LRMH.loan_id
-        WHERE L.member_id = #{id}
+                 INNER JOIN loan_repayment_month_history LRMH ON L.id = LRMH.loan_id
+        WHERE L.member_id = #{memberId}
         GROUP BY
-            LRMH.history_date
-            , LRMH.type;
+            DATE_FORMAT(LRMH.history_date, '%Y-%m')
+        ORDER BY
+            LRMH.history_date;
     </select>
+
+<!--    <select id="selectRepaymentHistoryList" parameterType="Long" resultType="com.side.freedomdaybackend.domain.loan.dto.LoanStatisticsDto$RepaymentHistoryMonthTmp">-->
+<!--        SELECT-->
+<!--            L.id,-->
+<!--            DATE_FORMAT(LRMH.history_date, '%Y-%m') AS history_date,-->
+<!--            SUM(LRMH.repayment_amount) AS repayment_amount,-->
+<!--            LRMH.type-->
+<!--        FROM loan L-->
+<!--        INNER JOIN loan_repayment_month_history LRMH ON L.id = LRMH.loan_id-->
+<!--        WHERE L.member_id = #{id}-->
+<!--        GROUP BY-->
+<!--            LRMH.history_date-->
+<!--            , LRMH.type;-->
+<!--    </select>-->
 </mapper>

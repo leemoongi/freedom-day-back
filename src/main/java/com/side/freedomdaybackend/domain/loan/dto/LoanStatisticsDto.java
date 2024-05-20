@@ -51,6 +51,7 @@ public class LoanStatisticsDto {
         private long repaymentAmount1; // 상환 방식 -> 1:원금 2:이자 3:중도상환
         private long repaymentAmount2;
         private long repaymentAmount3;
+        private boolean delayed; // 연체 확인
     }
 
     @Data

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LoanRepositoryCustom {
-    public Member queryDslTest();
 
     List<LoanSimpleDto> findByLoanList(Long memberId);
     Optional<Long> findByPreviousMonthPayment(Long memberId);

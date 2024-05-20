@@ -103,7 +103,7 @@ public class LoanService {
         List<LoanStatisticsDto.RepaidLoan> repaidLoan = loanRepository.repaidLoan(memberId);
 
         /* RepaymentHistoryMonthList 월별 상환 기록 */
-        List<LoanStatisticsDto.RepaymentHistoryMonth> rhmList = loanRepository.repaymentHistoryList(memberId);
+        List<LoanStatisticsDto.RepaymentHistoryMonth> rhmList = loanMapper.selectRepaymentHistoryList(memberId);
         LocalDate originationDate = statisticsTmp.getOriginationDate();
         LocalDate expirationDate = statisticsTmp.getExpirationDate();
 
@@ -138,7 +138,7 @@ public class LoanService {
                 }
                 // 해당 달에 기록이 없음
             } else {
-                rhmList.add(new LoanStatisticsDto.RepaymentHistoryMonth(LocalDate.of(orYM.getYear(),orYM.getMonth(),1), 0, 0, 0));
+                rhmList.add(new LoanStatisticsDto.RepaymentHistoryMonth(LocalDate.of(orYM.getYear(),orYM.getMonth(),1), 0, 0, 0, true));
             }
             orYM = orYM.plusMonths(1);
         }

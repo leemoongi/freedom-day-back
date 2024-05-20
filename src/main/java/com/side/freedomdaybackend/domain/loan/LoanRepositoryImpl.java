@@ -19,12 +19,6 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-
-    @Override
-    public Member queryDslTest() {
-        return null;
-    }
-
     @Override
     public List<LoanSimpleDto> findByLoanList(Long memberId) {
 
@@ -193,6 +187,7 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
                 .innerJoin(loanRepaymentMonthHistory)
                 .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
                 .where(loan.id.eq(loanId))
+//                .orderBy(loanRepaymentMonthHistory.historyDate)
                 .fetch();
     }
 }
