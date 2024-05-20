@@ -300,6 +300,7 @@ class LoanControllerTest extends RestDocsTest {
                 , 1000000
                 , 1000000
                 , 0
+                , false
         );
         list.add(repaymentHistoryMonth);
 
@@ -331,6 +332,7 @@ class LoanControllerTest extends RestDocsTest {
                                 fieldWithPath("repaymentHistoryMonthList[].repaymentAmount1").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 원금"),
                                 fieldWithPath("repaymentHistoryMonthList[].repaymentAmount2").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 이자"),
                                 fieldWithPath("repaymentHistoryMonthList[].repaymentAmount3").type(JsonFieldType.NUMBER).description("상환 내역 리스트 - 중도상환"),
+                                fieldWithPath("repaymentHistoryMonthList[].delayed").type(JsonFieldType.BOOLEAN).description("상환 내역 리스트 - 연체 여부 true: 연체됨"),
                                 fieldWithPath("totalPrincipal").type(JsonFieldType.NUMBER).description("대출 금액"),
                                 fieldWithPath("originationDate").type(JsonFieldType.STRING).description("대출 실행일"),
                                 fieldWithPath("loanPeriod").type(JsonFieldType.NUMBER).description("대출 기간"),

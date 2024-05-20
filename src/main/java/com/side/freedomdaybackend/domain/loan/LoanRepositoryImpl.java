@@ -187,7 +187,7 @@ public class LoanRepositoryImpl implements LoanRepositoryCustom {
                 .innerJoin(loanRepaymentMonthHistory)
                 .on(loan.id.eq(loanRepaymentMonthHistory.loan.id))
                 .where(loan.id.eq(loanId))
-//                .orderBy(loanRepaymentMonthHistory.historyDate)
+                .orderBy(loanRepaymentMonthHistory.historyDate.asc())
                 .fetch();
     }
 }
