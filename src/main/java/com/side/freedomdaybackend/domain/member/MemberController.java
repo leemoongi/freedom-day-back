@@ -7,9 +7,7 @@ import com.side.freedomdaybackend.domain.member.dto.EmailAuthenticationDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInRequestDto;
 import com.side.freedomdaybackend.domain.member.dto.SignInResponseDto;
 import com.side.freedomdaybackend.domain.member.dto.SignUpRequestDto;
-import io.jsonwebtoken.Claims;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
@@ -34,6 +34,7 @@ public class MemberController {
     private final RedisUtil redisUtil;
     private final AuthUtil authUtil;
     private final EmailUtil emailutil;
+    private final SpringTemplateEngine templateEngine;
 
     @PostMapping("/sign-in")
     public ResponseEntity<ApiResponse> signIn(@RequestBody SignInRequestDto signInRequestDto) throws NoSuchAlgorithmException {
@@ -92,9 +93,13 @@ public class MemberController {
     }
 
     @GetMapping("/email-authentication")
-    public ApiResponse<String> emailAuthentication(@RequestParam("token") String token) {
-        emailutil.emailAuthentication(token);
-        return new ApiResponse<>();
+    public ResponseEntity<String> emailAuthentication(@RequestParam("token") String token) {
+        String htmlBody = emailutil.emailAuthentication(token);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8");
+
+        return new ResponseEntity<>(htmlBody, headers, HttpStatus.OK);
     }
 
 

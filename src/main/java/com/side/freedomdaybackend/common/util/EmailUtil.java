@@ -40,8 +40,8 @@ public class EmailUtil {
         redisUtil.set("emailAUth-" + email , Constants.EMAIL_NOT_AUTHENTICATED, Duration.ofHours(1).toMillis());
 
         HashMap<String, Object> templateModel = new HashMap<>();
-        templateModel.put("url", EMAIL_URL + emailAuthToken);
-//        templateModel.put("url", "http://localhost:8080/api/member/email-authentication?token=" + emailAuthToken);
+//        templateModel.put("url", EMAIL_URL + emailAuthToken);
+        templateModel.put("url", "http://localhost:8080/api/member/email-authentication?token=" + emailAuthToken);
 
         String subject = String.format("해방의날");
         Context thymeleafContext = new Context();
@@ -62,7 +62,7 @@ public class EmailUtil {
         mailSender.send(message);
     }
 
-    public void emailAuthentication(String token) {
+    public String emailAuthentication(String token) {
         Claims claims = jwtUtil.isValidToken(token);
         String email = claims.get(Constants.EMAIL).toString();
 
@@ -71,5 +71,9 @@ public class EmailUtil {
         }
 
         redisUtil.update("emailAUth-" + email, Constants.EMAIL_AUTHENTICATED);
+
+        Context thymeleafContext = new Context();
+        String htmlBody = templateEngine.process("email-success.html", thymeleafContext);
+        return htmlBody;
     }
 }
