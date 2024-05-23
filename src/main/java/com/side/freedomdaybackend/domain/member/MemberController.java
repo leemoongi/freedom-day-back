@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.security.NoSuchAlgorithmException;
@@ -64,9 +63,18 @@ public class MemberController {
     }
 
     @PostMapping("/sign-up")
-    public ApiResponse<String> signUp(@RequestBody SignUpRequestDto signUpRequestDto) throws NoSuchAlgorithmException {
+    public ResponseEntity<ApiResponse> signUp(@RequestBody SignUpRequestDto signUpRequestDto) throws NoSuchAlgorithmException {
+        /* 회원가입 */
         memberService.signUp(signUpRequestDto);
-        return new ApiResponse<>();
+
+        /* 로그인 */
+        SignInRequestDto signInRequestDto = new SignInRequestDto(
+                signUpRequestDto.getEmail()
+                , signUpRequestDto.getPassword()
+        );
+        ResponseEntity<ApiResponse> responseResponseEntity = this.signIn(signInRequestDto);
+
+        return responseResponseEntity;
     }
 
     @PostMapping("/sign-out")
