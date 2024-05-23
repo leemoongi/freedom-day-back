@@ -40,8 +40,8 @@ public class EmailUtil {
         redisUtil.set("emailAUth-" + email , Constants.EMAIL_NOT_AUTHENTICATED, Duration.ofHours(1).toMillis());
 
         HashMap<String, Object> templateModel = new HashMap<>();
-//        templateModel.put("url", EMAIL_URL + emailAuthToken);
-        templateModel.put("url", "http://localhost:8080/api/member/email-authentication?token=" + emailAuthToken);
+        templateModel.put("url", EMAIL_URL + emailAuthToken);
+//        templateModel.put("url", "http://localhost:8080/api/member/email-authentication?token=" + emailAuthToken);
 
         String subject = String.format("해방의날");
         Context thymeleafContext = new Context();
