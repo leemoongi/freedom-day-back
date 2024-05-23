@@ -117,13 +117,15 @@ class LoanControllerTest extends RestDocsTest {
                         "카카오뱅크 청년 전월세",
                         "주택자금",
                         9,
-                        LocalDate.of(2024, 5, 16)));
+                        LocalDate.of(2024, 5, 16),
+                        true));
         loanSimpleList.add(
                 new LoanStatisticsDto.LoanSimple(
                         "카카오뱅크 신용대출",
                         "생활비",
                         9,
-                        LocalDate.of(2024, 5, 16))
+                        LocalDate.of(2024, 5, 16),
+                        false)
         );
 
         List<LoanStatisticsDto.RepaidLoan> repaidLoanList = new ArrayList<>();
@@ -202,6 +204,7 @@ class LoanControllerTest extends RestDocsTest {
                                         fieldWithPath("loanList[].purpose").type(JsonFieldType.STRING).description("진행중인 대출 - 용도"),
                                         fieldWithPath("loanList[].paymentDDay").type(JsonFieldType.NUMBER).description("진행중인 대출 - 남은 납부일 D-Day"),
                                         fieldWithPath("loanList[].paymentDate").type(JsonFieldType.STRING).description("진행중인 대출 - 납부 예정일"),
+                                        fieldWithPath("loanList[].delayed").type(JsonFieldType.BOOLEAN).description("진행중인 대출 - 지연상태"),
 
                                         fieldWithPath("repaidLoanList[].name").type(JsonFieldType.STRING).description("종료된 대출 - 대출 이름"),
                                         fieldWithPath("repaidLoanList[].purpose").type(JsonFieldType.STRING).description("종료된 대출 - 용도"),

@@ -29,6 +29,7 @@ public class LoanStatisticsDto {
         private String purpose; // 용도
         private int paymentDDay; // 남은 납부일 D-Day
         private LocalDate paymentDate; // 납부 예정일
+        private boolean delayed; // 연체 확인
     }
 
     @Data

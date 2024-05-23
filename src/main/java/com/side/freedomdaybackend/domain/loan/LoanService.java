@@ -85,13 +85,20 @@ public class LoanService {
         for (LoanStatisticsDto.LoanSimpleTmp tmp : loanTmpList) {
             int paymentNumber = tmp.getPaymentDate(); // ex) 16
             int d_day = repaymentCountdown(paymentNumber, now);
-            LocalDate paymentDate = getRepaymentDate(paymentNumber, now);
+            LocalDate paymentDate = LocalDate.of(now.getYear(), now.getMonth(), paymentNumber);
+
+            // d-day가 0 이하라면 지연됨 처리
+            boolean delayed = false;
+            if (d_day < 0) {
+                delayed = true;
+            }
 
             LoanStatisticsDto.LoanSimple loanSimple = new LoanStatisticsDto.LoanSimple(
                     tmp.getName()
                     , tmp.getPurpose()
                     , d_day
                     , paymentDate
+                    , delayed
             );
 
             loanSimpleList.add(loanSimple);
@@ -115,7 +122,7 @@ public class LoanService {
         if (exYM.isAfter(nowYM)) ym = nowYM;
         else ym = exYM;
 
-        long between = ChronoUnit.MONTHS.between(orYM, ym);
+        long between = ChronoUnit.MONTHS.between(orYM, ym) + 1;
 
         Queue<LoanStatisticsDto.RepaymentHistoryMonth> queue = new LinkedList(rhmList);
         rhmList = new ArrayList<>(); // 담을 리스트 초기화
@@ -210,7 +217,7 @@ public class LoanService {
         if (exYM.isAfter(nowYM)) ym = nowYM;
         else ym = exYM;
 
-        long between = ChronoUnit.MONTHS.between(orYM, ym);
+        long between = ChronoUnit.MONTHS.between(orYM, ym) + 1;
 
         Queue<LoanDetailResponseDto.RepaymentHistoryMonth> queue = new LinkedList(rhmList);
         rhmList = new ArrayList<>(); // 담을 리스트 초기화
@@ -286,11 +293,6 @@ public class LoanService {
     public int repaymentCountdown(int paymentNumber, LocalDate now) {
         // 상환 날짜
         LocalDate date = LocalDate.of(now.getYear(), now.getMonth(), paymentNumber);
-
-        // 상환날자가 지났을 경우, 한달 더함
-        if (isPaidThisMonth(paymentNumber, now)) {
-            date = date.plusMonths(1);
-        }
 
         return (int) ChronoUnit.DAYS.between(now, date);
     }
